@@ -83,7 +83,7 @@ namespace Loader {
     uint8_t	_licenseeCode[2];
     CGB		_sgbFunctions;
     uint8_t	_memoryBank;
-    uint8_t	_romSize;
+    size_t	_romSize;
     uint8_t	_ramSize;
     uint8_t	_destination;
     uint8_t	_maskROMVersion;

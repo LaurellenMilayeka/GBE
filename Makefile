@@ -19,11 +19,11 @@ SRC=		$(SRCDIR)cpu/Z80.cpp \
 
 OBJS=		$(SRC:.cpp=.o)
 
-CXXFLAGS=	-Wall -Wextra -Werror -std=c++11
+CXXFLAGS=	-Wall -Wextra -Werror -std=c++11 -g3
 CXXFLAGS+=	-I $(INCDIR)cpu/ -I $(INCDIR)loader/ -I $(INCDIR)bios/ -I $(INCDIR)ram/ -I $(INCDIR)
 
 ifeq ($(DEBUG), true)
-CXXFLAGS+= -DDEBUG -g3
+CXXFLAGS+= -DDEBUG
 endif
 
 CXX=		g++

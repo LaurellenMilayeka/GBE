@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include "ROMLoader.hpp"
 
-Loader::ROM *Loader::ROM::_singleton = nullptr;
+Loader::ROM *Loader::ROM::_singleton = NULL;
 
 Loader::ROM::ROM() {
 
@@ -12,7 +12,7 @@ Loader::ROM::~ROM() {
 }
 
 Loader::ROM *Loader::ROM::Instance() {
-  if (_singleton == nullptr) {
+  if (_singleton == NULL) {
     _singleton = new Loader::ROM();
   }
   return (_singleton);

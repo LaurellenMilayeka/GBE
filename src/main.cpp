@@ -21,8 +21,8 @@ int main(int ac, char **av) {
   if (ac == 2) {
     rom = Loader::ROM::Instance();
     rom->Load(av[1]);
-    //Engine::RAM::Initialize();
-    //HexDump(Engine::RAM::GetRAM(), 0x0000, 0x3FFF);
+    Engine::RAM::Initialize();
+    HexDump(Engine::RAM::GetRAM(), 0x0000, 0x0140);
     Engine::BIOS::CheckBIOSIntegrity();
   }
   return (0);
