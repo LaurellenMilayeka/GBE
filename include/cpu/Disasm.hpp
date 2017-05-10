@@ -1,6 +1,11 @@
 #ifndef __DISASM_HPP__
 #define __DISASM_HPP__
 
+#include <stdint.h>
+#include <stdio.h>
+#include "RAM.hpp"
+#include "Z80.hpp"
+
 namespace CPU {
 
   class Disasm {

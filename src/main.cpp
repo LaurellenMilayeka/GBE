@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "Z80.hpp"
 #include "Disasm.hpp"
 #include "ROMLoader.hpp"
 #include "BIOS.hpp"
@@ -24,6 +23,7 @@ int main(int ac, char **av) {
     Engine::RAM::Initialize();
     HexDump(Engine::RAM::GetRAM(), 0x0000, 0x0140);
     Engine::BIOS::CheckBIOSIntegrity();
+    CPU::Disasm::Dis0x01();
   }
   return (0);
 }

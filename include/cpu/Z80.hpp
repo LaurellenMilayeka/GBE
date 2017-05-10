@@ -1,5 +1,5 @@
-#ifndef __Z80__
-#define __z80__
+#ifndef __Z80_HPP__
+#define __z80_HPP__
 
 #include <stdint.h>
 #include <cstdlib>

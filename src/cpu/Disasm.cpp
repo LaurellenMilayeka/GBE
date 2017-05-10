@@ -1,14 +1,24 @@
-#include <stdint.h>
-#include <stdio.h>
-#include "Z80.hpp"
+#include <iomanip>
 #include "Disasm.hpp"
 
+// NOP Instruction
+// Do nothing...
+// Wait 4 cycles
 void CPU::Disasm::Dis0x00() {
-  /* Implement the clock */
+
 }
 
+// LD Instruction
+// Load the value of 16bytes-direct in BC
 void CPU::Disasm::Dis0x01() {
-
+  CPU::Z80 *cpu = CPU::Z80::Instance();
+  cpu->bc = Engine::RAM::GetByte(cpu->pc++);
+  std::cout << "BC register status : " << std::hex << std::setw(4) << cpu->bc << std::endl;
+  cpu->bc <<= 8;
+  std::cout << "BC register status : " << std::hex << std::setw(4) << cpu->bc << std::endl;
+  cpu->bc += Engine::RAM::GetByte(cpu->pc++);
+  std::cout << "BC register status : " << std::hex << std::setw(4) << cpu->bc << std::endl;
+  cpu->pc++;
 }
 
 void CPU::Disasm::Dis0x02() {
