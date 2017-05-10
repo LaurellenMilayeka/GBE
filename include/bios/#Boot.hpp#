@@ -1,0 +1,12 @@
+#ifndef __BOOT_HPP__
+#define __BOOT_HPP__
+
+namespace Engine {
+
+  class Boot {
+    
+  }
+  
+};
+
+#endif
