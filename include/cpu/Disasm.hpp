@@ -8,6 +8,8 @@
 
 namespace CPU {
 
+  class Z80;
+  
   class Disasm {
 
   public:

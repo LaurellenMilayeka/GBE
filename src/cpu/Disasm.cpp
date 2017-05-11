@@ -1,5 +1,6 @@
 #include <iomanip>
 #include "Disasm.hpp"
+#include <bitset>
 
 // NOP Instruction
 // Do nothing...
@@ -69,9 +70,15 @@ void CPU::Disasm::Dis0x06(CPU::Z80 *cpu) {
 // RLCA Instruction
 // TODO ????
 
-void CPU::Disasm::Dis0x07(CPU::Z80*) {
-  //CPU::Z80 *cpu = CPU::Z80::Instance();
-  /* RLCA */
+void CPU::Disasm::Dis0x07(CPU::Z80 *cpu) {
+  uint8_t tmp;
+  
+  tmp = cpu->af >> 8;
+  tmp = (tmp << 1) |
+    ((tmp & (1 << (sizeof(uint8_t)*8-1))) >> ((sizeof(uint8_t)*8-1) - 1)) |
+    (tmp & (1 << (sizeof(uint8_t)*8-1)));
+  tmp ^= (-8 ^ tmp) & (1 << 0);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
 }
 
 // LD Instruction
@@ -144,6 +151,6 @@ void CPU::Disasm::Dis0x0E(CPU::Z80 *cpu) {
 
 // RRCA Instruction
 // TODO ????
-void CPU::Disasm::Dis0x0F() {
+void CPU::Disasm::Dis0x0F(CPU::Z80 *) {
   /* RRCA */
 }

@@ -2,7 +2,10 @@
 #define __OPCODES_HPP__
 
 #include <stdint.h>
-#include "Z80.hpp"
+
+namespace CPU {
+  class Z80;
+};
 
 typedef enum E_FLAGS_STATE {
   CLEAR, /* Clear the flag to 0 */
