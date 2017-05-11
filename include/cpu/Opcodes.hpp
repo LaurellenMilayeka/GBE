@@ -2,7 +2,7 @@
 #define __OPCODES_HPP__
 
 #include <stdint.h>
-
+#include "Z80.hpp"
 
 typedef enum E_FLAGS_STATE {
   CLEAR, /* Clear the flag to 0 */
@@ -25,7 +25,7 @@ typedef struct s_opcodes {
   uint8_t		nbrCycles;
   //FLAGS		flagSet[6];
   t_set_flag_state	flagsState;
-  void			(*fptr)(void);
+  void			(*fptr)(CPU::Z80*);
 } t_op;
 
 extern t_op	opcodes[];

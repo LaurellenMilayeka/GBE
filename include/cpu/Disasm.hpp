@@ -12,22 +12,22 @@ namespace CPU {
 
   public:
 
-    static void Dis0x00();
-    static void Dis0x01();
-    static void Dis0x02();
-    static void Dis0x03();
-    static void Dis0x04();
-    static void Dis0x05();
-    static void Dis0x06();
-    static void Dis0x07();
-    static void Dis0x08();
-    static void Dis0x09();
-    static void Dis0x0A();
-    static void Dis0x0B();
-    static void Dis0x0C();
-    static void Dis0x0D();
-    static void Dis0x0E();
-    static void Dis0x0F();
+    static void Dis0x00(CPU::Z80*);
+    static void Dis0x01(CPU::Z80*);
+    static void Dis0x02(CPU::Z80*);
+    static void Dis0x03(CPU::Z80*);
+    static void Dis0x04(CPU::Z80*);
+    static void Dis0x05(CPU::Z80*);
+    static void Dis0x06(CPU::Z80*);
+    static void Dis0x07(CPU::Z80*);
+    static void Dis0x08(CPU::Z80*);
+    static void Dis0x09(CPU::Z80*);
+    static void Dis0x0A(CPU::Z80*);
+    static void Dis0x0B(CPU::Z80*);
+    static void Dis0x0C(CPU::Z80*);
+    static void Dis0x0D(CPU::Z80*);
+    static void Dis0x0E(CPU::Z80*);
+    static void Dis0x0F(CPU::Z80*);
   };
 };
 
