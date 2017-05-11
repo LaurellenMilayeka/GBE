@@ -31,3 +31,6 @@
 # Test ROMs
 *.gb
 *.gbc
+
+# Test BIOS
+*.bin
