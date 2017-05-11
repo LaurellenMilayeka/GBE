@@ -1,6 +1,8 @@
 #ifndef __DEFINES_HPP__
 #define __DEFINES_HPP__
 
+#include <iostream>
+
 #ifdef DEBUG
 #define DEBUG_PRINT(str) do { std::cout << "[DEBUG] : " << str << std::endl; } while( false )
 #else

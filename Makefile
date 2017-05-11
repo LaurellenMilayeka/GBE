@@ -10,6 +10,7 @@ SRC=		$(SRCDIR)cpu/Z80.cpp \
 		$(SRCDIR)loader/ROMLoader.cpp \
 \
 		$(SRCDIR)bios/BIOS.cpp \
+		$(SRCDIR)bios/Boot.cpp \
 \
 		$(SRCDIR)ram/RAM.cpp \
 \
@@ -37,6 +38,7 @@ $(NAME):	$(OBJS)
 
 clean:
 		rm -rf $(OBJS)
+		find . -name '*~' -exec rm {} \;
 
 fclean:		clean
 		rm -rf $(NAME)

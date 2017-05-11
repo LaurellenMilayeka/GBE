@@ -10,7 +10,7 @@ void HexDump(uint8_t *data, uint16_t start, uint16_t end)
   uint16_t address = start;
   
   i = 0;
-  while (address < end) {
+  while (address <= end) {
     if ((i % 16) == 0 && i != 0) {
       dprintf(1, "\n");
       dprintf(1, "[DEBUG] : ");

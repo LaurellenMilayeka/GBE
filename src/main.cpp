@@ -2,6 +2,7 @@
 #include "Disasm.hpp"
 #include "ROMLoader.hpp"
 #include "BIOS.hpp"
+#include "Boot.hpp"
 
 int main(int ac, char **av) {
 
@@ -18,12 +19,13 @@ int main(int ac, char **av) {
   dprintf(1, "PC : 0x%04X\n", cpu->pc);*/
 
   if (ac == 2) {
+    Engine::Boot::BootInit();
     rom = Loader::ROM::Instance();
     rom->Load(av[1]);
     Engine::RAM::Initialize();
-    HexDump(Engine::RAM::GetRAM(), 0x0000, 0x0140);
+    //HexDump(Engine::RAM::GetRAM(), 0x0000, 0x0140);
     Engine::BIOS::CheckBIOSIntegrity();
-    CPU::Disasm::Dis0x01();
+    CPU::Disasm::Dis0x06();
   }
   return (0);
 }
