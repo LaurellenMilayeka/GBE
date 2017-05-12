@@ -25,12 +25,14 @@ typedef struct s_defineflags {
 typedef struct s_opcodes {
 
   uint8_t		code;
-  uint8_t		nbrCycles;
+  uint8_t		nbrMachCycles;
+  uint8_t		nbrClockCycles;
   //FLAGS		flagSet[6];
   t_set_flag_state	flagsState;
   void			(*fptr)(CPU::Z80*);
 } t_op;
 
 extern t_op	opcodes[];
+extern t_op	ext_opcodes[];
 
 #endif
