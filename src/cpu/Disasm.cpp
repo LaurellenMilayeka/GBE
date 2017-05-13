@@ -185,6 +185,7 @@ void CPU::Disasm::Dis0x11(CPU::Z80 *cpu) {
 
   tmp = Engine::RAM::GetByte(++cpu->pc);
   cpu->de = (tmp << 8) + Engine::RAM::GetByte(++cpu->pc);
+  cpu->de = (cpu->de >> 8) | (cpu->de << 8);
   cpu->pc++;
 }
 
@@ -306,5 +307,163 @@ void CPU::Disasm::Dis0x1E(CPU::Z80 *cpu) {
 // TODO ????
 
 void CPU::Disasm::Dis0x1F(CPU::Z80 *cpu) {
+  cpu->pc++;
+}
+
+// JR Instruction
+// TODO ????
+
+void CPU::Disasm::Dis0x20(CPU::Z80 *cpu) {
+  cpu->pc++;
+}
+
+// LD Instruction
+// Load the value of 16-bits direct in 16-bits register HL
+
+void CPU::Disasm::Dis0x21(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(++cpu->pc);
+  cpu->hl = (tmp << 8) + Engine::RAM::GetByte(++cpu->pc);
+  cpu->hl = (cpu->hl >> 8) | (cpu->hl << 8);
+  cpu->pc++;
+}
+
+// LD+ Instruction
+// Load the value of 8-bits register A at the address pointed by 16-bits register HL
+// Increment the value of 16-bits register HL
+
+void CPU::Disasm::Dis0x22(CPU::Z80 *cpu) {
+  Engine::RAM::SetByte(cpu->hl, (cpu->af >> 8));
+  cpu->hl++;
+  cpu->pc++;
+}
+
+// INC Instruction
+// Increment the value of 16-bits register HL
+
+void CPU::Disasm::Dis0x23(CPU::Z80 *cpu) {
+  cpu->hl++;
+  cpu->pc++;
+}
+
+// INC Instruction
+// Increment the value of 8-bits register H
+
+void CPU::Disasm::Dis0x24(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8) + 1;
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
+  cpu->pc++;
+}
+
+// DEC Instruction
+// Decrement the value of 8-bits register H
+
+void CPU::Disasm::Dis0x25(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8) - 1;
+  cpu->hl = (tmp << 8) + (cpu->hl & 0XFF);
+  cpu->pc++;
+}
+
+// LD Instruction
+// Load the value of 8-bits direct in 8-bits register H
+
+void CPU::Disasm::Dis0x26(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(++cpu->pc);
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
+  cpu->pc++;
+}
+
+// DAA Instruction
+// TODO ????
+
+void CPU::Disasm::Dis0x27(CPU::Z80 *cpu) {
+  cpu->pc++;
+}
+
+// JR Z Instruction
+// TODO ????
+
+void CPU::Disasm::Dis0x28(CPU::Z80 *cpu) {
+  cpu->pc++;
+}
+
+// ADD Instruction
+// Add the value of 16-bits register HL to 16-bits register HL
+
+void CPU::Disasm::Dis0x29(CPU::Z80 *cpu) {
+  cpu->hl += cpu->hl;
+  cpu->pc++;
+}
+
+// LD Instruction
+// Load the value of 8-bits direct at the address pointed by 16-bits register HL in 8-bits register A
+// Increment the value of 16-bits register HL
+
+void CPU::Disasm::Dis0x2A(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8);
+  tmp = Engine::RAM::GetByte(cpu->hl);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
+  cpu->hl++;
+  cpu->pc++;
+}
+
+// DEC Instruction
+// Decrement the value of 16-bits register HL
+
+void CPU::Disasm::Dis0x2B(CPU::Z80 *cpu) {
+  cpu->hl--;
+  cpu->pc++;
+}
+
+// INC Instruction
+// Increment the value of 8-bits register L
+
+void CPU::Disasm::Dis0x2C(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF) + 1;
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
+  cpu->pc++;
+}
+
+// DEC Instruction
+// Decrement the value of 8-bits register L
+
+void CPU::Disasm::Dis0x2D(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF) - 1;
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
+  cpu->pc++;
+}
+
+// LD Instruction
+// Load the value of 8-bits direct in 8-bits register L
+
+void CPU::Disasm::Dis0x2E(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(++cpu->pc);
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
+  cpu->pc++;
+}
+
+// CPL Instruction
+// Flips all bits of 8-bits register A
+
+void CPU::Disasm::Dis0x2F(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = ~(cpu->af >> 8);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
