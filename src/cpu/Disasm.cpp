@@ -1133,6 +1133,7 @@ void CPU::Disasm::Dis0x80(CPU::Z80 *cpu) {
 // ADD Instruction
 // Add the value of 8-bits register C and 8-bits register A
 // Store the result in 8-bits register A
+
 void CPU::Disasm::Dis0x81(CPU::Z80 *cpu) {
   cpu->af = (((cpu->af >> 8) + (cpu->bc & 0xFF)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
@@ -1193,154 +1194,386 @@ void CPU::Disasm::Dis0x87(CPU::Z80 *cpu) {
 }
 
 // ADC Instruction
-// TODO ????
+// Add the value of 8-bits register B and 8-bits register A
+// Then add the carry flag (0 or 1)
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x88(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8) + (cpu->bc >> 8);
+  if ((((cpu->af & 0xFF) >> 4) & 1) == 1)
+    tmp++;
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
 
 // ADC Instruction
-// TODO ????
+// Add the value of 8-bits register C and 8-bits register A
+// Then add the carry flag (0 or 1)
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x89(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8) + (cpu->bc & 0xFF);
+  if ((((cpu->af & 0xFF) >> 4) & 1) == 1)
+    tmp++;
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
 
 // ADC Instruction
-// TODO ????
+// Add the value of 8-bits register D and 8-bits register A
+// Then add the carry flag (0 or 1)
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x8A(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8) + (cpu->de >> 8);
+  if ((((cpu->af & 0xFF) >> 4) & 1) == 1)
+    tmp++;
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
 
 // ADC Instruction
-// TODO ????
+// Add the value of 8-bits register E and 8-bits register A
+// Then add the carry flag (0 or 1)
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x8B(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8) + (cpu->bc & 0xFF);
+  if ((((cpu->af & 0xFF) >> 4) & 1) == 1)
+    tmp++;
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
 
 // ADC Instruction
-// TODO ????
+// Add the value of 8-bits register H and 8-bits register A
+// Then add the carry flag (0 or 1)
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x8C(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8) + (cpu->hl >> 8);
+  if ((((cpu->af & 0xFF) >> 4) & 1) == 1)
+    tmp++;
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
 
 // ADC Instruction
-// TODO ????
+// Add the value of 8-bits register L and 8-bits register A
+// Then add the carry flag (0 or 1)
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x8D(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8) + (cpu->hl & 0xFF);
+  if ((((cpu->af & 0xFF) >> 4) & 1) == 1)
+    tmp++;
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
 
 // ADC Instruction
-// TODO ????
+// Add the value of 8-bits direct located at the address pointed by 16-bits register HL and 8-bits register A
+// Then add the carry flag (0 or 1)
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x8E(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8) + Engine::RAM::GetByte(cpu->hl);
+  if ((((cpu->af & 0xFF) >> 4) & 1) == 1)
+    tmp++;
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
 
 // ADC Instruction
-// TODO ????
+// Add the value of 8-bits register A and 8-bits register A
+// Then add the carry flag (0 or 1)
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x8F(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8) + (cpu->af >> 8);
+  if ((((cpu->af & 0xFF) >> 4) & 1) == 1)
+    tmp++;
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SUB Instruction
+// Substract 8-bits register B from 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x90(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) - (cpu->bc >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SUB Instruction
+// Substract 8-bits register C from 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x91(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) - (cpu->bc & 0xFF)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SUB Instruction
+// Substract 8-bits register D from 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x92(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) - (cpu->de >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SUB Instruction
+// Substract 8-bits register E from 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x93(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) - (cpu->de & 0xFF)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SUB Instruction
+// Substract 8-bits register H from 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x94(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) - (cpu->hl >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SUB Instruction
+// Substract 8-bits register L from 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x95(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) - (cpu->hl & 0xFF)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SUB Instruction
+// Substract 8-bits direct located at the address pointed by 16-bits register HL from 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x96(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) - Engine::RAM::GetByte(cpu->hl)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SUB Instruction
+// Substract 8-bits register A from 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x97(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) - (cpu->af >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SBC Instruction
+// Substract 8-bits register B from 8-bits register A
+// Then substract the carry flag (0 or 1)
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x98(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8) - (cpu->bc >> 8);
+  if ((((cpu->af & 0xFF) >> 4) & 1) == 1)
+    tmp--;
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SBC Instruction
+// Substract 8-bits register C from 8-bits register A
+// Then substract the carry flag (0 or 1)
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x99(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8) - (cpu->bc & 0xFF);
+  if ((((cpu->af & 0xFF) >> 4) & 1) == 1)
+    tmp--;
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SBC Instruction
+// Substract 8-bits register D from 8-bits register A
+// Then substract the carry flag (0 or 1)
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x9A(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8) - (cpu->de >> 8);
+  if ((((cpu->af & 0xFF) >> 4) & 1) == 1)
+    tmp--;
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SBC Instruction
+// Substract 8-bits register E from 8-bits register A
+// Then substract the carry flag (0 or 1)
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x9B(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8) - (cpu->de & 0xFF);
+  if ((((cpu->af & 0xFF) >> 4) & 1) == 1)
+    tmp--;
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SBC Instruction
+// Substract 8-bits register H from 8-bits register A
+// Then substract the carry flag (0 or 1)
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x9C(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8) - (cpu->hl >> 8);
+  if ((((cpu->af & 0xFF) >> 4) & 1) == 1)
+    tmp--;
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SBC Instruction
+// Substract 8-bits register L from 8-bits register A
+// Then substract the carry flag (0 or 1)
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x9D(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8) - (cpu->hl & 0xFF);
+  if ((((cpu->af & 0xFF) >> 4) & 1) == 1)
+    tmp--;
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SBC Instruction
+// Substract 8-bits direct located at the address pointed by 16-bits register HL from 8-bits register A
+// Then substract the carry flag (0 or 1)
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x9E(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8) - Engine::RAM::GetByte(cpu->hl);
+  if ((((cpu->af & 0xFF) >> 4) & 1) == 1)
+    tmp--;
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SBC Instruction
+// Substract 8-bits register A from 8-bits register A
+// Then substract the carry flag (0 or 1)
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x9F(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8) - (cpu->af >> 8);
+  if ((((cpu->af & 0xFF) >> 4) & 1) == 1)
+    tmp--;
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// AND Instruction
+// Logically AND 8-bits register B and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xA0(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) & (cpu->bc >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// AND Instruction
+// Logically AND 8-bits register C and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xA1(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) & (cpu->bc & 0xFF)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// AND Instruction
+// Logically AND 8-bits register D and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xA2(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) & (cpu->de >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// AND Instruction
+// Logically AND 8-bits register E and 8-bits register A
+// Store the value in 8-bits register A
 
 void CPU::Disasm::Dis0xA3(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) & (cpu->de & 0xFF)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// AND Instruction
+// Logically AND 8-bits register H and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xA4(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) & (cpu->hl >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// AND Instruction
+// Logically AND 8-bits register L and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xA5(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) & (cpu->hl & 0xFF)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// AND Instruction
+// Logically AND 8-bits direct located at the address pointed by 16-bits register HL and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xA6(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) & Engine::RAM::GetByte(cpu->hl)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
 
+// AND Instruction
+// Logically AND 8-bits register A and 8-bits register A
+// Store the results in 8-bits register A
+
 void CPU::Disasm::Dis0xA7(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) & (cpu->af >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
 
