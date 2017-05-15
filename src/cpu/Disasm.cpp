@@ -738,257 +738,511 @@ void CPU::Disasm::Dis0x4F(CPU::Z80 *cpu) {
   cpu->pc++;
 }
 
+// LD Instruction
+// Load the value of 8-bits register B in 8-bits register D
+
 void CPU::Disasm::Dis0x50(CPU::Z80 *cpu) {
+  cpu->de = ((cpu->bc >> 8) << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register C in 8-bits register D
 
 void CPU::Disasm::Dis0x51(CPU::Z80 *cpu) {
+  cpu->de = ((cpu->bc & 0xFF) << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register D in 8-bits register D
 
 void CPU::Disasm::Dis0x52(CPU::Z80 *cpu) {
+  // Nothing to do ?
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register E in 8-bits register D
 
 void CPU::Disasm::Dis0x53(CPU::Z80 *cpu) {
+  cpu->de = ((cpu->de & 0xFF) << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register H in 8-bits register D
 
 void CPU::Disasm::Dis0x54(CPU::Z80 *cpu) {
+  cpu->de = ((cpu->hl >> 8) << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register L in 8-bits register D
 
 void CPU::Disasm::Dis0x55(CPU::Z80 *cpu) {
+  cpu->de = ((cpu->hl & 0xFF) << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits direct located at the address pointed by 16-bits register HL in 8-bits register D
 
 void CPU::Disasm::Dis0x56(CPU::Z80 *cpu) {
+  cpu->de = (Engine::RAM::GetByte(cpu->hl) << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register A in 8-bits register D
 
 void CPU::Disasm::Dis0x57(CPU::Z80 *cpu) {
+  cpu->de = ((cpu->af >> 8) << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register B in 8-bits register E
 
 void CPU::Disasm::Dis0x58(CPU::Z80 *cpu) {
+  cpu->de = ((cpu->de >> 8) << 8) + (cpu->bc >> 8);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register C in 8-bits register E
 
 void CPU::Disasm::Dis0x59(CPU::Z80 *cpu) {
+  cpu->de = ((cpu->de >> 8) << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register D in 8-bits register E
 
 void CPU::Disasm::Dis0x5A(CPU::Z80 *cpu) {
+  cpu->de = ((cpu->de >> 8) << 8) + (cpu->de >> 8);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register E in 8-bits register E
 
 void CPU::Disasm::Dis0x5B(CPU::Z80 *cpu) {
+  // Nothing to do ?
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register H in 8-bits register E
 
 void CPU::Disasm::Dis0x5C(CPU::Z80 *cpu) {
+  cpu->de = ((cpu->de >> 8) << 8) + (cpu->hl >> 8);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register L in 8-bits register E
 
 void CPU::Disasm::Dis0x5D(CPU::Z80 *cpu) {
+  cpu->de = ((cpu->de >> 8) << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits direct located at the address pointed by 16-bits register HL in 8-bits register E
 
 void CPU::Disasm::Dis0x5E(CPU::Z80 *cpu) {
+  cpu->de = ((cpu->de >> 8) << 8) + Engine::RAM::GetByte(cpu->hl);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register A in 8-bits register E
 
 void CPU::Disasm::Dis0x5F(CPU::Z80 *cpu) {
+  cpu->de = ((cpu->de >> 8) << 8) + (cpu->af >> 8);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register B in 8-bits register H
 
 void CPU::Disasm::Dis0x60(CPU::Z80 *cpu) {
+  cpu->hl = ((cpu->bc >> 8) << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register C in 8-bits register H
 
 void CPU::Disasm::Dis0x61(CPU::Z80 *cpu) {
+  cpu->hl = ((cpu->bc & 0xFF) << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register D in 8-bits register H
 
 void CPU::Disasm::Dis0x62(CPU::Z80 *cpu) {
+  cpu->hl = ((cpu->de >> 8) << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register E in 8-bits register H
 
 void CPU::Disasm::Dis0x63(CPU::Z80 *cpu) {
+  cpu->hl = ((cpu->de & 0xFF) << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register H in 8-bits register H
 
 void CPU::Disasm::Dis0x64(CPU::Z80 *cpu) {
+  // Nothing to do ?
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register L in 8-bits register H
 
 void CPU::Disasm::Dis0x65(CPU::Z80 *cpu) {
+  cpu->hl = ((cpu->hl & 0xFF) << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits direct located at the address pointed by 16-bits register HL in 8-bits register H
 
 void CPU::Disasm::Dis0x66(CPU::Z80 *cpu) {
+  cpu->hl = (Engine::RAM::GetByte(cpu->hl) << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register A in 8-bits register H
 
 void CPU::Disasm::Dis0x67(CPU::Z80 *cpu) {
+  cpu->hl = ((cpu->af >> 8) << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register B in 8-bits register L
 
 void CPU::Disasm::Dis0x68(CPU::Z80 *cpu) {
+  cpu->hl = ((cpu->hl >> 8) << 8) + (cpu->bc >> 8);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register C in 8-bits register L
 
 void CPU::Disasm::Dis0x69(CPU::Z80 *cpu) {
+  cpu->hl = ((cpu->hl >> 8) << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register D in 8-bits register L
 
 void CPU::Disasm::Dis0x6A(CPU::Z80 *cpu) {
+  cpu->hl = ((cpu->hl >> 8) << 8) + (cpu->de >> 8);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register E in 8-bits register L
 
 void CPU::Disasm::Dis0x6B(CPU::Z80 *cpu) {
+  cpu->hl = ((cpu->hl >> 8) << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register H in 8-bits register L
 
 void CPU::Disasm::Dis0x6C(CPU::Z80 *cpu) {
+  cpu->hl = ((cpu->hl >> 8) << 8) + (cpu->hl >> 8);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register L in 8-bits register L
 
 void CPU::Disasm::Dis0x6D(CPU::Z80 *cpu) {
+  // Nothing to do ?
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits direct located at the address pointed by 16-bits register HL in 8-bits register L
 
 void CPU::Disasm::Dis0x6E(CPU::Z80 *cpu) {
+  cpu->hl = ((cpu->hl >> 8) << 8) + Engine::RAM::GetByte(cpu->hl);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register A in 8-bits register L
 
 void CPU::Disasm::Dis0x6F(CPU::Z80 *cpu) {
+  cpu->hl = ((cpu->hl >> 8) << 8) + (cpu->af >> 8);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register B at the address pointed by 16-bits register HL
 
 void CPU::Disasm::Dis0x70(CPU::Z80 *cpu) {
+  Engine::RAM::SetByte(cpu->hl, (cpu->bc >> 8));
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register C at the address pointed by 16-bits register HL
 
 void CPU::Disasm::Dis0x71(CPU::Z80 *cpu) {
+  Engine::RAM::SetByte(cpu->hl, (cpu->bc & 0xFF));
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register D at the address pointed by 16-bits register HL
 
 void CPU::Disasm::Dis0x72(CPU::Z80 *cpu) {
+  Engine::RAM::SetByte(cpu->hl, (cpu->de >> 8));
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register E at the address pointed by 16bits register HL
 
 void CPU::Disasm::Dis0x73(CPU::Z80 *cpu) {
+  Engine::RAM::SetByte(cpu->hl, (cpu->de & 0xFF));
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register H at the address pointed by 16-bits register HL
 
 void CPU::Disasm::Dis0x74(CPU::Z80 *cpu) {
+  Engine::RAM::SetByte(cpu->hl, (cpu->hl >> 8));
   cpu->pc++;
 }
 
+// LD Instruction
+// Load the value of 8-bits register L at the address pointed by 16-bits register HL
+
 void CPU::Disasm::Dis0x75(CPU::Z80 *cpu) {
+  Engine::RAM::SetByte(cpu->hl, (cpu->hl & 0xFF));
   cpu->pc++;
 }
+
+// HALT Instruction
+// TODO ????
 
 void CPU::Disasm::Dis0x76(CPU::Z80 *cpu) {
   cpu->pc++;
 }
 
+// LD Instruction
+// Load the value of 8-bits register A at the address pointed by 16-bits register HL
+
 void CPU::Disasm::Dis0x77(CPU::Z80 *cpu) {
+  Engine::RAM::SetByte(cpu->hl, (cpu->af >> 8));
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register B in 8-bits register A
 
 void CPU::Disasm::Dis0x78(CPU::Z80 *cpu) {
+  cpu->af = ((cpu->bc >> 8) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register C in 8-bits register A
 
 void CPU::Disasm::Dis0x79(CPU::Z80 *cpu) {
+  cpu->af = ((cpu->bc & 0xFF) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register D in 8-bits register A
 
 void CPU::Disasm::Dis0x7A(CPU::Z80 *cpu) {
+  cpu->af = ((cpu->de >> 8) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register E in 8-bits register A
 
 void CPU::Disasm::Dis0x7B(CPU::Z80 *cpu) {
+  cpu->af = ((cpu->de & 0xFF) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register H in 8-bits register A
 
 void CPU::Disasm::Dis0x7C(CPU::Z80 *cpu) {
+  cpu->af = ((cpu->hl >> 8) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register L in 8-bits register A
 
 void CPU::Disasm::Dis0x7D(CPU::Z80 *cpu) {
+  cpu->af = ((cpu->hl & 0xFF) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits direct located at the address pointed by 16-bits register HL in 8-bits register A
 
 void CPU::Disasm::Dis0x7E(CPU::Z80 *cpu) {
+  cpu->af = (Engine::RAM::GetByte(cpu->hl) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// LD Instruction
+// Load the value of 8-bits register A in 8-bits register A
 
 void CPU::Disasm::Dis0x7F(CPU::Z80 *cpu) {
+  // Nothing to do ?
   cpu->pc++;
 }
+
+// ADD Instruction
+// Add the value of 8-bits register B and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x80(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) + (cpu->bc >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
 
+// ADD Instruction
+// Add the value of 8-bits register C and 8-bits register A
+// Store the result in 8-bits register A
 void CPU::Disasm::Dis0x81(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) + (cpu->bc & 0xFF)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// ADD Instruction
+// Add the value of 8-bits register D and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x82(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) + (cpu->de >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// ADD Instruction
+// Add the value of 8-bits register E and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x83(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) + (cpu->de & 0xFF)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// ADD Instruction
+// Add the value of 8-bits register H and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x84(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) + (cpu->hl >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// ADD Instruction
+// Add the value of 8-bits register L and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x85(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) + (cpu->hl & 0xFF)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// ADD Instruction
+// Add the value of 8-bits direct located at the address pointed by HL and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0x86(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) + Engine::RAM::GetByte(cpu->hl)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
 
+// ADD Instruction
+// Add the value of 8-bits register A and 8-bits register A
+// Store the result in A
+
 void CPU::Disasm::Dis0x87(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) + (cpu->af >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// ADC Instruction
+// TODO ????
 
 void CPU::Disasm::Dis0x88(CPU::Z80 *cpu) {
   cpu->pc++;
 }
 
+// ADC Instruction
+// TODO ????
+
 void CPU::Disasm::Dis0x89(CPU::Z80 *cpu) {
   cpu->pc++;
 }
+
+// ADC Instruction
+// TODO ????
 
 void CPU::Disasm::Dis0x8A(CPU::Z80 *cpu) {
   cpu->pc++;
 }
 
+// ADC Instruction
+// TODO ????
+
 void CPU::Disasm::Dis0x8B(CPU::Z80 *cpu) {
   cpu->pc++;
 }
+
+// ADC Instruction
+// TODO ????
 
 void CPU::Disasm::Dis0x8C(CPU::Z80 *cpu) {
   cpu->pc++;
 }
 
+// ADC Instruction
+// TODO ????
+
 void CPU::Disasm::Dis0x8D(CPU::Z80 *cpu) {
   cpu->pc++;
 }
 
+// ADC Instruction
+// TODO ????
+
 void CPU::Disasm::Dis0x8E(CPU::Z80 *cpu) {
   cpu->pc++;
 }
+
+// ADC Instruction
+// TODO ????
 
 void CPU::Disasm::Dis0x8F(CPU::Z80 *cpu) {
   cpu->pc++;
