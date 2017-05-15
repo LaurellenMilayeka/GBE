@@ -25,7 +25,7 @@ typedef struct s_defineflags {
 typedef struct s_opcodes {
 
   uint8_t		code;
-  uint8_t		nbrMachCycles;
+  uint8_t		byteLength;
   uint8_t		nbrClockCycles;
   //FLAGS		flagSet[6];
   t_set_flag_state	flagsState;
