@@ -1577,149 +1577,329 @@ void CPU::Disasm::Dis0xA7(CPU::Z80 *cpu) {
   cpu->pc++;
 }
 
+// XOR Instruction
+// Logically XOR 8-bits register B and 8-bits register A
+// Store the result in 8-bits register A
+
 void CPU::Disasm::Dis0xA8(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) ^ (cpu->bc >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// XOR Instruction
+// Logically XOR 8-bits register C and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xA9(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) ^ (cpu->bc & 0xFF)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// XOR Instruction
+// Logically XOR 8-bits register D and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xAA(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) ^ (cpu->de >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// XOR Instruction
+// Logically XOR 8-bits register E and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xAB(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) ^ (cpu->de & 0xFF)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// XOR Instruction
+// Logically XOR 8-bits register H and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xAC(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) ^ (cpu->hl >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// XOR Instruction
+// Logically XOR 8-bits register L and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xAD(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) ^ (cpu->hl & 0xFF)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// XOR Instruction
+// Logically XOR 8-bits direct located at the address pointed by 16-bits register HL and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xAE(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) ^ Engine::RAM::GetByte(cpu->hl)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// XOR Instruction
+// Logically XOR 8-bits register A and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xAF(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) ^ (cpu->af >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// OR Instruction
+// Logically OR 8-bits register B and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xB0(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) | (cpu->af >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// OR Instruction
+// Logically OR 8-bits register C and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xB1(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) | (cpu->bc & 0xFF)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// OR Instruction
+// Logically OR 8-bits register D and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xB2(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) | (cpu->de >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// OR Instruction
+// Logically OR 8-bits register E and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xB3(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) | (cpu->de & 0xFF)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// OR Instruction
+// Logically OR 8-bits register H and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xB4(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) | (cpu->hl >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// OR Instruction
+// Logically OR 8-bits register L and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xB5(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) | (cpu->hl & 0xFF)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// OR Instruction
+// Logically OR 8-bits direct located at the address pointed by 16-bits register HL and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xB6(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) | Engine::RAM::GetByte(cpu->hl)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
 
+// OR Instruction
+// Logically OR 8-bits register A and 8-bits register A
+// Store the result in 8-bits register A
+
 void CPU::Disasm::Dis0xB7(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) | (cpu->af >> 8)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// CP Instruction
+// Compare 8-bits register B and 8-bits register A
+// TODO ????
 
 void CPU::Disasm::Dis0xB8(CPU::Z80 *cpu) {
   cpu->pc++;
 }
 
+// CP Instruction
+// Compare 8-bits register C and 8-bits register A
+// TODO ????
+
 void CPU::Disasm::Dis0xB9(CPU::Z80 *cpu) {
   cpu->pc++;
 }
+
+// CP Instruction
+// Compare 8-bits register D and 8-bits register A
+// TODO ????
 
 void CPU::Disasm::Dis0xBA(CPU::Z80 *cpu) {
   cpu->pc++;
 }
 
+// CP Instruction
+// Compare 8-bits register E and 8-bits register A
+// TODO ????
+
 void CPU::Disasm::Dis0xBB(CPU::Z80 *cpu) {
   cpu->pc++;
 }
+
+// CP Instruction
+// Compare 8-bits register H and 8-bits register A
+// TODO ????
 
 void CPU::Disasm::Dis0xBC(CPU::Z80 *cpu) {
   cpu->pc++;
 }
 
+// CP Instruction
+// Compare 8-bits register L and 8-bits register A
+// TODO ????
+
 void CPU::Disasm::Dis0xBD(CPU::Z80 *cpu) {
   cpu->pc++;
 }
+
+// CP Instruction
+// Compare 8-bits direct located at the address pointed by 16-bits register HL and 8-bits register A
+// TODO ????
 
 void CPU::Disasm::Dis0xBE(CPU::Z80 *cpu) {
   cpu->pc++;
 }
 
+// CP Instruction
+// Compare 8-bits register A and 8-bits register A
+// TODO ????
+
 void CPU::Disasm::Dis0xBF(CPU::Z80 *cpu) {
   cpu->pc++;
 }
 
+// RET NZ Instruction
+// Pop last 16-bits value from stack if Z flag = 0
+// Store the 16-bits value in 16-bits register PC
+
 void CPU::Disasm::Dis0xC0(CPU::Z80 *cpu) {
-  cpu->pc++;
+  if (((cpu->af & 0xFF) & 1) != 1) {
+    cpu->pc = (Engine::RAM::GetByte(cpu->sp + 1) << 8) + Engine::RAM::GetByte(cpu->sp); 
+    cpu->sp += 2;
+  }
 }
+
+// POP Instruction
+// Pop 16-bits from stack
+// Store value in 16-bits register BC
 
 void CPU::Disasm::Dis0xC1(CPU::Z80 *cpu) {
+  cpu->bc = (Engine::RAM::GetByte(cpu->sp + 1) << 8) + Engine::RAM::GetByte(cpu->sp);
   cpu->pc++;
+  cpu->sp += 2;
 }
+
+// JP Instruction
+// Jump to the given address if Z flag = 0
+// Reset Z flag
 
 void CPU::Disasm::Dis0xC2(CPU::Z80 *cpu) {
-  cpu->pc++;
+  if (((cpu->af & 0xFF) >> 7) != 1)
+    cpu->pc = (Engine::RAM::GetByte(cpu->pc + 2) << 8) + Engine::RAM::GetByte(cpu->pc + 1);
 }
+
+// JP Instruction
+// Jump to the given address
 
 void CPU::Disasm::Dis0xC3(CPU::Z80 *cpu) {
-  cpu->pc++;
+  cpu->pc = (Engine::RAM::GetByte(cpu->pc + 2) << 8) + Engine::RAM::GetByte(cpu->pc + 1);
 }
+
+// CALL Instruction
+// Push address of next instruction into stack
+// Jump to given address
 
 void CPU::Disasm::Dis0xC4(CPU::Z80 *cpu) {
-  cpu->pc++;
+  cpu->sp -= 2;
+  Engine::RAM::SetByte(cpu->sp, cpu->pc + 4);
+  Engine::RAM::SetByte(cpu->sp + 1, cpu->pc + 3);
+  cpu->pc = (Engine::RAM::GetByte(cpu->pc + 2) << 8) + Engine::RAM::GetByte(cpu->pc + 1);
 }
+
+// PUSH Instruction
+// Push 16-bits register BC onto stack
+// Decrement stack twice
 
 void CPU::Disasm::Dis0xC5(CPU::Z80 *cpu) {
+  cpu->sp -= 2;
+  Engine::RAM::SetByte(cpu->sp, (cpu->bc & 0xFF));
+  Engine::RAM::SetByte(cpu->sp + 1, (cpu->bc >> 8));
   cpu->pc++;
 }
+
+// ADD Instruction
+// Add the value of 8-bits direct and 8-bits register A
+// Store the result in 8-bits register A
 
 void CPU::Disasm::Dis0xC6(CPU::Z80 *cpu) {
+  cpu->af = (((cpu->af >> 8) + Engine::RAM::GetByte(++cpu->pc)) << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// RST Instruction
+// 16-bits register PC + 3 is pushed onto the stack
+// PC is initialized to 0x0000
 
 void CPU::Disasm::Dis0xC7(CPU::Z80 *cpu) {
-  cpu->pc++;
+  cpu->sp -= 2;
+  cpu->pc += 3;
+  Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
+  Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
+  cpu->pc = 0x0000;
 }
+
+// RET Z Instruction
+// Pop last 16-bits from stack if Zero flag = 1
+// Store the result in 16-bits register PC
 
 void CPU::Disasm::Dis0xC8(CPU::Z80 *cpu) {
-  cpu->pc++;
+  if (((cpu->af & 0xFF) & 1) == 1) {
+    cpu->pc = (Engine::RAM::GetByte(cpu->sp + 1) << 8) + Engine::RAM::GetByte(cpu->sp);
+    cpu->sp += 2;
+  }
 }
+
+// RET Instruction
+// Pop last 16-bits from stack
+// Store the result in 16-bits register PC
 
 void CPU::Disasm::Dis0xC9(CPU::Z80 *cpu) {
-  cpu->pc++;
+  cpu->pc = (Engine::RAM::GetByte(cpu->sp + 1) << 8) + Engine::RAM::GetByte(cpu->sp);
+  cpu->sp += 2;
 }
 
+// JP Instruction
+// Jump to given address if Zero flag = 1
+
 void CPU::Disasm::Dis0xCA(CPU::Z80 *cpu) {
-  cpu->pc++;
+  if (((cpu->af & 0xFF) & 1) == 1)
+    cpu->pc = (Engine::RAM::GetByte(cpu->pc + 2) << 8) + Engine::RAM::GetByte(cpu->pc + 1);
 }
+
+// CB PREFIX
+// TODO ????
 
 void CPU::Disasm::Dis0xCB(CPU::Z80 *cpu) {
   cpu->pc++;
 }
+
 
 void CPU::Disasm::Dis0xCC(CPU::Z80 *cpu) {
   cpu->pc++;
