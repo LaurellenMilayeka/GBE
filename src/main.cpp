@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <bitset>
 #include "Disasm.hpp"
 #include "ROMLoader.hpp"
 #include "BIOS.hpp"
@@ -8,8 +9,13 @@ int main(int ac, char **av) {
 
   Loader::ROM *rom;
   CPU::Z80 *cpu;
-  
+  uint8_t tmp = 0xF0;
+
+  std::cout << "Before swap : " << std::bitset<8>(tmp) << std::endl;
+  tmp = (tmp >> 4) | (tmp << 4);
+  std::cout << "After swap : " << std::bitset<8>(tmp) << std::endl;  
   if (ac == 2) {
+    
     cpu = CPU::Z80::Instance();
     Engine::Boot::BootInit();
     rom = Loader::ROM::Instance();

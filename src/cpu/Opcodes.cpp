@@ -263,7 +263,7 @@ t_op opcodes[] = {
 
   {0xF0, 2, 12, {UNCHANGED, UNCHANGED, UNCHANGED, UNCHANGED}, &(CPU::Disasm::Dis0xF0)},
   {0xF1, 1, 12, {INST_SET, INST_SET, INST_SET, INST_SET}, &(CPU::Disasm::Dis0xF1)},
-  {0xF2, 2, 8, {UNCHANGED, UNCHANGED, UNCHANGED, UNCHANGED}, &(CPU::Disasm::Dis0xF2)},
+  // 0xF2 : Instruction does not exist.
   {0xF3, 1, 4, {UNCHANGED, UNCHANGED, UNCHANGED, UNCHANGED}, &(CPU::Disasm::Dis0xF3)},
   // 0xF4 : Instruction does not exist.
   {0xF5, 1, 16, {UNCHANGED, UNCHANGED, UNCHANGED, UNCHANGED}, &(CPU::Disasm::Dis0xF5)},
