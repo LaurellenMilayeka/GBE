@@ -42,8 +42,15 @@ void CPU::Disasm::Dis0x03(CPU::Z80 *cpu) {
 
 void CPU::Disasm::Dis0x04(CPU::Z80 *cpu) {
   uint8_t tmp;
-
+  uint8_t flags;
+  
   tmp = (cpu->bc >> 8) + 1;
+  flags = (cpu->af & 0xFF);
+  flags &= ~(1 << 6);
+  if (((((cpu->bc >> 8) & 0xF) + (1 & 0xF)) & 0x10) == 0x10) {
+    flags |= 1 << 5;
+  }
+  
   cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
@@ -239,6 +246,9 @@ void CPU::Disasm::Dis0x16(CPU::Z80 *cpu) {
 // TODO????
 
 void CPU::Disasm::Dis0x17(CPU::Z80 *cpu) {
+  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
+  DEBUG_PRINT("Instruction 0x17 : RLA : Not Implemented");
+  exit(EXIT_FAILURE);
   cpu->pc++;
 }
 
@@ -307,6 +317,9 @@ void CPU::Disasm::Dis0x1E(CPU::Z80 *cpu) {
 // TODO ????
 
 void CPU::Disasm::Dis0x1F(CPU::Z80 *cpu) {
+  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
+  DEBUG_PRINT("Instruction 0x17 : RRA : Not Implemented");
+  exit(EXIT_FAILURE);
   cpu->pc++;
 }
 
@@ -386,6 +399,9 @@ void CPU::Disasm::Dis0x26(CPU::Z80 *cpu) {
 // TODO ????
 
 void CPU::Disasm::Dis0x27(CPU::Z80 *cpu) {
+  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
+  DEBUG_PRINT("Instruction 0x27 : DAA : Not Implemented");
+  exit(EXIT_FAILURE);
   cpu->pc++;
 }
 
@@ -1067,6 +1083,9 @@ void CPU::Disasm::Dis0x75(CPU::Z80 *cpu) {
 // TODO ????
 
 void CPU::Disasm::Dis0x76(CPU::Z80 *cpu) {
+  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
+  DEBUG_PRINT("Instruction 0x76 : HALT : Not Implemented");
+  exit(EXIT_FAILURE);
   cpu->pc++;
 }
 
@@ -1747,6 +1766,9 @@ void CPU::Disasm::Dis0xB7(CPU::Z80 *cpu) {
 // TODO ????
 
 void CPU::Disasm::Dis0xB8(CPU::Z80 *cpu) {
+  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
+  DEBUG_PRINT("Instruction 0xB8 : CP : Not Implemented");
+  exit(EXIT_FAILURE);
   cpu->pc++;
 }
 
@@ -1755,6 +1777,9 @@ void CPU::Disasm::Dis0xB8(CPU::Z80 *cpu) {
 // TODO ????
 
 void CPU::Disasm::Dis0xB9(CPU::Z80 *cpu) {
+  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
+  DEBUG_PRINT("Instruction 0xB9 : CP : Not Implemented");
+  exit(EXIT_FAILURE);
   cpu->pc++;
 }
 
@@ -1763,6 +1788,9 @@ void CPU::Disasm::Dis0xB9(CPU::Z80 *cpu) {
 // TODO ????
 
 void CPU::Disasm::Dis0xBA(CPU::Z80 *cpu) {
+  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
+  DEBUG_PRINT("Instruction 0xBA : CP : Not Implemented");
+  exit(EXIT_FAILURE);
   cpu->pc++;
 }
 
@@ -1771,6 +1799,9 @@ void CPU::Disasm::Dis0xBA(CPU::Z80 *cpu) {
 // TODO ????
 
 void CPU::Disasm::Dis0xBB(CPU::Z80 *cpu) {
+  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
+  DEBUG_PRINT("Instruction 0xBB : CP : Not Implemented");
+  exit(EXIT_FAILURE);
   cpu->pc++;
 }
 
@@ -1779,6 +1810,9 @@ void CPU::Disasm::Dis0xBB(CPU::Z80 *cpu) {
 // TODO ????
 
 void CPU::Disasm::Dis0xBC(CPU::Z80 *cpu) {
+  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
+  DEBUG_PRINT("Instruction 0xBC : CP : Not Implemented");
+  exit(EXIT_FAILURE);
   cpu->pc++;
 }
 
@@ -1787,6 +1821,9 @@ void CPU::Disasm::Dis0xBC(CPU::Z80 *cpu) {
 // TODO ????
 
 void CPU::Disasm::Dis0xBD(CPU::Z80 *cpu) {
+  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
+  DEBUG_PRINT("Instruction 0xBD : CP : Not Implemented");
+  exit(EXIT_FAILURE);
   cpu->pc++;
 }
 
@@ -1795,6 +1832,9 @@ void CPU::Disasm::Dis0xBD(CPU::Z80 *cpu) {
 // TODO ????
 
 void CPU::Disasm::Dis0xBE(CPU::Z80 *cpu) {
+  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
+  DEBUG_PRINT("Instruction 0xBE : CP : Not Implemented");
+  exit(EXIT_FAILURE);
   cpu->pc++;
 }
 
@@ -1803,6 +1843,9 @@ void CPU::Disasm::Dis0xBE(CPU::Z80 *cpu) {
 // TODO ????
 
 void CPU::Disasm::Dis0xBF(CPU::Z80 *cpu) {
+  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
+  DEBUG_PRINT("Instruction 0xBF : CP : Not Implemented");
+  exit(EXIT_FAILURE);
   cpu->pc++;
 }
 
@@ -1920,6 +1963,9 @@ void CPU::Disasm::Dis0xCA(CPU::Z80 *cpu) {
 // TODO ????
 
 void CPU::Disasm::Dis0xCB(CPU::Z80 *cpu) {
+  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
+  DEBUG_PRINT("Instruction 0xCB : Extension Instruction : Not Implemented");
+  exit(EXIT_FAILURE);
   cpu->pc++;
 }
 
@@ -2300,6 +2346,9 @@ void CPU::Disasm::Dis0xF2(CPU::Z80 *cpu) {
 // TODO ????
 
 void CPU::Disasm::Dis0xF3(CPU::Z80 *cpu) {
+  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
+  DEBUG_PRINT("Instruction 0xF3 : DI : Not Implemented");
+  exit(EXIT_FAILURE);
   cpu->pc++;
 }
 
@@ -2372,6 +2421,9 @@ void CPU::Disasm::Dis0xFA(CPU::Z80 *cpu) {
 // TODO ????
 
 void CPU::Disasm::Dis0xFB(CPU::Z80 *cpu) {
+  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
+  DEBUG_PRINT("Instruction 0xFB : EI : Not Implemented");
+  exit(EXIT_FAILURE);
   cpu->pc++;
 }
 
@@ -2395,6 +2447,9 @@ void CPU::Disasm::Dis0xFD(CPU::Z80 *cpu) {
 // TODO ????
 
 void CPU::Disasm::Dis0xFE(CPU::Z80 *cpu) {
+  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
+  DEBUG_PRINT("Instruction 0xFE : CP : Not Implemented");
+  exit(EXIT_FAILURE);
   cpu->pc++;
 }
 
@@ -3030,802 +3085,2761 @@ void CPU::Disasm::DisCB0x37(CPU::Z80 *cpu) {
   cpu->pc++;
 }
 
+// SRL Instruction
+// TODO ????
+
 void CPU::Disasm::DisCB0x38(CPU::Z80 *cpu) {
   cpu->pc++;
 }
+
+// SRL Instruction
+// TODO ????
 
 void CPU::Disasm::DisCB0x39(CPU::Z80 *cpu) {
   cpu->pc++;
 }
 
+// SRL Instruction
+// TODO ????
+
 void CPU::Disasm::DisCB0x3A(CPU::Z80 *cpu) {
   cpu->pc++;
 }
+
+// SRL Instruction
+// TODO ????
 
 void CPU::Disasm::DisCB0x3B(CPU::Z80 *cpu) {
   cpu->pc++;
 }
 
+// SRL Instruction
+// TODO ????
+
 void CPU::Disasm::DisCB0x3C(CPU::Z80 *cpu) {
   cpu->pc++;
 }
+
+// SRL Instruction
+// TODO ????
 
 void CPU::Disasm::DisCB0x3D(CPU::Z80 *cpu) {
   cpu->pc++;
 }
 
+// SRL Instruction
+// TODO ????
+
 void CPU::Disasm::DisCB0x3E(CPU::Z80 *cpu) {
   cpu->pc++;
 }
+
+// SRL Instruction
+// TODO ????
 
 void CPU::Disasm::DisCB0x3F(CPU::Z80 *cpu) {
   cpu->pc++;
 }
 
+// BIT Instruction
+// Test if bit 0 is set in 8-bits register B
+
 void CPU::Disasm::DisCB0x40(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->bc >> 8) >> 0) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 0 is set in 8-bits register C
 
 void CPU::Disasm::DisCB0x41(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->bc & 0xFF) >> 0) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 0 is set in 8-bits register D
 
 void CPU::Disasm::DisCB0x42(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->de >> 8) >> 0) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 0 is set in 8-bits register E
 
 void CPU::Disasm::DisCB0x43(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->de & 0xFF) >> 0) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 0 is set in 8-bits register H
 
 void CPU::Disasm::DisCB0x44(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->hl >> 8) >> 0) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 0 is set in 8-bits register L
 
 void CPU::Disasm::DisCB0x45(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->hl & 0xFF) >> 0) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 0 is set in 8-bits direct located at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0x46(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if (((Engine::RAM::GetByte(cpu->hl) >> 0) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 0 is set in 8-bits register A
 
 void CPU::Disasm::DisCB0x47(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->af >> 8) >> 0) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 1 is set in 8-bits register B
 
 void CPU::Disasm::DisCB0x48(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->bc >> 8) >> 1) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 1 is set in 8-bits register C
 
 void CPU::Disasm::DisCB0x49(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->bc & 0xFF) >> 1) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 1 is set in 8-bits register D
 
 void CPU::Disasm::DisCB0x4A(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->de >> 8) >> 1) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 1 is set in 8-bits register E
 
 void CPU::Disasm::DisCB0x4B(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->de & 0xFF) >> 1) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 1 is set in 8-bits register H
 
 void CPU::Disasm::DisCB0x4C(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->hl >> 8) >> 1) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 1 is set in 8-bits register L
 
 void CPU::Disasm::DisCB0x4D(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->hl & 0xFF) >> 1) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 1 is set in 8-bits direct located at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0x4E(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if (((Engine::RAM::GetByte(cpu->hl) >> 1) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 1 is set in 8-bits register A
 
 void CPU::Disasm::DisCB0x4F(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->af >> 8) >> 1) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 2 is set in 8-bits register B
 
 void CPU::Disasm::DisCB0x50(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->bc >> 8) >> 2) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 2 is set in 8-bits register C
 
 void CPU::Disasm::DisCB0x51(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->bc & 0xFF) >> 2) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 2 is set in 8-bits register D
 
 void CPU::Disasm::DisCB0x52(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->de >> 8) >> 2) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 2 is set in 8-bits register E
 
 void CPU::Disasm::DisCB0x53(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->de & 0xFF) >> 2) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 2 is set in 8-bits register H
 
 void CPU::Disasm::DisCB0x54(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->hl >> 8) >> 2) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 2 is set in 8-bits register L
 
 void CPU::Disasm::DisCB0x55(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->hl & 0xFF) >> 0) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 2 is set in 8-bits direct located at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0x56(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if (((Engine::RAM::GetByte(cpu->hl) >> 2) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 2 is set in 8-bits register A
 
 void CPU::Disasm::DisCB0x57(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->af >> 8) >> 2) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 3 is set in 8-bits register B
 
 void CPU::Disasm::DisCB0x58(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->bc >> 8) >> 3) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 3 is set in 8-bits register C
 
 void CPU::Disasm::DisCB0x59(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->bc & 0xFF) >> 3) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 3 is set in 8-bits register D
 
 void CPU::Disasm::DisCB0x5A(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->de >> 8) >> 3) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 3 is set in 8-bits register E
 
 void CPU::Disasm::DisCB0x5B(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->de & 0xFF) >> 3) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 3 is set in 8-bits register H
 
 void CPU::Disasm::DisCB0x5C(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->hl >> 8) >> 3) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 3 is set in 8-bits register L
 
 void CPU::Disasm::DisCB0x5D(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->hl & 0xFF) >> 3) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 3 is set in 8-bits direct located at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0x5E(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if (((Engine::RAM::GetByte(cpu->hl) >> 3) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 3 is set in 8-bits register A
 
 void CPU::Disasm::DisCB0x5F(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->af >> 8) >> 3) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 4 is set in 8-bits register B
 
 void CPU::Disasm::DisCB0x60(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->bc >> 8) >> 4) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 4 is set in 8-bits register C
 
 void CPU::Disasm::DisCB0x61(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->bc & 0xFF) >> 4) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 4 is set in 8-bits register D
 
 void CPU::Disasm::DisCB0x62(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->de >> 8) >> 4) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 4 is set in 8-bits register E
 
 void CPU::Disasm::DisCB0x63(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->de & 0xFF) >> 4) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 4 is set in 8-bits register H
 
 void CPU::Disasm::DisCB0x64(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->hl >> 8) >> 4) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 4 is set in 8-bits register L
 
 void CPU::Disasm::DisCB0x65(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->hl & 0xFF) >> 4) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 4 is set in 8-bits direct located at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0x66(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if (((Engine::RAM::GetByte(cpu->hl) >> 4) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 4 is set in 8-bits register A
 
 void CPU::Disasm::DisCB0x67(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->af >> 8) >> 4) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 5 is set in 8-bits register B
 
 void CPU::Disasm::DisCB0x68(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->bc >> 8) >> 5) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 5 is set in 8-bits register C
 
 void CPU::Disasm::DisCB0x69(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->bc & 0xFF) >> 5) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 5 is set in 8-bits register D
 
 void CPU::Disasm::DisCB0x6A(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->de >> 8) >> 5) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 5 is set in 8-bits register E
 
 void CPU::Disasm::DisCB0x6B(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->de & 0xFF) >> 5) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 5 is set in 8-bits register H
 
 void CPU::Disasm::DisCB0x6C(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->hl >> 8) >> 5) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 5 is set in 8-bits register L
 
 void CPU::Disasm::DisCB0x6D(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->hl & 0xFF) >> 5) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 5 is set in 8-bits direct located at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0x6E(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if (((Engine::RAM::GetByte(cpu->hl) >> 5) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 5 is set in 8-bits register A
 
 void CPU::Disasm::DisCB0x6F(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->af >> 8) >> 5) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 6 is set in 8-bits register B
 
 void CPU::Disasm::DisCB0x70(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->bc >> 8) >> 6) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 6 is set in 8-bits register C
 
 void CPU::Disasm::DisCB0x71(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->bc & 0xFF) >> 6) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 6 is set in 8-bits register D
 
 void CPU::Disasm::DisCB0x72(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->de >> 8) >> 6) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 6 is set in 8-bits register E
 
 void CPU::Disasm::DisCB0x73(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->de & 0xFF) >> 6) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 6 is set in 8-bits register H
 
 void CPU::Disasm::DisCB0x74(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->hl >> 8) >> 6) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 6 is set in 8-bits register L
 
 void CPU::Disasm::DisCB0x75(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->hl & 0xFF) >> 6) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 6 is set in 8-bits direct located at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0x76(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if (((Engine::RAM::GetByte(cpu->hl) >> 6) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 6 is set in 8-bits register A
 
 void CPU::Disasm::DisCB0x77(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->af >> 8) >> 6) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 7 is set in 8-bits register B
 
 void CPU::Disasm::DisCB0x78(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->bc >> 8) >> 7) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 7 is set in 8-bits register C
 
 void CPU::Disasm::DisCB0x79(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->bc & 0xFF) >> 7) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 7 is set in 8-bits register D
 
 void CPU::Disasm::DisCB0x7A(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->de >> 8) >> 7) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 7 is set in 8-bits register E
 
 void CPU::Disasm::DisCB0x7B(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->de & 0xFF) >> 7) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 7 is set in 8-bits register H
 
 void CPU::Disasm::DisCB0x7C(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->hl >> 8) >> 7) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 7 is set in 8-bits register L
 
 void CPU::Disasm::DisCB0x7D(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->hl & 0xFF) >> 7) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 7 is set in 8-bits direct located at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0x7E(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if (((Engine::RAM::GetByte(cpu->hl) >> 7) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// BIT Instruction
+// Test if bit 7 is set in 8-bits register A
 
 void CPU::Disasm::DisCB0x7F(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af & 0xFF);
+  if ((((cpu->af >> 8) >> 7) & 1) == 1) {
+    tmp |= 1 << 7;
+  } else {
+    tmp &= ~(1 << 7);
+  }
+  tmp &= ~(1 << 6);
+  tmp |= 1 << 5;
+  cpu->af = ((cpu->af >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 0 from 8-bits register B
 
 void CPU::Disasm::DisCB0x80(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc >> 8);
+  tmp &= ~(1 << 0);
+  cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 0 from 8-bits register C
 
 void CPU::Disasm::DisCB0x81(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc & 0xFF);
+  tmp &= ~(1 << 0);
+  cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 0 from 8-bits register D
 
 void CPU::Disasm::DisCB0x82(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de >> 8);
+  tmp &= ~(1 << 0);
+  cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 0 from 8-bits register E
 
 void CPU::Disasm::DisCB0x83(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de & 0xFF);
+  tmp &= ~(1 << 0);
+  cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 0 from 8-bits register H
 
 void CPU::Disasm::DisCB0x84(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8);
+  tmp &= ~(1 << 0);
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 0 from 8-bits register L
 
 void CPU::Disasm::DisCB0x85(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF);
+  tmp &= ~(1 << 0);
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->pc++;
 }
 
+// RES Instruction
+// Clear bit 0 from 8-bits direct located at the address pointed by 16-bits register HL
+// Save the result at the address pointed by 16-bits register HL
 void CPU::Disasm::DisCB0x86(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->hl);
+  tmp &= ~(1 << 0);
+  Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 0 from 8-bits register A
 
 void CPU::Disasm::DisCB0x87(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8);
+  tmp &= ~(1 << 0);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 1 from 8-bits register B
 
 void CPU::Disasm::DisCB0x88(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc >> 8);
+  tmp &= ~(1 << 1);
+  cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 1 from 8-bits register C
 
 void CPU::Disasm::DisCB0x89(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc & 0xFF);
+  tmp &= ~(1 << 1);
+  cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 1 from 8-bits register D
 
 void CPU::Disasm::DisCB0x8A(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de >> 8);
+  tmp &= ~(1 << 1);
+  cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 1 from 8-bits register E
 
 void CPU::Disasm::DisCB0x8B(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de & 0xFF);
+  tmp &= ~(1 << 1);
+  cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 1 from 8-bits register H
 
 void CPU::Disasm::DisCB0x8C(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8);
+  tmp &= ~(1 << 1);
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 1 from 8-bits register L
 
 void CPU::Disasm::DisCB0x8D(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF);
+  tmp &= ~(1 << 1);
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 1 from 8-bits direct located at the address pointed by 16-bits register HL
+// Save the result at the address located by 16-bits register HL
 
 void CPU::Disasm::DisCB0x8E(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->hl);
+  tmp &= ~(1 << 1);
+  Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 1 from 8-bits register A
 
 void CPU::Disasm::DisCB0x8F(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8);
+  tmp &= ~(1 << 1);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 2 from 8-bits register B
 
 void CPU::Disasm::DisCB0x90(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc >> 8);
+  tmp &= ~(1 << 2);
+  cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 2 from 8-bits register C
 
 void CPU::Disasm::DisCB0x91(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc & 0xFF);
+  tmp &= ~(1 << 2);
+  cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 2 from 8-bits register D
 
 void CPU::Disasm::DisCB0x92(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de >> 8);
+  tmp &= ~(1 << 2);
+  cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 2 from 8-bits register E
 
 void CPU::Disasm::DisCB0x93(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de & 0xFF);
+  tmp &= ~(1 << 2);
+  cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 2 from 8-bits register H
 
 void CPU::Disasm::DisCB0x94(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8);
+  tmp &= ~(1 << 2);
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 2 from 8-bits register L
 
 void CPU::Disasm::DisCB0x95(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF);
+  tmp &= ~(1 << 2);
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 2 from 8-bits direct located at the address pointed by 16-bits register HL
+// Save the result at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0x96(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->hl);
+  tmp &= ~(1 << 2);
+  Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 2 from 8-bits register A
 
 void CPU::Disasm::DisCB0x97(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8);
+  tmp &= ~(1 << 2);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 3 from 8-bits register B
 
 void CPU::Disasm::DisCB0x98(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc >> 8);
+  tmp &= ~(1 << 3);
+  cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 3 from 8-bits register C
 
 void CPU::Disasm::DisCB0x99(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc & 0xFF);
+  tmp &= ~(1 << 3);
+  cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 3 from 8-bits register D
 
 void CPU::Disasm::DisCB0x9A(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de >> 8);
+  tmp &= ~(1 << 3);
+  cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 3 from 8-bits register E
 
 void CPU::Disasm::DisCB0x9B(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de & 0xFF);
+  tmp &= ~(1 << 3);
+  cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 3 from 8-bits register H
 
 void CPU::Disasm::DisCB0x9C(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8);
+  tmp &= ~(1 << 3);
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 3 from 8-bits register L
 
 void CPU::Disasm::DisCB0x9D(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF);
+  tmp &= ~(1 << 3);
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 3 from 8-bits direct located at the address pointed by 16-bits register HL
+// Save the result at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0x9E(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->hl);
+  tmp &= ~(1 << 3);
+  Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 3 from 8-bits register A
 
 void CPU::Disasm::DisCB0x9F(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8);
+  tmp &= ~(1 << 3);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 4 from 8-bits register B
 
 void CPU::Disasm::DisCB0xA0(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc >> 8);
+  tmp &= ~(1 << 4);
+  cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 4 from 8-bits register C
 
 void CPU::Disasm::DisCB0xA1(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc & 0xFF);
+  tmp &= ~(1 << 4);
+  cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 4 from 8-bits register D
 
 void CPU::Disasm::DisCB0xA2(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de >> 8);
+  tmp &= ~(1 << 4);
+  cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 4 from 8-bits register E
 
 void CPU::Disasm::DisCB0xA3(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de & 0xFF);
+  tmp &= ~(1 << 4);
+  cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 4 from 8-bits register H
 
 void CPU::Disasm::DisCB0xA4(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8);
+  tmp &= ~(1 << 4);
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 4 from 8-bits register L
 
 void CPU::Disasm::DisCB0xA5(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF);
+  tmp &= ~(1 << 4);
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 4 from 8-bits direct located at the address pointed by 16-bits register HL
+// Save the result at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0xA6(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->hl);
+  tmp &= ~(1 << 4);
+  Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 4 from 8-bits register A
 
 void CPU::Disasm::DisCB0xA7(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8);
+  tmp &= ~(1 << 4);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 5 from 8-bits register B
 
 void CPU::Disasm::DisCB0xA8(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc >> 8);
+  tmp &= ~(1 << 5);
+  cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 5 from 8-bits register C
 
 void CPU::Disasm::DisCB0xA9(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc & 0xFF);
+  tmp &= ~(1 << 5);
+  cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 5 from 8-bits register D
 
 void CPU::Disasm::DisCB0xAA(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de >> 8);
+  tmp &= ~(1 << 5);
+  cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 5 from 8-bits register E
 
 void CPU::Disasm::DisCB0xAB(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de & 0xFF);
+  tmp &= ~(1 << 5);
+  cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 5 from 8-bits register H
 
 void CPU::Disasm::DisCB0xAC(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8);
+  tmp &= ~(1 << 5);
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 5 from 8-bits register L
 
 void CPU::Disasm::DisCB0xAD(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF);
+  tmp &= ~(1 << 5);
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 5 from 8-bits direct located at the address pointed by 16-bits register HL
+// Save the result at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0xAE(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->hl);
+  tmp &= ~(1 << 5);
+  Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 5 from 8-bits register A
 
 void CPU::Disasm::DisCB0xAF(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8);
+  tmp &= ~(1 << 5);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 6 from 8-bits register B
 
 void CPU::Disasm::DisCB0xB0(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc >> 8);
+  tmp &= ~(1 << 6);
+  cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 6 from 8-bits register C
 
 void CPU::Disasm::DisCB0xB1(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc & 0xFF);
+  tmp &= ~(1 << 6);
+  cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 6 from 8-bits register D
 
 void CPU::Disasm::DisCB0xB2(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de >> 8);
+  tmp &= ~(1 << 6);
+  cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 6 from 8-bits register E
 
 void CPU::Disasm::DisCB0xB3(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de & 0xFF);
+  tmp &= ~(1 << 6);
+  cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 6 from 8-bits register H
 
 void CPU::Disasm::DisCB0xB4(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8);
+  tmp &= ~(1 << 6);
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 6 from 8-bits register L
 
 void CPU::Disasm::DisCB0xB5(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF);
+  tmp &= ~(1 << 6);
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 6 from 8-bits direct located at the address pointed by 16-bits register HL
+// Save the result at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0xB6(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->hl);
+  tmp &= ~(1 << 6);
+  Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 6 from 8-bits register A
 
 void CPU::Disasm::DisCB0xB7(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8);
+  tmp &= ~(1 << 6);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 7 from 8-bits register B
 
 void CPU::Disasm::DisCB0xB8(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc >> 8);
+  tmp &= ~(1 << 7);
+  cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 7 from 8-bits register C
 
 void CPU::Disasm::DisCB0xB9(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc & 0xFF);
+  tmp &= ~(1 << 7);
+  cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 7 from 8-bits register D
 
 void CPU::Disasm::DisCB0xBA(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de >> 8);
+  tmp &= ~(1 << 7);
+  cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 7 from 8-bits register E
 
 void CPU::Disasm::DisCB0xBB(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de & 0xFF);
+  tmp &= ~(1 << 7);
+  cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 7 from 8-bits register H
 
 void CPU::Disasm::DisCB0xBC(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8);
+  tmp &= ~(1 << 7);
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 7 from 8-bits register L
 
 void CPU::Disasm::DisCB0xBD(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF);
+  tmp &= ~(1 << 7);
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 7 from 8-bits direct located at the address pointed by 16-bits register HL
+// Save the result at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0xBE(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->hl);
+  tmp &= ~(1 << 7);
+  Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->pc++;
 }
+
+// RES Instruction
+// Clear bit 7 from 8-bits register A
 
 void CPU::Disasm::DisCB0xBF(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8);
+  tmp &= ~(1 << 7);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 0 from 8-bits register B
 
 void CPU::Disasm::DisCB0xC0(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc >> 8);
+  tmp |= (1 << 0);
+  cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 0 from 8-bits register C
 
 void CPU::Disasm::DisCB0xC1(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc & 0xFF);
+  tmp |= (1 << 0);
+  cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 0 from 8-bits register D
 
 void CPU::Disasm::DisCB0xC2(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de >> 8);
+  tmp |= (1 << 0);
+  cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 0 from 8-bits register E
 
 void CPU::Disasm::DisCB0xC3(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de & 0xFF);
+  tmp |= (1 << 0);
+  cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 0 from 8-bits register H
 
 void CPU::Disasm::DisCB0xC4(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8);
+  tmp |= (1 << 0);
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 0 from 8-bits register L
 
 void CPU::Disasm::DisCB0xC5(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF);
+  tmp |= (1 << 0);
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 0 from 8-bits direct located at the address pointed by 16-bits register HL
+// Save the result at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0xC6(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->hl);
+  tmp |= (1 << 0);
+  Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 0 from 8-bits register A
 
 void CPU::Disasm::DisCB0xC7(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8);
+  tmp |= (1 << 0);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 1 from 8-bits register B
 
 void CPU::Disasm::DisCB0xC8(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc >> 8);
+  tmp |= (1 << 1);
+  cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 1 from 8-bits register C
 
 void CPU::Disasm::DisCB0xC9(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc & 0xFF);
+  tmp |= (1 << 1);
+  cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 1 from 8-bits register D
 
 void CPU::Disasm::DisCB0xCA(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de >> 8);
+  tmp |= (1 << 1);
+  cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 1 from 8-bits register E
 
 void CPU::Disasm::DisCB0xCB(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de & 0xFF);
+  tmp |= (1 << 1);
+  cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 1 from 8-bits register H
 
 void CPU::Disasm::DisCB0xCC(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8);
+  tmp |= (1 << 1);
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 1 from 8-bits register L
 
 void CPU::Disasm::DisCB0xCD(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF);
+  tmp |= (1 << 1);
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 1 from 8-bits direct located at the address pointed by 16-bits register HL
+// Save the result at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0xCE(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->hl);
+  tmp |= (1 << 1);
+  Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 1 from 8-bits register A
 
 void CPU::Disasm::DisCB0xCF(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8);
+  tmp |= (1 << 1);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 2 from 8-bits register B
 
 void CPU::Disasm::DisCB0xD0(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc >> 8);
+  tmp |= (1 << 2);
+  cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 2 from 8-bits register C
 
 void CPU::Disasm::DisCB0xD1(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc & 0xFF);
+  tmp |= (1 << 2);
+  cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 2 from 8-bits register D
 
 void CPU::Disasm::DisCB0xD2(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de >> 8);
+  tmp |= (1 << 2);
+  cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 2 from 8-bits register E
 
 void CPU::Disasm::DisCB0xD3(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de & 0xFF);
+  tmp |= (1 << 2);
+  cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 2 from 8-bits register H
 
 void CPU::Disasm::DisCB0xD4(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8);
+  tmp |= (1 << 2);
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 2 from 8-bits register L
 
 void CPU::Disasm::DisCB0xD5(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF);
+  tmp |= (1 << 2);
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 2 from 8-bits direct located at the address pointed by 16-bits register HL
+// Save the result at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0xD6(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->hl);
+  tmp |= (1 << 2);
+  Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 2 from 8-bits register A
 
 void CPU::Disasm::DisCB0xD7(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8);
+  tmp |= (1 << 2);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 3 from 8-bits register B
 
 void CPU::Disasm::DisCB0xD8(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc >> 8);
+  tmp |= (1 << 3);
+  cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 3 from 8-bits register C
 
 void CPU::Disasm::DisCB0xD9(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc & 0xFF);
+  tmp |= (1 << 3);
+  cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 3 from 8-bits register D
 
 void CPU::Disasm::DisCB0xDA(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de >> 8);
+  tmp |= (1 << 3);
+  cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 3 from 8-bits register E
 
 void CPU::Disasm::DisCB0xDB(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de & 0xFF);
+  tmp |= (1 << 3);
+  cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 3 from 8-bits register H
 
 void CPU::Disasm::DisCB0xDC(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8);
+  tmp |= (1 << 3);
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 3 from 8-bits register L
 
 void CPU::Disasm::DisCB0xDD(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF);
+  tmp |= (1 << 3);
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 3 from 8-bits direct located at the address pointed by 16-bits register HL
+// Save the result at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0xDE(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->hl);
+  tmp |= (1 << 3);
+  Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 3 from 8-bits register A
 
 void CPU::Disasm::DisCB0xDF(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8);
+  tmp |= (1 << 3);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 4 from 8-bits register B
 
 void CPU::Disasm::DisCB0xE0(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc >> 8);
+  tmp |= (1 << 4);
+  cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 4 from 8-bits register C
 
 void CPU::Disasm::DisCB0xE1(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc & 0xFF);
+  tmp |= (1 << 4);
+  cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 4 from 8-bits register D
 
 void CPU::Disasm::DisCB0xE2(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de >> 8);
+  tmp |= (1 << 4);
+  cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 4 from 8-bits register E
 
 void CPU::Disasm::DisCB0xE3(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de & 0xFF);
+  tmp |= (1 << 4);
+  cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 4 from 8-bits register H
 
 void CPU::Disasm::DisCB0xE4(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8);
+  tmp |= (1 << 4);
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 4 from 8-bits register L
 
 void CPU::Disasm::DisCB0xE5(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF);
+  tmp |= (1 << 4);
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 4 from 8-bits direct located at the address pointed by 16-bits register HL
+// Save the result at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0xE6(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->hl);
+  tmp |= (1 << 4);
+  Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 4 from 8-bits register A
 
 void CPU::Disasm::DisCB0xE7(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8);
+  tmp |= (1 << 4);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 5 from 8-bits register B
 
 void CPU::Disasm::DisCB0xE8(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc >> 8);
+  tmp |= (1 << 5);
+  cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 5 from 8-bits register C
 
 void CPU::Disasm::DisCB0xE9(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc & 0xFF);
+  tmp |= (1 << 5);
+  cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 5 from 8-bits register D
 
 void CPU::Disasm::DisCB0xEA(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de >> 8);
+  tmp |= (1 << 5);
+  cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 6 from 8-bits register E
 
 void CPU::Disasm::DisCB0xEB(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de & 0xFF);
+  tmp |= (1 << 5);
+  cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 6 from 8-bits register H
 
 void CPU::Disasm::DisCB0xEC(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8);
+  tmp |= (1 << 5);
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 6 from 8-bits register L
 
 void CPU::Disasm::DisCB0xED(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF);
+  tmp |= (1 << 5);
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 5 from 8-bits direct located at the address pointed by 16-bits register HL
+// Save the result at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0xEE(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->hl);
+  tmp |= (1 << 5);
+  Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 5 from 8-bits register A
 
 void CPU::Disasm::DisCB0xEF(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8);
+  tmp |= (1 << 5);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 6 from 8-bits register B
 
 void CPU::Disasm::DisCB0xF0(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc >> 8);
+  tmp |= (1 << 6);
+  cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 6 from 8-bits register C
 
 void CPU::Disasm::DisCB0xF1(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc & 0xFF);
+  tmp |= (1 << 6);
+  cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 6 from 8-bits register D
 
 void CPU::Disasm::DisCB0xF2(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de >> 8);
+  tmp |= (1 << 6);
+  cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 6 from 8-bits register E
 
 void CPU::Disasm::DisCB0xF3(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de & 0xFF);
+  tmp |= (1 << 6);
+  cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 6 from 8-bits register H
 
 void CPU::Disasm::DisCB0xF4(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8);
+  tmp |= (1 << 6);
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 6 from 8-bits register L
 
 void CPU::Disasm::DisCB0xF5(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF);
+  tmp |= (1 << 6);
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 6 from 8-bits direct located at the address pointed by 16-bits register HL
+// Save the result at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0xF6(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->hl);
+  tmp |= (1 << 6);
+  Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 6 from 8-bits register A
 
 void CPU::Disasm::DisCB0xF7(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8);
+  tmp |= (1 << 6);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 7 from 8-bits register B
 
 void CPU::Disasm::DisCB0xF8(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc >> 8);
+  tmp |= (1 << 7);
+  cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 7 from 8-bits register C
 
 void CPU::Disasm::DisCB0xF9(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->bc & 0xFF);
+  tmp |= (1 << 7);
+  cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 7 from 8-bits register D
 
 void CPU::Disasm::DisCB0xFA(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de >> 8);
+  tmp |= (1 << 7);
+  cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 7 from 8-bits register E
 
 void CPU::Disasm::DisCB0xFB(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->de & 0xFF);
+  tmp |= (1 << 7);
+  cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 7 from 8-bits register H
 
 void CPU::Disasm::DisCB0xFC(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl >> 8);
+  tmp |= (1 << 7);
+  cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 7 from 8-bits register L
 
 void CPU::Disasm::DisCB0xFD(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->hl & 0xFF);
+  tmp |= (1 << 7);
+  cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->pc++;
 }
+
+// SET Instruction
+// Set bit 7 from 8-bits direct located at the address pointed by 16-bits register HL
+// Save the result at the address pointed by 16-bits register HL
 
 void CPU::Disasm::DisCB0xFE(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->hl);
+  tmp |= (1 << 7);
+  Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->pc++;
 }
 
+// SET Instruction
+// Set bit 7 from 8-bits register A
+
 void CPU::Disasm::DisCB0xFF(CPU::Z80 *cpu) {
+  uint8_t tmp;
+
+  tmp = (cpu->af >> 8);
+  tmp |= (1 << 7);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
   cpu->pc++;
 }

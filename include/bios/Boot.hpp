@@ -16,6 +16,7 @@ namespace Engine {
   public:
     static void BootInit();
     static void UnloadBoot();
+    static uint8_t *GetBiosData();
   };
 
 };

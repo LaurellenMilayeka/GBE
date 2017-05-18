@@ -41,7 +41,8 @@ void Engine::RAM::Initialize() {
   memset(Engine::RAM::_ram, 0, Engine::RAM::_ramSize);
   DEBUG_PRINT("Done");
   DEBUG_PRINT("Loading first 16kb of ROM data in the first memory bank");
-  Engine::RAM::GetROMChunk(0x0000, 0x3FFF);
+  Engine::RAM::LoadBIOS();
+  Engine::RAM::GetROMChunk(0x0100, 0x0100, 0x3FFF);
   DEBUG_PRINT("Done");
 }
 
@@ -53,10 +54,14 @@ void Engine::RAM::SetByte(uint16_t pos, uint8_t value) {
   _ram[pos] = value;
 }
 
-void Engine::RAM::GetROMChunk(uint16_t start, uint16_t end) {
+void Engine::RAM::LoadBIOS() {
+  memcpy(Engine::RAM::_ram, Engine::Boot::GetBiosData(), 0x100);
+}
+
+void Engine::RAM::GetROMChunk(uint16_t startRAM, uint16_t start, uint16_t end) {
   Loader::ROM *rom = Loader::ROM::Instance();
 
-  memcpy(Engine::RAM::_ram, &(rom->GetROMData())[start], (end - start));
+  memcpy(&(Engine::RAM::_ram)[startRAM], &(rom->GetROMData())[start], (end - start));
 }
 
 uint8_t *Engine::RAM::GetRAM() {

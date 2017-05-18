@@ -11,6 +11,10 @@ void Engine::Boot::BootInit() {
   HexDump(Engine::Boot::_biosData, 0x0000, 0x00FF);
 }
 
+uint8_t *Engine::Boot::GetBiosData() {
+  return (Engine::Boot::_biosData);
+}
+
 void Engine::Boot::UnloadBoot() {
   memset(Engine::Boot::_biosData, 0, 256);
 }
