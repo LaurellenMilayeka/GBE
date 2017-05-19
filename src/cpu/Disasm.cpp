@@ -132,7 +132,18 @@ void CPU::Disasm::Dis0x08(CPU::Z80 *cpu) {
 // Add 16-bits register BC to 16-bits register HL
 
 void CPU::Disasm::Dis0x09(CPU::Z80 *cpu) {
+  uint8_t flags;
+  
+  flags = (cpu->af & 0xFF);
+  flags &= ~(1 << 6);
+  if (((((cpu->hl >> 8) & 0xF) + ((cpu->bc >> 8) & 0xF)) & 0x10) == 0x10) {
+    flags |= (1 << 5);
+  }
+  if (((((cpu->hl >> 8) & 0xFF) + ((cpu->bc >> 8) & 0xFF)) & 0x100) == 0x100) {
+    flags |= (1 << 4);
+  }
   cpu->hl += cpu->bc;
+  cpu->af = ((cpu->af >> 8) << 8) + flags;
   cpu->pc++;
 }
 
@@ -165,7 +176,7 @@ void CPU::Disasm::Dis0x0C(CPU::Z80 *cpu) {
   tmp = (cpu->bc & 0xFF) + 1;
   flags = (cpu->af & 0xFF);
   flags &= ~(1 << 6);
-  if (((((cpu->bc >> 8) & 0xF) + (1 & 0xF)) & 0x10) == 0x10) {
+  if (((((cpu->bc & 0xFF) & 0xF) + (1 & 0xF)) & 0x10) == 0x10) {
     flags |= 1 << 5;
   }
   if (!tmp) {
@@ -186,7 +197,7 @@ void CPU::Disasm::Dis0x0D(CPU::Z80 *cpu) {
   tmp = (cpu->bc & 0xFF) - 1;
   flags = (cpu->af & 0xFF);
   flags |= (1 << 6);
-  if ((((cpu->bc >> 8) & 0xF) - (1 & 0xF)) < 0) {
+  if ((((cpu->bc & 0xFF) & 0xF) - (1 & 0xF)) < 0) {
     flags |= 1 << 5;
   }
   if (!tmp) {
@@ -270,9 +281,19 @@ void CPU::Disasm::Dis0x13(CPU::Z80 *cpu) {
 
 void CPU::Disasm::Dis0x14(CPU::Z80 *cpu) {
   uint8_t tmp;
-
+  uint8_t flags;
+  
   tmp = (cpu->de >> 8) + 1;
+  flags = (cpu->af & 0xFF);
+  flags &= ~(1 << 6);
+  if (((((cpu->de >> 8) & 0xF) + (1 & 0xF)) & 0x10) == 0x10) {
+    flags |= 1 << 5;
+  }
+  if (!tmp) {
+    flags |= 1 << 7;
+  }
   cpu->de = (tmp << 8) + (cpu->de & 0xFF);
+  cpu->af = ((cpu->af >> 8) << 8) + flags;
   cpu->pc++;
 }
 
@@ -281,9 +302,19 @@ void CPU::Disasm::Dis0x14(CPU::Z80 *cpu) {
 
 void CPU::Disasm::Dis0x15(CPU::Z80 *cpu) {
   uint8_t tmp;
-
+  uint8_t flags;
+  
   tmp = (cpu->de >> 8) - 1;
+  flags = (cpu->af & 0xFF);
+  flags |= (1 << 6);
+  if ((((cpu->de >> 8) & 0xF) - (1 & 0xF)) < 0) {
+    flags |= 1 << 5;
+  }
+  if (!tmp) {
+    flags |= 1 << 7;
+  }
   cpu->de = (tmp << 8) + (cpu->de & 0xFF);
+  cpu->af = ((cpu->af >> 8) << 8) + flags;
   cpu->pc++;
 }
 
@@ -296,12 +327,29 @@ void CPU::Disasm::Dis0x16(CPU::Z80 *cpu) {
 }
 
 // RLA Instruction
-// TODO????
+// Rotate 8-bits register A left
 
 void CPU::Disasm::Dis0x17(CPU::Z80 *cpu) {
-  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
-  DEBUG_PRINT("Instruction 0x17 : RLA : Not Implemented");
-  exit(EXIT_FAILURE);
+  uint8_t tmp;
+  uint8_t flags;
+  
+  tmp = cpu->af >> 8;
+  flags = (cpu->af & 0xFF);
+  flags &= ~(1 << 7);
+  flags &= ~(1 << 6);
+  flags &= ~(1 << 5);
+  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  if ((((cpu->af >> 8) >> 7) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
+  }
+  if (((flags >> 4) & 1) == 1) {
+    tmp |= (1 << 0);
+  } else {
+    tmp &= ~(1 << 0);
+  }
+  cpu->af = (tmp << 8) + flags;
   cpu->pc++;
 }
 
@@ -316,7 +364,18 @@ void CPU::Disasm::Dis0x18(CPU::Z80 *cpu) {
 // Add the value of 16-bits register DE to 16-bits register HL
 
 void CPU::Disasm::Dis0x19(CPU::Z80 *cpu) {
+  uint8_t flags;
+  
+  flags = (cpu->af & 0xFF);
+  flags &= ~(1 << 6);
+  if (((((cpu->hl >> 8) & 0xF) + ((cpu->de >> 8) & 0xF)) & 0x10) == 0x10) {
+    flags |= (1 << 5);
+  }
+  if (((((cpu->hl >> 8) & 0xFF) + ((cpu->de >> 8) & 0xFF)) & 0x100) == 0x100) {
+    flags |= (1 << 4);
+  }
   cpu->hl += cpu->de;
+  cpu->af = ((cpu->af >> 8) << 8) + flags;
   cpu->pc++;
 }
 
@@ -341,9 +400,19 @@ void CPU::Disasm::Dis0x1B(CPU::Z80 *cpu) {
 
 void CPU::Disasm::Dis0x1C(CPU::Z80 *cpu) {
   uint8_t tmp;
-
+  uint8_t flags;
+  
   tmp = (cpu->de & 0xFF) + 1;
+  flags = (cpu->af & 0xFF);
+  flags &= ~(1 << 6);
+  if (((((cpu->de & 0xFF) & 0xF) + (1 & 0xF)) & 0x10) == 0x10) {
+    flags |= 1 << 5;
+  }
+  if (!tmp) {
+    flags |= 1 << 7;
+  }
   cpu->de = ((cpu->de >> 8) << 8) + tmp;
+  cpu->af = ((cpu->af >> 8) << 8) + flags;
   cpu->pc++;
 }
 
@@ -352,9 +421,19 @@ void CPU::Disasm::Dis0x1C(CPU::Z80 *cpu) {
 
 void CPU::Disasm::Dis0x1D(CPU::Z80 *cpu) {
   uint8_t tmp;
-
+  uint8_t flags;
+  
   tmp = (cpu->de & 0xFF) - 1;
+  flags = (cpu->af & 0xFF);
+  flags |= (1 << 6);
+  if ((((cpu->de & 0xFF) & 0xF) - (1 & 0xF)) < 0) {
+    flags |= 1 << 5;
+  }
+  if (!tmp) {
+    flags |= 1 << 7;
+  }
   cpu->de = ((cpu->de >> 8) << 8) + tmp;
+  cpu->af = ((cpu->af >> 8) << 8) + flags;
   cpu->pc++;
 }
 
