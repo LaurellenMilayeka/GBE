@@ -1,3 +1,0 @@
-#include "GPU.hpp"
-
-Graphics::GPU::_singleton = nullptr;
