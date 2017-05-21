@@ -2,6 +2,7 @@
 #define __OPCODES_HPP__
 
 #include <stdint.h>
+#include "Disasm.hpp"
 
 namespace CPU {
   class Z80;

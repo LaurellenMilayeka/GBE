@@ -15,6 +15,7 @@ SRC=		$(SRCDIR)cpu/Z80.cpp \
 		$(SRCDIR)ram/RAM.cpp \
 \
 		$(SRCDIR)debug/Hexdump.cpp \
+		$(SRCDIR)debug/RegDump.cpp \
 \
 		$(SRCDIR)main.cpp
 
