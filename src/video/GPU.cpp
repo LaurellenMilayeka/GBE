@@ -120,5 +120,35 @@ void Graphics::GPU::Tick(CPU::Z80 *cpu) {
 }
 
 void Graphics::GPU::Process() {
-  
+  if (this->IsLCDEnabled()) {
+    switch (Engine::RAM::GetByte(0xFF41) & 0x03) {
+    case 0:
+      Engine::RAM::SetByte(0xFF44, Engine::RAM::GetByte(0xFF44) + 1);
+      if ((this->_actualLine = Engine::RAM::GetByte(0xFF44)) == 144) {
+	uint8_t tmp = Engine::RAM::GetByte(0xFF41);
+	tmp &= ~(1 << 1);
+	tmp |= (1 << 0);
+	Engine::RAM::SetByte(0xFF41, tmp);
+      }
+      break;
+    case 1:
+      //Engine::RAM::SetByte(0xFF44, Engine::RAM::GetByte(0xFF44) + 1);
+      this->_actualLine++;
+      if (this->_actualLine > 153) {
+	uint8_t tmp = Engine::RAM::GetByte(0xFF41);
+	tmp &= ~(1 << 1);
+	tmp &= ~(1 << 0);
+	Engine::RAM::SetByte(0xFF41, tmp);
+	Engine::RAM::SetByte(0xFF44, 0);
+	this->_actualLine = 0;
+      }
+      break;
+    case 2:
+      // Search OAM
+      break;
+    case 3:
+      // Display sprites
+      break;
+    }
+  }
 }

@@ -370,6 +370,7 @@ void CPU::Disasm::Dis0x18(CPU::Z80 *cpu) {
 
   i = Engine::RAM::GetByte(cpu->pc + 1);
   cpu->pc += i;
+  cpu->pc -= 2;
 }
 
 // ADD Instruction
@@ -498,6 +499,7 @@ void CPU::Disasm::Dis0x20(CPU::Z80 *cpu) {
   i = (char)Engine::RAM::GetByte(cpu->pc + 1);
   if ((((cpu->af & 0xFF) >> 7) & 1) != 1) {
     cpu->pc += i;
+    cpu->pc -= 2;
   }
 }
 
@@ -622,6 +624,7 @@ void CPU::Disasm::Dis0x28(CPU::Z80 *cpu) {
   i = Engine::RAM::GetByte(cpu->pc + 1);
   if ((((cpu->af & 0xFF) >> 7) & 1) == 1) {
     cpu->pc += i;
+    cpu->pc -= 2;
   }
 }
 
@@ -748,6 +751,7 @@ void CPU::Disasm::Dis0x30(CPU::Z80 *cpu) {
   i = Engine::RAM::GetByte(cpu->pc + 1);
   if ((((cpu->af & 0xFF) >> 4) & 1) != 1) {
     cpu->pc += i;
+    cpu->pc -= 2;
   }
 }
 
@@ -851,6 +855,7 @@ void CPU::Disasm::Dis0x38(CPU::Z80 *cpu) {
   i = Engine::RAM::GetByte(cpu->pc + 1);
   if ((((cpu->af & 0xFF) >> 4) & 1) == 1) {
     cpu->pc += i;
+    cpu->pc -= 2;
   }
 }
 
@@ -3063,6 +3068,7 @@ void CPU::Disasm::Dis0xBF(CPU::Z80 *cpu) {
 void CPU::Disasm::Dis0xC0(CPU::Z80 *cpu) {
   if (((cpu->af & 0xFF) & 1) != 1) {
     cpu->pc = (Engine::RAM::GetByte(cpu->sp + 1) << 8) + Engine::RAM::GetByte(cpu->sp); 
+    cpu->pc--;
     cpu->sp += 2;
   }
 }
@@ -3081,8 +3087,10 @@ void CPU::Disasm::Dis0xC1(CPU::Z80 *cpu) {
 // Reset Z flag
 
 void CPU::Disasm::Dis0xC2(CPU::Z80 *cpu) {
-  if (((cpu->af & 0xFF) >> 7) != 1)
+  if (((cpu->af & 0xFF) >> 7) != 1) {
     cpu->pc = (Engine::RAM::GetByte(cpu->pc + 2) << 8) + Engine::RAM::GetByte(cpu->pc + 1);
+    cpu->pc -= 3;
+  }
 }
 
 // JP Instruction
@@ -3090,6 +3098,7 @@ void CPU::Disasm::Dis0xC2(CPU::Z80 *cpu) {
 
 void CPU::Disasm::Dis0xC3(CPU::Z80 *cpu) {
   cpu->pc = (Engine::RAM::GetByte(cpu->pc + 2) << 8) + Engine::RAM::GetByte(cpu->pc + 1);
+  cpu->pc -= 3;
 }
 
 // CALL Instruction
@@ -3102,6 +3111,7 @@ void CPU::Disasm::Dis0xC4(CPU::Z80 *cpu) {
     Engine::RAM::SetByte(cpu->sp, (cpu->pc + 3) & 0xFF);
     Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc + 3) >> 8);
     cpu->pc = (Engine::RAM::GetByte(cpu->pc + 2) << 8) + Engine::RAM::GetByte(cpu->pc + 1);
+    cpu->pc -= 3;
   }
 }
 
@@ -3149,10 +3159,10 @@ void CPU::Disasm::Dis0xC6(CPU::Z80 *cpu) {
 
 void CPU::Disasm::Dis0xC7(CPU::Z80 *cpu) {
   cpu->sp -= 2;
-  cpu->pc += 3;
-  Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
-  Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
+  Engine::RAM::SetByte(cpu->sp, ((cpu->pc + 3) & 0xFF));
+  Engine::RAM::SetByte(cpu->sp + 1, ((cpu->pc + 3) >> 8));
   cpu->pc = 0x0000;
+  cpu->pc -= 3;
 }
 
 // RET Z Instruction
@@ -3162,6 +3172,7 @@ void CPU::Disasm::Dis0xC7(CPU::Z80 *cpu) {
 void CPU::Disasm::Dis0xC8(CPU::Z80 *cpu) {
   if (((cpu->af & 0xFF) & 1) == 1) {
     cpu->pc = (Engine::RAM::GetByte(cpu->sp + 1) << 8) + Engine::RAM::GetByte(cpu->sp);
+    cpu->pc--;
     cpu->sp += 2;
   }
 }
@@ -3180,8 +3191,10 @@ void CPU::Disasm::Dis0xC9(CPU::Z80 *cpu) {
 // Jump to given address if Zero flag = 1
 
 void CPU::Disasm::Dis0xCA(CPU::Z80 *cpu) {
-  if (((cpu->af & 0xFF) & 1) == 1)
+  if (((cpu->af & 0xFF) & 1) == 1) {
     cpu->pc = (Engine::RAM::GetByte(cpu->pc + 2) << 8) + Engine::RAM::GetByte(cpu->pc + 1);
+    cpu->pc -= 3;
+  }
 }
 
 // CB PREFIX
@@ -3193,12 +3206,16 @@ void CPU::Disasm::Dis0xCB(CPU::Z80 *cpu) {
   
   while (ext_opcodes[i].byteLength != 0 && !found) {
     if (Engine::RAM::GetByte(cpu->pc + 1) == ext_opcodes[i].code) {
+      ext_opcodes[i].fptr(cpu);
+
+#ifdef DEBUG
       dprintf(1, "\n[DEBUG] : ------------------------------START---------------------------------\n");
       dprintf(1, "[DEBUG] : Program Counter value : 0x%04X\n", cpu->pc);
       dprintf(1, "[DEBUG] : Instruction 0x%02X found\n", ext_opcodes[i].code);
-      ext_opcodes[i].fptr(cpu);
       RegDump(cpu);
       dprintf(1, "[DEBUG] : ---------------------------------END----------------------------------\n\n");
+#endif
+      
       found = true;
       cpu->pc += ext_opcodes[i].byteLength;
     }
@@ -3216,6 +3233,7 @@ void CPU::Disasm::Dis0xCC(CPU::Z80 *cpu) {
     Engine::RAM::SetByte(cpu->sp, (cpu->pc + 3) & 0xFF);
     Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc + 3) >> 8);
     cpu->pc = (Engine::RAM::GetByte(cpu->pc + 2) << 8) + Engine::RAM::GetByte(cpu->pc + 1);
+    cpu->pc -= 3;
   }
 }
 
@@ -3271,6 +3289,7 @@ void CPU::Disasm::Dis0xCF(CPU::Z80 *cpu) {
   Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
   Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
   cpu->pc = 0x0008;
+  cpu->pc--;
 }
 
 // RET NC Instruction
@@ -3280,6 +3299,7 @@ void CPU::Disasm::Dis0xD0(CPU::Z80 *cpu) {
   if ((((cpu->af & 0xFF) >> 4) & 1) != 1) { 
     cpu->pc = (Engine::RAM::GetByte(cpu->sp + 1) << 8) + Engine::RAM::GetByte(cpu->sp);
     cpu->sp += 2;
+    cpu->pc--;
   }
 }
 
@@ -3297,6 +3317,7 @@ void CPU::Disasm::Dis0xD1(CPU::Z80 *cpu) {
 void CPU::Disasm::Dis0xD2(CPU::Z80 *cpu) {
   if ((((cpu->af & 0xFF) >> 4) & 1) != 0) {
     cpu->pc = (Engine::RAM::GetByte(cpu->pc + 2) << 8) + Engine::RAM::GetByte(cpu->pc + 1);
+    cpu->pc -= 3;
   }
 }
 
@@ -3317,6 +3338,7 @@ void CPU::Disasm::Dis0xD4(CPU::Z80 *cpu) {
     Engine::RAM::SetByte(cpu->sp, (cpu->pc + 3) & 0xFF);
     Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc + 3) >> 8);
     cpu->pc = (Engine::RAM::GetByte(cpu->pc + 2) << 8) + Engine::RAM::GetByte(cpu->pc + 1);
+    cpu->pc -= 3;
   }
 }
 
@@ -3367,6 +3389,7 @@ void CPU::Disasm::Dis0xD7(CPU::Z80 *cpu) {
   Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
   Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
   cpu->pc = 0x0010;
+  cpu->pc--;
 }
 
 // RET C
@@ -3376,6 +3399,7 @@ void CPU::Disasm::Dis0xD8(CPU::Z80 *cpu) {
   if ((((cpu->af & 0xFF) >> 4) & 1) == 1) {
     cpu->pc = (Engine::RAM::GetByte(cpu->sp + 1) << 8) + Engine::RAM::GetByte(cpu->sp);
     cpu->sp += 2;
+    cpu->pc--;
   }
 }
 
@@ -3384,6 +3408,7 @@ void CPU::Disasm::Dis0xD8(CPU::Z80 *cpu) {
 
 void CPU::Disasm::Dis0xD9(CPU::Z80 *cpu) {
   cpu->pc = (Engine::RAM::GetByte(cpu->sp - 1) << 8) + Engine::RAM::GetByte(cpu->sp);
+  cpu->pc--;
 }
 
 // JP Instruction
@@ -3392,6 +3417,7 @@ void CPU::Disasm::Dis0xD9(CPU::Z80 *cpu) {
 void CPU::Disasm::Dis0xDA(CPU::Z80 *cpu) {
   if ((((cpu->af & 0xFF) >> 4) & 1) == 1) {
     cpu->pc = (Engine::RAM::GetByte(cpu->pc + 2) << 8) + Engine::RAM::GetByte(cpu->pc + 1);
+    cpu->pc -= 3;
   }
 }
 
@@ -3413,6 +3439,7 @@ void CPU::Disasm::Dis0xDC(CPU::Z80 *cpu) {
     Engine::RAM::SetByte(cpu->sp, (cpu->pc + 3) & 0xFF);
     Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc + 3) >> 8);
     cpu->pc = (Engine::RAM::GetByte(cpu->pc + 2) << 8) + Engine::RAM::GetByte(cpu->pc + 1);
+    cpu->pc -= 3;
   }
 }
 
@@ -3466,6 +3493,7 @@ void CPU::Disasm::Dis0xDF(CPU::Z80 *cpu) {
   Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
   Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
   cpu->pc = 0x0018;
+  cpu->pc--;
 }
 
 // LDH Instruction
@@ -3544,6 +3572,7 @@ void CPU::Disasm::Dis0xE7(CPU::Z80 *cpu) {
   Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
   Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
   cpu->pc = 0x0020;
+  cpu->pc--;
 }
 
 // ADD Instruction
@@ -3589,6 +3618,7 @@ void CPU::Disasm::Dis0xE8(CPU::Z80 *cpu) {
 
 void CPU::Disasm::Dis0xE9(CPU::Z80 *cpu) {
   cpu->pc = (Engine::RAM::GetByte(cpu->hl + 1) << 8) + Engine::RAM::GetByte(cpu->hl);
+  cpu->pc--;
 }
 
 // LD Instruction
@@ -3647,6 +3677,7 @@ void CPU::Disasm::Dis0xEF(CPU::Z80 *cpu) {
   Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
   Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
   cpu->pc = 0x0028;
+  cpu->pc--;
 }
 
 // LDH Instruction
@@ -3730,6 +3761,7 @@ void CPU::Disasm::Dis0xF7(CPU::Z80 *cpu) {
   Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
   Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
   cpu->pc = 0x0030;
+  cpu->pc--;
 }
 
 // LDHL Instruction
@@ -3844,6 +3876,7 @@ void CPU::Disasm::Dis0xFF(CPU::Z80 *cpu) {
   Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
   Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
   cpu->pc = 0x0038;
+  cpu->pc--;
 }
 
 

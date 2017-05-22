@@ -8,7 +8,11 @@ void Engine::Boot::BootInit() {
   memset(Engine::Boot::_biosData, 0, 256);
   bios.read((char*)Engine::Boot::_biosData, 256);
   DEBUG_PRINT("BIOS Loaded");
+
+#ifdef DEBUG
   HexDump(Engine::Boot::_biosData, 0x0000, 0x00FF);
+#endif
+  
 }
 
 uint8_t *Engine::Boot::GetBiosData() {
