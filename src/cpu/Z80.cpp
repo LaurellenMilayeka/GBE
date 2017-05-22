@@ -11,6 +11,9 @@ CPU::Z80::Z80() {
 
   this->sp = 0x0000;
   this->pc = 0x0000;
+
+  this->clock.t = 0;
+  this->clock.m = 0;
 }
 
 CPU::Z80::~Z80() {

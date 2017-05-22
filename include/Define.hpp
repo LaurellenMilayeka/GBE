@@ -1,5 +1,4 @@
-#ifndef __DEFINES_HPP__
-#define __DEFINES_HPP__
+#pragma once
 
 #include <iostream>
 
@@ -10,6 +9,3 @@
 #endif
 
 void HexDump(uint8_t*, uint16_t, uint16_t);
-
-#endif
-

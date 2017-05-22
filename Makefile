@@ -3,7 +3,9 @@ DEBUG ?= false
 SRCDIR=		./src/
 INCDIR=		./include/
 
-SRC=		$(SRCDIR)cpu/Z80.cpp \
+SRC=		$(SRCDIR)main.cpp \
+\
+		$(SRCDIR)cpu/Z80.cpp \
 		$(SRCDIR)cpu/Opcodes.cpp \
 		$(SRCDIR)cpu/Disasm.cpp \
 \
@@ -14,15 +16,16 @@ SRC=		$(SRCDIR)cpu/Z80.cpp \
 \
 		$(SRCDIR)ram/RAM.cpp \
 \
+		$(SRCDIR)video/GPU.cpp \
+\
 		$(SRCDIR)debug/Hexdump.cpp \
 		$(SRCDIR)debug/RegDump.cpp \
-\
-		$(SRCDIR)main.cpp
+		$(SRCDIR)debug/DebugShell.cpp
 
 OBJS=		$(SRC:.cpp=.o)
 
 CXXFLAGS=	-Wall -Wextra -Werror -std=c++11 -g3
-CXXFLAGS+=	-I $(INCDIR)cpu/ -I $(INCDIR)loader/ -I $(INCDIR)bios/ -I $(INCDIR)ram/ -I $(INCDIR)
+CXXFLAGS+=	-I $(INCDIR)cpu/ -I $(INCDIR)loader/ -I $(INCDIR)bios/ -I $(INCDIR)ram/ -I $(INCDIR) -I $(INCDIR)video/ -I $(INCDIR)debug/
 
 ifeq ($(DEBUG), true)
 CXXFLAGS+= -DDEBUG

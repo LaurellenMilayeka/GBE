@@ -1,5 +1,4 @@
-#ifndef __RAM_HPP__
-#define __RAM_HPP__
+#pragma once
 
 #include <stdint.h>
 
@@ -23,5 +22,3 @@ namespace Engine {
     static void		LoadBIOS();
   };
 };
-
-#endif

@@ -4,6 +4,8 @@
 #include "ROMLoader.hpp"
 #include "Boot.hpp"
 #include "RAM.hpp"
+#include "DebugShell.hpp"
+#include "GPU.hpp"
 
 void RegDump(CPU::Z80 *cpu) {
   dprintf(1, "[DEBUG] : AF Register : 0x%04X\n", cpu->af);
@@ -17,24 +19,42 @@ void RegDump(CPU::Z80 *cpu) {
   dprintf(1, "[DEBUG] : HL Register : 0x%04X\n", cpu->hl);
   dprintf(1, "[DEBUG] : SP Register : 0x%04X\n", cpu->sp);
   dprintf(1, "[DEBUG] : PC Register : 0x%04X\n", cpu->pc);  
+  dprintf(1, "[DEBUG] : Clock _t Register : %d\n", cpu->clock.t);  
+  dprintf(1, "[DEBUG] : Clock _m Register : %d\n", cpu->clock.m);
+}
+
+void GPURegDump(Graphics::GPU *gpu) {
+  dprintf(1, "[DEBUG] : LCD Control Status :\n");
+  dprintf(1, "[DEBUG] : \t0xFF40 Value : 0x%02X\n", Engine::RAM::GetByte(0xFF40));
+  dprintf(1, "[DEBUG] : \tLCD Enabled : %s\n", (gpu->IsLCDEnabled()) ? "TRUE" : "FALSE");
+  dprintf(1, "[DEBUG] : \tWindow Enabled : %s\n", (gpu->IsWindowDisplayEnabled()) ? "TRUE" : "FALSE");
+  dprintf(1, "[DEBUG] : \tSprite Display Enabled : %s\n", (gpu->IsSpriteDisplayEnabled()) ? "TRUE" : "FALSE");
+  dprintf(1, "[DEBUG] : \tBackground Enabled : %s\n", (gpu->IsBackgroundEnabled()) ? "TRUE" : "FALSE");
+  dprintf(1, "[DEBUG] : \tAddress plage for Window tile map : %s\n", (gpu->GetWindowTileMapDisplaySelect()) ? "0x9C00-0x9FFF" : "0x9800-0x9BFF");
+  dprintf(1, "[DEBUG] : \tAddress plage for Background and Window tile data : %s\n", (gpu->GetBGWindowTileDataSelect()) ? "0x8800-0x97FF" : "0x8000-0x8FFF");
+  dprintf(1, "[DEBUG] : \tAddress plage for Background display : %s\n", (gpu->GetBGTileMapDisplaySelect()) ? "0x9C00-0x9FFF" : "0x9800-0x9BFF");
+  dprintf(1, "[DEBUG] : \tSprite size in pixels : %s\n", (gpu->GetSpriteSize()) ? "8x16" : "8x8");
 }
 
 int main(int ac, char **av) {
 
   Loader::ROM *rom;
   CPU::Z80 *cpu;
+  Graphics::GPU *gpu;
   int i;
   bool found;
   
   if (ac == 2) {
     
     cpu = CPU::Z80::Instance();
+    gpu = Graphics::GPU::Instance();
     Engine::Boot::BootInit();
     rom = Loader::ROM::Instance();
     rom->Load(av[1]);
     Engine::RAM::Initialize();
     HexDump(Engine::RAM::GetRAM(), 0x0000, 0x3FFF);
-
+    cpu->pc = 0x055;
+    
     while (cpu->pc < 0x100) {
       i = 0;
       found = false;
@@ -44,8 +64,13 @@ int main(int ac, char **av) {
 	  dprintf(1, "[DEBUG] : Program Counter value : 0x%04X\n", cpu->pc);
 	  dprintf(1, "[DEBUG] : Instruction 0x%02X found\n", opcodes[i].code);
 	  opcodes[i].fptr(cpu);
-	  RegDump(cpu);
 	  cpu->pc += opcodes[i].byteLength;
+	  cpu->clock.t += opcodes[i].nbrClockCycles;
+	  cpu->clock.m += opcodes[i].nbrClockCycles / 4;
+	  gpu->Tick(cpu);
+	  gpu->Process();
+	  RegDump(cpu);
+	  GPURegDump(gpu);
 	  dprintf(1, "[DEBUG] : ---------------------------------END----------------------------------\n");
 	  found = true;
 	  getchar();

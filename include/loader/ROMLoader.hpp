@@ -1,5 +1,4 @@
-#ifndef __ROM_LOADER_HPP__
-#define __ROM_LOADER_HPP__
+#pragma once
 
 #include <stdint.h>
 #include <cstring>
@@ -109,5 +108,3 @@ namespace Loader {
     uint8_t	*GetROMData() const;
   };
 };
-
-#endif

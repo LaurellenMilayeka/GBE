@@ -1,5 +1,4 @@
-#ifndef __BOOT_HPP__
-#define __BOOT_HPP__
+#pragma once
 
 #include <stdint.h>
 #include <cstring>
@@ -20,5 +19,3 @@ namespace Engine {
   };
 
 };
-
-#endif

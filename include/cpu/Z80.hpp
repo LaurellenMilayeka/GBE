@@ -1,11 +1,15 @@
-#ifndef __Z80_HPP__
-#define __z80_HPP__
+#pragma once
 
 #include <stdint.h>
 #include <cstdlib>
 
 namespace CPU {
 
+  typedef struct s_timer_clock {
+    uint16_t t;
+    uint16_t m;
+  } CLOCK;
+  
   class Z80 {
 
     Z80();
@@ -30,8 +34,10 @@ namespace CPU {
     uint16_t sp;
     uint16_t pc;
 
+    /* Clock */
+    
+    CLOCK    clock;
+
   };
   
 };
-
-#endif

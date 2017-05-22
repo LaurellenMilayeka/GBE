@@ -1,5 +1,4 @@
-#ifndef __OPCODES_HPP__
-#define __OPCODES_HPP__
+#pragma once
 
 #include <stdint.h>
 #include "Disasm.hpp"
@@ -35,5 +34,3 @@ typedef struct s_opcodes {
 
 extern t_op	opcodes[];
 extern t_op	ext_opcodes[];
-
-#endif

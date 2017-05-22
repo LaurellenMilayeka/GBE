@@ -1,7 +1,10 @@
-#ifndef __GPU_HPP__
-#define __GPU_HPP__
+#pragma once
 
 #include <cstdint>
+#include "Z80.hpp"
+
+#define GB_SCR_HEIGHT	144
+#define GB_SCR_WIDTH	160
 
 typedef enum GPU_REGISTER {
 
@@ -14,14 +17,25 @@ typedef enum GPU_REGISTER {
 
 namespace Graphics {
 
+  typedef struct s_pixel_value {
+    uint8_t		r;
+    uint8_t		g;
+    uint8_t		b;
+    uint8_t		a;
+  } RGBAPixValue;
+  
   class GPU {
 
-    static GPU *_singleton;
+    static GPU *	_singleton;
 
-    uint8_t	_lcdc;
-    uint8_t	_lcdStatus;
+    uint8_t		_lcdc;
+    uint8_t		_lcdStatus;
+    RGBAPixValue	_data[144][160];
+    uint16_t		_clock;
+    uint8_t		_actualLine;
     
     GPU();
+    
   public:
 
     static GPU *Instance();
@@ -36,14 +50,19 @@ namespace Graphics {
     void DisableWindow();
     void DisableSpriteDisplay();
     
-    bool isLCDEnabled();
-    bool isWindowDisplayEnabled();
-    bool isSpriteDisplayEnabled();
-
+    bool IsLCDEnabled();
+    bool IsWindowDisplayEnabled();
+    bool IsSpriteDisplayEnabled();
+    bool IsBackgroundEnabled();
+    
+    bool GetWindowTileMapDisplaySelect();
+    bool GetBGWindowTileDataSelect();
+    bool GetBGTileMapDisplaySelect();
+    bool GetSpriteSize();
+    
     void SetLCDStatus(uint8_t status);
 
-    
+    void Tick(CPU::Z80 *);
+    void Process();
   };
 };
-
-#endif

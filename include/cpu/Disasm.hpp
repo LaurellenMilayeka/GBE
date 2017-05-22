@@ -1,5 +1,4 @@
-#ifndef __DISASM_HPP__
-#define __DISASM_HPP__
+#pragma once
 
 #include <stdint.h>
 #include <stdio.h>
@@ -623,5 +622,3 @@ namespace CPU {
 
   };
 };
-
-#endif

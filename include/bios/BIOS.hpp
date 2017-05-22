@@ -1,5 +1,4 @@
-#ifndef __BIOS_HPP__
-#define __BIOS_HPP__
+#pragma once
 
 #include <stdint.h>
 #include <iostream>
@@ -21,5 +20,3 @@ namespace Engine {
   };
   
 };
-
-#endif
