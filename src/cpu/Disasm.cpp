@@ -370,7 +370,6 @@ void CPU::Disasm::Dis0x18(CPU::Z80 *cpu) {
 
   i = Engine::RAM::GetByte(cpu->pc + 1);
   cpu->pc += i;
-  cpu->pc -= 2;
 }
 
 // ADD Instruction
@@ -499,7 +498,7 @@ void CPU::Disasm::Dis0x20(CPU::Z80 *cpu) {
   i = (char)Engine::RAM::GetByte(cpu->pc + 1);
   if ((((cpu->af & 0xFF) >> 7) & 1) != 1) {
     cpu->pc += i;
-    cpu->pc -= 2;
+    //cpu->pc -= 2;
   }
 }
 
@@ -624,7 +623,6 @@ void CPU::Disasm::Dis0x28(CPU::Z80 *cpu) {
   i = Engine::RAM::GetByte(cpu->pc + 1);
   if ((((cpu->af & 0xFF) >> 7) & 1) == 1) {
     cpu->pc += i;
-    cpu->pc -= 2;
   }
 }
 
@@ -751,7 +749,6 @@ void CPU::Disasm::Dis0x30(CPU::Z80 *cpu) {
   i = Engine::RAM::GetByte(cpu->pc + 1);
   if ((((cpu->af & 0xFF) >> 4) & 1) != 1) {
     cpu->pc += i;
-    cpu->pc -= 2;
   }
 }
 
@@ -855,7 +852,6 @@ void CPU::Disasm::Dis0x38(CPU::Z80 *cpu) {
   i = Engine::RAM::GetByte(cpu->pc + 1);
   if ((((cpu->af & 0xFF) >> 4) & 1) == 1) {
     cpu->pc += i;
-    cpu->pc -= 2;
   }
 }
 
@@ -3206,22 +3202,24 @@ void CPU::Disasm::Dis0xCB(CPU::Z80 *cpu) {
   
   while (ext_opcodes[i].byteLength != 0 && !found) {
     if (Engine::RAM::GetByte(cpu->pc + 1) == ext_opcodes[i].code) {
-      ext_opcodes[i].fptr(cpu);
-
 #ifdef DEBUG
       dprintf(1, "\n[DEBUG] : ------------------------------START---------------------------------\n");
       dprintf(1, "[DEBUG] : Program Counter value : 0x%04X\n", cpu->pc);
       dprintf(1, "[DEBUG] : Instruction 0x%02X found\n", ext_opcodes[i].code);
+#endif
+      
+      ext_opcodes[i].fptr(cpu);
+
+#ifdef DEBUG
       RegDump(cpu);
       dprintf(1, "[DEBUG] : ---------------------------------END----------------------------------\n\n");
 #endif
       
       found = true;
-      cpu->pc += ext_opcodes[i].byteLength;
+      cpu->pc++;
     }
     i++;
   }
-  cpu->pc--;
 }
 
 // CALL Instruction

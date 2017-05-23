@@ -33,12 +33,12 @@ void Engine::RAM::Initialize() {
     _ramSize = 131072;
     break;
   }
-  if ((Engine::RAM::_ram = (uint8_t*)malloc(sizeof(uint8_t) * Engine::RAM::_ramSize)) == nullptr) {
+  if ((Engine::RAM::_ram = (uint8_t*)malloc(sizeof(uint8_t) * _ramSize)) == nullptr) {
     std::cerr << "Error allocation RAM" << std::endl;
     exit(EXIT_FAILURE);
   }
   DEBUG_PRINT("Setting all bytes to 0");
-  memset(Engine::RAM::_ram, 0, Engine::RAM::_ramSize);
+  memset(Engine::RAM::_ram, 0, _ramSize);
   DEBUG_PRINT("Done");
   DEBUG_PRINT("Loading first 16kb of ROM data in the first memory bank");
   Engine::RAM::LoadBIOS();
@@ -60,7 +60,7 @@ void Engine::RAM::LoadBIOS() {
 
 void Engine::RAM::GetROMChunk(uint16_t startRAM, uint16_t start, uint16_t end) {
   Loader::ROM *rom = Loader::ROM::Instance();
-
+  
   memcpy(&(Engine::RAM::_ram)[startRAM], &(rom->GetROMData())[start], (end - start));
 }
 

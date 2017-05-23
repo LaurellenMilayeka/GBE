@@ -15,6 +15,13 @@ typedef enum GPU_REGISTER {
   
 } GPU_REGISTER;
 
+typedef struct GPU_TILE_PLAGE {
+
+  uint16_t start;
+  uint16_t end;
+  
+} TileOffset;
+
 namespace Graphics {
 
   typedef struct s_pixel_value {
@@ -33,7 +40,11 @@ namespace Graphics {
     RGBAPixValue	_data[144][160];
     uint16_t		_clock;
     uint8_t		_actualLine;
-    
+    unsigned int	_nbrRefresh;
+
+    TileOffset		_windowTile;
+    TileOffset		_bgWindowTile;
+    TileOffset		_bgTile;
     GPU();
     
   public:
@@ -59,6 +70,8 @@ namespace Graphics {
     bool GetBGWindowTileDataSelect();
     bool GetBGTileMapDisplaySelect();
     bool GetSpriteSize();
+
+    unsigned int GetTotalRefreshes();
     
     void SetLCDStatus(uint8_t status);
 

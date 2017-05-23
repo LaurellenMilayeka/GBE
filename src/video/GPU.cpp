@@ -94,28 +94,33 @@ void Graphics::GPU::SetLCDStatus(uint8_t status) {
   Engine::RAM::SetByte(0xFF40, this->_lcdc);
 }
 
-void Graphics::GPU::Tick(CPU::Z80 *cpu) {
-  uint8_t tmp;
+unsigned int Graphics::GPU::GetTotalRefreshes() {
+  return (this->_nbrRefresh);
+}
 
-  tmp = Engine::RAM::GetByte(0xFF41);
+void Graphics::GPU::Tick(CPU::Z80 *cpu) {
   this->_lcdc = Engine::RAM::GetByte(0xFF40);
   this->_clock = cpu->clock.t;
-  if (this->_clock > 456) {
-    /* Set VBLANK Mode */
-    tmp &= ~(1 << 1);
-    tmp |= (1 << 0);
-  } else if (this->_clock > 201) {
-    /* Set HBLANK Mode */
-    tmp &= ~(1 << 1);
-    tmp &= ~(1 << 0);
-  } else if (this->_clock > 169) {
-    /* Set OAM / VRAM LCD Read Access */
-    tmp |= (1 << 1);
-    tmp |= (1 << 0);
-  } else if (this->_clock > 77) {
-    // OAM Read Access
-    tmp |= (1 << 1);
-    tmp &= ~(1 << 0);
+  if (((this->_lcdc >> 6) & 1) == 1) {
+    this->_windowTile.start = 0x9C00;
+    this->_windowTile.end = 0x9FFF;
+  } else {
+    this->_windowTile.start = 0x9800;
+    this->_windowTile.end = 0x9BFF;
+  }
+  if (((this->_lcdc >> 4) & 1) == 1) {
+    this->_bgWindowTile.start = 0x8000;
+    this->_bgWindowTile.end = 0x8FFF;
+  } else {
+    this->_bgWindowTile.start = 0x8800;
+    this->_bgWindowTile.end = 0x97FF;
+  }
+  if (((this->_lcdc >> 3) & 1) == 1) {
+    this->_bgTile.start = 0x9C00;
+    this->_bgTile.end = 0x9FFF;    
+  } else {
+    this->_bgTile.start = 0x9800;
+    this->_bgTile.end = 0x9BFF;
   }
 }
 
@@ -129,12 +134,18 @@ void Graphics::GPU::Process() {
 	tmp &= ~(1 << 1);
 	tmp |= (1 << 0);
 	Engine::RAM::SetByte(0xFF41, tmp);
+      } else {
+	uint8_t tmp = Engine::RAM::GetByte(0xFF41);
+	tmp |= (1 << 1);
+	tmp |= (1 << 0);
+	Engine::RAM::SetByte(0xFF41, tmp);
       }
       break;
     case 1:
       //Engine::RAM::SetByte(0xFF44, Engine::RAM::GetByte(0xFF44) + 1);
       this->_actualLine++;
       if (this->_actualLine > 153) {
+	this->_nbrRefresh++;
 	uint8_t tmp = Engine::RAM::GetByte(0xFF41);
 	tmp &= ~(1 << 1);
 	tmp &= ~(1 << 0);
@@ -147,7 +158,18 @@ void Graphics::GPU::Process() {
       // Search OAM
       break;
     case 3:
-      // Display sprites
+      uint8_t line = Engine::RAM::GetByte(0xFF44);
+      uint8_t tmp = Engine::RAM::GetByte(0xFF41);
+      uint8_t x = Engine::RAM::GetByte(0xFF43);
+      uint8_t y = Engine::RAM::GetByte(0xFF42);
+
+      line = line;
+      x = x;
+      y = y;
+      
+      tmp &= ~(1 << 1);
+      tmp &= ~(1 << 0);
+      Engine::RAM::SetByte(0xFF41, tmp);
       break;
     }
   }

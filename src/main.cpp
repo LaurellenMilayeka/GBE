@@ -87,7 +87,7 @@ int main(int ac, char **av) {
     rom = Loader::ROM::Instance();
     rom->Load(av[1]);
     Engine::RAM::Initialize();
-
+    
 #ifdef DEBUG
     HexDump(Engine::RAM::GetRAM(), 0x0000, 0x3FFF);
 #endif
@@ -97,25 +97,32 @@ int main(int ac, char **av) {
       found = false;
       while (opcodes[i].byteLength != 0 && !found) {
 	if (Engine::RAM::GetByte(cpu->pc) == opcodes[i].code) {
+
+#ifdef DEBUG
+	  dprintf(1, "\n[DEBUG] : ------------------------------START---------------------------------\n");
+	  dprintf(1, "[DEBUG] : Program Counter value : 0x%04X\n", cpu->pc);
+	  dprintf(1, "[DEBUG] : Instruction 0x%02X found\n", opcodes[i].code);
+#endif
+	  
 	  opcodes[i].fptr(cpu);
-	  cpu->pc += opcodes[i].byteLength;
 	  cpu->clock.t += opcodes[i].nbrClockCycles;
 	  cpu->clock.m += opcodes[i].nbrClockCycles / 4;
 	  gpu->Tick(cpu);
 	  gpu->Process();
 
 #ifdef DEBUG
-	  dprintf(1, "\n[DEBUG] : ------------------------------START---------------------------------\n");
-	  dprintf(1, "[DEBUG] : Program Counter value : 0x%04X\n", cpu->pc);
-	  dprintf(1, "[DEBUG] : Instruction 0x%02X found\n", opcodes[i].code);
 	  RegDump(cpu);
 	  GPURegDump(gpu);
 	  Addr0xFFXDump();
 	  dprintf(1, "[DEBUG] : ---------------------------------END----------------------------------\n");
+
+#ifdef STS_DBG
+	  getchar();
 #endif
 
+#endif
+	  cpu->pc += opcodes[i].byteLength;
 	  found = true;
-	  //getchar();
 	}
 	i++;
       }
@@ -123,6 +130,8 @@ int main(int ac, char **av) {
     RegDump(cpu);
     dprintf(1, "\n");
     Addr0xFFXDump();
+    dprintf(1, "Total V-Blank calls : %u\n", (gpu->GetTotalRefreshes()));
+    HexDump(rom->GetROMData(), 0x8000, 0x9FFF);
   }
   return (0);
 }
