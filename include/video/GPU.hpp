@@ -30,7 +30,13 @@ namespace Graphics {
     uint8_t		b;
     uint8_t		a;
   } RGBAPixValue;
-  
+
+  typedef struct s_bg_pal {
+    RGBAPixValue	color0;
+    RGBAPixValue	color1;
+    RGBAPixValue	color2;
+    RGBAPixValue	color3;
+  } Palette;
   class GPU {
 
     static GPU *	_singleton;
@@ -40,8 +46,14 @@ namespace Graphics {
     RGBAPixValue	_data[144][160];
     uint16_t		_clock;
     uint8_t		_actualLine;
+    uint8_t		_wxPosition;
+    uint8_t		_wyPosition;
     unsigned int	_nbrRefresh;
 
+    Palette		_bgPalette;
+    Palette		_spritePalette0;
+    Palette		_spritePalette1;
+    
     TileOffset		_windowTile;
     TileOffset		_bgWindowTile;
     TileOffset		_bgTile;
@@ -56,6 +68,7 @@ namespace Graphics {
     void EnableLCD();
     void EnableWindow();
     void EnableSpriteDisplay();
+    void EnableCoincidenceInterrupt();
 
     void DisableLCD();
     void DisableWindow();

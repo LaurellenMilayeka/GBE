@@ -31,6 +31,10 @@ ifeq ($(DEBUG), true)
 CXXFLAGS+= -DDEBUG
 endif
 
+ifeq ($(STS), true)
+CXXFLAGS+= -DSTS_DBG
+endif
+
 CXX=		g++
 
 NAME=		GBEmu

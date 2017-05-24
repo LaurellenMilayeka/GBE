@@ -31,7 +31,7 @@ void GPURegDump(Graphics::GPU *gpu) {
   dprintf(1, "[DEBUG] : \tSprite Display Enabled : %s\n", (gpu->IsSpriteDisplayEnabled()) ? "TRUE" : "FALSE");
   dprintf(1, "[DEBUG] : \tBackground Enabled : %s\n", (gpu->IsBackgroundEnabled()) ? "TRUE" : "FALSE");
   dprintf(1, "[DEBUG] : \tAddress plage for Window tile map : %s\n", (gpu->GetWindowTileMapDisplaySelect()) ? "0x9C00-0x9FFF" : "0x9800-0x9BFF");
-  dprintf(1, "[DEBUG] : \tAddress plage for Background and Window tile data : %s\n", (gpu->GetBGWindowTileDataSelect()) ? "0x8800-0x97FF" : "0x8000-0x8FFF");
+  dprintf(1, "[DEBUG] : \tAddress plage for Background and Window tile data : %s\n", (gpu->GetBGWindowTileDataSelect()) ? "0x8000-0x8FFF" : "0x8800-0x97FF");
   dprintf(1, "[DEBUG] : \tAddress plage for Background display : %s\n", (gpu->GetBGTileMapDisplaySelect()) ? "0x9C00-0x9FFF" : "0x9800-0x9BFF");
   dprintf(1, "[DEBUG] : \tSprite size in pixels : %s\n", (gpu->GetSpriteSize()) ? "8x16" : "8x8");
   dprintf(1, "[DEBUG] : \tLine being treated : %d\n", Engine::RAM::GetByte(0xFF44));
@@ -131,7 +131,7 @@ int main(int ac, char **av) {
     dprintf(1, "\n");
     Addr0xFFXDump();
     dprintf(1, "Total V-Blank calls : %u\n", (gpu->GetTotalRefreshes()));
-    HexDump(rom->GetROMData(), 0x8000, 0x9FFF);
+    //HexDump(rom->GetROMData(), 0x8000, 0x9FFF);
   }
   return (0);
 }
