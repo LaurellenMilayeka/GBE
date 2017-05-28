@@ -330,6 +330,10 @@ void Loader::ROM::Unload() {
 
 }
 
+uint8_t Loader::ROM::GetByte(uint16_t addr) {
+  return (this->_romData[addr]);
+}
+
 uint8_t Loader::ROM::GetMBCType() const {
   return (this->_memoryBank);
 }

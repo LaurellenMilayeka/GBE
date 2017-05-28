@@ -4,16 +4,10 @@
 Graphics::GPU *Graphics::GPU::_singleton = nullptr;
 
 Graphics::GPU::GPU() {
-  this->_lcdc = 0;
-  this->_lcdStatus = 0;
-  for (int y = 0; y < GB_SCR_HEIGHT; y++) {
-    for (int x = 0; x < GB_SCR_WIDTH; x++) {
-      this->_data[y][x].r = 0xFF;
-      this->_data[y][x].g = 0xFF;
-      this->_data[y][x].b = 0xFF;
-      this->_data[y][x].a = 0xFF;
-    }
-  }
+  this->_nbrRefresh = 0;
+  glClearColor(1.0, 1.0, 1.0, 1.0);
+  glClear(GL_COLOR_BUFFER_BIT);
+  SDL_GL_SwapWindow(Core::Window::Instance()->GetWindow());
 }
 
 Graphics::GPU::~GPU() {
@@ -27,229 +21,189 @@ Graphics::GPU *Graphics::GPU::Instance() {
   return (Graphics::GPU::_singleton);
 }
 
-void Graphics::GPU::EnableLCD() {
-  this->_lcdc = Engine::RAM::GetByte(0xFF40);
-  this->_lcdc |= (1 << 7);
-  Engine::RAM::SetByte(0xFF40, this->_lcdc);
-}
-
-void Graphics::GPU::EnableWindow() {
-  this->_lcdc = Engine::RAM::GetByte(0xFF40);
-  this->_lcdc |= (1 << 5);
-  Engine::RAM::SetByte(0xFF40, this->_lcdc);
-}
-
-void Graphics::GPU::EnableSpriteDisplay() {
-  this->_lcdc = Engine::RAM::GetByte(0xFF40);
-  this->_lcdc |= (1 << 1);
-  Engine::RAM::SetByte(0xFF40, this->_lcdc);
-}
-
-void Graphics::GPU::EnableCoincidenceInterrupt() {
-  this->_lcdStatus = Engine::RAM::GetByte(0xFF41);
-  this->_lcdStatus |= (1 << 6);
-  Engine::RAM::SetByte(0xFF41, this->_lcdStatus);
-}
-
-void Graphics::GPU::DisableLCD() {
-  this->_lcdc = Engine::RAM::GetByte(0xFF40);
-  this->_lcdc &= ~(1 << 7);
-  Engine::RAM::SetByte(0xFF40, this->_lcdc);
-}
-
-void Graphics::GPU::DisableWindow() {
-  this->_lcdc = Engine::RAM::GetByte(0xFF40);
-  this->_lcdc &= ~(1 << 5);
-  Engine::RAM::SetByte(0xFF40, this->_lcdc);
-}
-
-bool Graphics::GPU::IsLCDEnabled() {
-  return ((this->_lcdc >> 7) & 1);
-}
-
-bool Graphics::GPU::IsWindowDisplayEnabled() {
-  return ((this->_lcdc >> 5) & 1);
-}
-
-bool Graphics::GPU::IsSpriteDisplayEnabled() {
-  return ((this->_lcdc >> 1) & 1);
-}
-
-bool Graphics::GPU::IsBackgroundEnabled() {
-  return ((this->_lcdc >> 0) & 1);
-}
-
-bool Graphics::GPU::GetWindowTileMapDisplaySelect() {
-  return ((this->_lcdc >> 6) & 1);
-}
-
-bool Graphics::GPU::GetBGWindowTileDataSelect() {
-  return ((this->_lcdc >> 4) & 1);
-}
-
-bool Graphics::GPU::GetBGTileMapDisplaySelect() {
-  return ((this->_lcdc >> 3) & 1);
-}
-
-bool Graphics::GPU::GetSpriteSize() {
-  return ((this->_lcdc >> 2) & 1);
-}
-
-void Graphics::GPU::SetLCDStatus(uint8_t status) {
+void Graphics::GPU::DrawScanLine(CPU::Z80 *cpu) {
+  uint8_t status = Engine::RAM::GetByte(0xFF40);
+  uint8_t lcdc_status = Engine::RAM::GetByte(0xFF41);
+  
   this->_lcdc = status;
-  Engine::RAM::SetByte(0xFF40, this->_lcdc);
-}
-
-unsigned int Graphics::GPU::GetTotalRefreshes() {
-  return (this->_nbrRefresh);
-}
-
-void Graphics::GPU::Tick(CPU::Z80 *cpu) {
-  uint8_t palette;
-  
-  palette = Engine::RAM::GetByte(0xFF47);
-  this->_lcdc = Engine::RAM::GetByte(0xFF40);
-  this->_clock = cpu->clock.t;
-  this->_wxPosition = Engine::RAM::GetByte(0xFF4B);
-  this->_wyPosition = Engine::RAM::GetByte(0xFF4A);
-
-  /* Constant comparison between LY and LYC */
-  if (Engine::RAM::GetByte(0xFF45) == Engine::RAM::GetByte(0xFF44)) {
-    this->EnableCoincidenceInterrupt();
-  }
-  
-  /* Update Tile Address Plage */
-  if (((this->_lcdc >> 6) & 1) == 1) {
-    this->_windowTile.start = 0x9C00;
-    this->_windowTile.end = 0x9FFF;
-  } else {
-    this->_windowTile.start = 0x9800;
-    this->_windowTile.end = 0x9BFF;
-  }
-  if (((this->_lcdc >> 4) & 1) == 1) {
-    this->_bgWindowTile.start = 0x8000;
-    this->_bgWindowTile.end = 0x8FFF;
-  } else {
-    this->_bgWindowTile.start = 0x8800;
-    this->_bgWindowTile.end = 0x97FF;
-  }
-  if (((this->_lcdc >> 3) & 1) == 1) {
-    this->_bgTile.start = 0x9C00;
-    this->_bgTile.end = 0x9FFF;    
-  } else {
-    this->_bgTile.start = 0x9800;
-    this->_bgTile.end = 0x9BFF;
-  }
-
-  /* Update BG Palette */
-  /* Color 0 */
-  if (((palette >> 0) & 0x03) == 0) {
-    this->_bgPalette.color0.r = this->_bgPalette.color0.g = this->_bgPalette.color0.b = this->_bgPalette.color0.a = 255;
-  } else if (((palette >> 0) & 0x03) == 1) {
-    this->_bgPalette.color0.r = this->_bgPalette.color0.g = this->_bgPalette.color0.b = this->_bgPalette.color0.a = 192;
-    this->_bgPalette.color0.a = 255;
-  } else if (((palette >> 0) & 0x03) == 2) {
-    this->_bgPalette.color0.r = this->_bgPalette.color0.g = this->_bgPalette.color0.b = this->_bgPalette.color0.a = 96;
-    this->_bgPalette.color0.a = 255;
-  } else {
-    this->_bgPalette.color0.r = this->_bgPalette.color0.g = this->_bgPalette.color0.b = this->_bgPalette.color0.a = 0;
-    this->_bgPalette.color0.a = 255;
-  }
-
-  /* Color 1 */
-  if (((palette >> 2) & 0x03) == 0) {
-    this->_bgPalette.color1.r = this->_bgPalette.color1.g = this->_bgPalette.color1.b = this->_bgPalette.color1.a = 255;
-  } else if (((palette >> 2) & 0x03) == 1) {
-    this->_bgPalette.color1.r = this->_bgPalette.color1.g = this->_bgPalette.color1.b = this->_bgPalette.color1.a = 192;
-    this->_bgPalette.color1.a = 255;
-  } else if (((palette >> 2) & 0x03) == 2) {
-    this->_bgPalette.color1.r = this->_bgPalette.color1.g = this->_bgPalette.color1.b = this->_bgPalette.color1.a = 96;
-    this->_bgPalette.color1.a = 255;
-  } else {
-    this->_bgPalette.color1.r = this->_bgPalette.color1.g = this->_bgPalette.color1.b = this->_bgPalette.color1.a = 0;
-    this->_bgPalette.color1.a = 255;
-  }
-
-  /* Color 2 */
-  if (((palette >> 4) & 0x03) == 0) {
-    this->_bgPalette.color2.r = this->_bgPalette.color2.g = this->_bgPalette.color2.b = this->_bgPalette.color2.a = 255;
-  } else if (((palette >> 4) & 0x03) == 1) {
-    this->_bgPalette.color2.r = this->_bgPalette.color2.g = this->_bgPalette.color2.b = this->_bgPalette.color2.a = 192;
-    this->_bgPalette.color2.a = 255;
-  } else if (((palette >> 4) & 0x03) == 2) {
-    this->_bgPalette.color2.r = this->_bgPalette.color2.g = this->_bgPalette.color2.b = this->_bgPalette.color2.a = 96;
-    this->_bgPalette.color2.a = 255;
-  } else {
-    this->_bgPalette.color2.r = this->_bgPalette.color2.g = this->_bgPalette.color2.b = this->_bgPalette.color2.a = 0;
-    this->_bgPalette.color2.a = 255;
-  }
-
-  /* Color 3 */
-  if (((palette >> 6) & 0x03) == 0) {
-    this->_bgPalette.color3.r = this->_bgPalette.color3.g = this->_bgPalette.color3.b = this->_bgPalette.color3.a = 255;
-  } else if (((palette >> 6) & 0x03) == 1) {
-    this->_bgPalette.color3.r = this->_bgPalette.color3.g = this->_bgPalette.color3.b = this->_bgPalette.color3.a = 192;
-    this->_bgPalette.color3.a = 255;
-  } else if (((palette >> 6) & 0x03) == 2) {
-    this->_bgPalette.color3.r = this->_bgPalette.color3.g = this->_bgPalette.color3.b = this->_bgPalette.color3.a = 96;
-    this->_bgPalette.color3.a = 255;
-  } else {
-    this->_bgPalette.color3.r = this->_bgPalette.color3.g = this->_bgPalette.color3.b = this->_bgPalette.color3.a = 0;
-    this->_bgPalette.color3.a = 255;
-  }
-
-}
-
-void Graphics::GPU::Process() {
-  if (this->IsLCDEnabled()) {
-    switch (Engine::RAM::GetByte(0xFF41) & 0x03) {
-    case 0:
+  switch ((lcdc_status & 3)) {
+  case 0:
+    if (cpu->clock.t >= 204) {
       Engine::RAM::SetByte(0xFF44, Engine::RAM::GetByte(0xFF44) + 1);
-      if ((this->_actualLine = Engine::RAM::GetByte(0xFF44)) == 144) {
-	uint8_t tmp = Engine::RAM::GetByte(0xFF41);
-	tmp &= ~(1 << 1);
-	tmp |= (1 << 0);
-	Engine::RAM::SetByte(0xFF41, tmp);
+      lcdc_status |= (1 << 1);
+      lcdc_status |= (1 << 0);
+      Engine::RAM::SetByte(0xFF41, lcdc_status);
+    }
+    break;
+  case 3:
+    if (cpu->clock.t >= 172) {
+      if (Engine::RAM::GetByte(0xFF44) < 144) {
+	if (((this->_lcdc >> 0) & 1) == 1) {
+	  this->RenderTiles();
+	}
+	/*if (((this->_lcdc >> 1) & 1) == 1) {
+	  this->RenderSprites();
+	  }*/
+	lcdc_status &= ~(1 << 0);
+	lcdc_status &= ~(1 << 1);
       } else {
-	uint8_t tmp = Engine::RAM::GetByte(0xFF41);
-	tmp |= (1 << 1);
-	tmp |= (1 << 0);
-	Engine::RAM::SetByte(0xFF41, tmp);
+	lcdc_status |= (1 << 0);
+	lcdc_status &= ~(1 << 1);
       }
-      break;
-    case 1:
-      //Engine::RAM::SetByte(0xFF44, Engine::RAM::GetByte(0xFF44) + 1);
-      this->_actualLine++;
-      if (this->_actualLine > 153) {
-	this->_nbrRefresh++;
-	uint8_t tmp = Engine::RAM::GetByte(0xFF41);
-	tmp &= ~(1 << 1);
-	tmp &= ~(1 << 0);
-	Engine::RAM::SetByte(0xFF41, tmp);
+      Engine::RAM::SetByte(0xFF41, lcdc_status);
+    }
+    break;
+  case 1:
+    if (cpu->clock.t >= 456) {
+      this->_nbrRefresh++;
+      Engine::RAM::SetByte(0xFF44, Engine::RAM::GetByte(0xFF44) + 1);
+      if (Engine::RAM::GetByte(0xFF44) > 153) {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+	glRasterPos2i(-1, 1);
+	glPixelZoom(1, -1);
+	glDrawPixels(160, 144, GL_RGB, GL_UNSIGNED_BYTE, this->_data);
+	SDL_GL_SwapWindow(Core::Window::Instance()->GetWindow());
 	Engine::RAM::SetByte(0xFF44, 0);
-	this->_actualLine = 0;
+	lcdc_status |= (1 << 1);
+	lcdc_status |= (1 << 0);
+	Engine::RAM::SetByte(0xFF41, lcdc_status);
+	isFrameDone = true;
       }
-      break;
-    case 2:
-      // Search OAM
-      break;
-    case 3:
-      uint8_t tmp = Engine::RAM::GetByte(0xFF41);
-      //uint8_t line = Engine::RAM::GetByte(0xFF44);
-      //uint8_t x = Engine::RAM::GetByte(0xFF43);
-      //uint8_t y = Engine::RAM::GetByte(0xFF42);
-      //uint8_t offset_map = line + y;
-      //uint8_t tile = Engine::RAM::GetByte(this->_bgWindowTile.start + (offset_map + x));
+    }
+    break; 
+  }
+}
 
-      /*for (ushort i = 0; i < GB_SCR_WIDTH; i++) {
-	dprintf(1, "VRAM Address : 0x%04X\n", this->_bgWindowTile.start + (offset_map + i));
-	dprintf(1, "VRAM Address value : 0x%02X\n", Engine::RAM::GetByte(this->_bgWindowTile.start + (offset_map + i)));
-	}*/
-      
-      tmp &= ~(1 << 1);
-      tmp &= ~(1 << 0);
-      Engine::RAM::SetByte(0xFF41, tmp);
-      break;
+int GetColour(uint8_t colour, uint16_t address) {
+  uint8_t palette = Engine::RAM::GetByte(address);
+  int hi = 0;
+  int lo = 0;
+
+  switch (colour)
+    {
+    case 0: hi = 1 ; lo = 0 ;break ;
+    case 1: hi = 3 ; lo = 2 ;break ;
+    case 2: hi = 5 ; lo = 4 ;break ;
+    case 3: hi = 7 ; lo = 6 ;break ;
+    }
+
+  int ret_colour = 0;
+  ret_colour = ((palette >> hi) & 1) << 1;
+  ret_colour |= ((palette >> lo) & 1);
+
+  return ret_colour;
+}
+
+void Graphics::GPU::RenderTiles() {
+  uint16_t tileData = 0;
+  uint16_t backgroundMemory = 0;
+  bool unsig = true;
+  uint8_t scrollY = Engine::RAM::GetByte(0xFF42);
+  uint8_t scrollX = Engine::RAM::GetByte(0xFF43);
+  uint8_t windowY = Engine::RAM::GetByte(0xFF4A);
+  uint8_t windowX = Engine::RAM::GetByte(0xFF4B) - 7;
+  uint8_t yPos = 0;
+  bool usingWindow = false;
+  uint16_t tileRow = 0;
+  
+  if (((this->_lcdc >> 5) & 1) == 1) {
+    if (windowY <= Engine::RAM::GetByte(0xFF44)) {
+      usingWindow = true;
     }
   }
+  if (((this->_lcdc  >> 4) & 1) == 1) {
+    tileData = 0x8000;
+  } else {
+    tileData = 0x8800;
+    unsig = false;
+  }
+  if (usingWindow) {
+    if (((this->_lcdc >> 3) & 1) == 1) {
+      backgroundMemory = 0x9C00 ;
+    } else {
+      backgroundMemory = 0x9800 ;
+    }
+  } else {
+    if (((this->_lcdc >> 6) & 1) == 1) {
+      backgroundMemory = 0x9C00 ;
+    } else {
+      backgroundMemory = 0x9800 ;
+    }
+  }
+  if (!usingWindow) {
+    yPos = scrollY + Engine::RAM::GetByte(0xFF44);
+  } else {
+    yPos = Engine::RAM::GetByte(0xFF44) - windowY;
+  }
+  tileRow = (((yPos / 8)) * 32);
+  for (int x = 0 ; x < GB_SCR_WIDTH; x++)
+    {
+      uint8_t xPos = x+scrollX;
+      uint16_t tileCol = 0;
+      short tileNum = 0;
+      uint16_t tileAddress = 0;
+      uint16_t tileLocation = 0;
+      uint8_t line = 0;
+      uint8_t data1 = 0, data2 = 0;
+      int colourBit = 0;
+      int colourNum = 0;
+      int col = 0;
+      int red = 0, green = 0, blue = 0;
+      int scanline = 0;
+      
+      if (usingWindow) {
+	if (x >= windowX) {
+	    xPos = x - windowX ;
+	  }
+      }
+      tileCol = (xPos / 8);
+      tileAddress = backgroundMemory + tileRow + tileCol;
+      tileLocation = tileData;
+      if(unsig) {
+	tileNum =(uint8_t)Engine::RAM::GetByte(tileAddress);
+      } else {
+	tileNum =(char)Engine::RAM::GetByte(tileAddress);
+      }
+      if (unsig) {
+	tileLocation += (tileNum * 16);
+      } else {
+	tileLocation += ((tileNum + 128) *16);
+      }
+      line = yPos % 8;
+      line *= 2;
+      data1 = Engine::RAM::GetByte(tileLocation + line);
+      data2 = Engine::RAM::GetByte(tileLocation + line + 1);
+      colourBit = xPos % 8;
+      colourBit -= 7;
+      colourBit *= -1;
+      colourNum = ((data2 >> colourBit) & 1);
+      colourNum <<= 1;
+      colourNum |= ((data1 >> colourBit) & 1);
+      col = GetColour(colourNum, 0xFF47);
+      switch(col) {
+      case 0:
+	red = 255;
+	green = 255;
+	blue = 255;
+	break;
+      case 1:
+	red = 0xCC;
+	green = 0xCC;
+	blue = 0xCC;
+	break;
+      case 2:
+	red = 0x77;
+	green = 0x77;
+	blue = 0x77;
+	break;
+      }
+      scanline = Engine::RAM::GetByte(0xFF44) ;
+      /*if ((scanline < 0) || (scanline > 143) || (x < 0) || (x > (GB_SCR_WIDTH - 1))) {
+	continue;
+	}*/
+      this->_data[scanline][x][0] = red;
+      this->_data[scanline][x][1] = green;
+      this->_data[scanline][x][2] = blue;
+    }
 }

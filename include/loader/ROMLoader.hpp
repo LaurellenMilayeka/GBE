@@ -104,6 +104,8 @@ namespace Loader {
     void	Load(const char *);
     void	Unload();
 
+    uint8_t	GetByte(uint16_t);
+    
     uint8_t	GetMBCType() const;
     uint8_t	*GetROMData() const;
   };

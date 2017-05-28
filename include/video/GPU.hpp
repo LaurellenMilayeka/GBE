@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstdint>
+#include "CoreWindow.hpp"
+#include <GL/gl.h>
 #include "Z80.hpp"
 
 #define GB_SCR_HEIGHT	144
@@ -37,18 +39,18 @@ namespace Graphics {
     RGBAPixValue	color2;
     RGBAPixValue	color3;
   } Palette;
+  
   class GPU {
 
     static GPU *	_singleton;
 
     uint8_t		_lcdc;
     uint8_t		_lcdStatus;
-    RGBAPixValue	_data[144][160];
+    uint8_t  		_data[144][160][3];
     uint16_t		_clock;
     uint8_t		_actualLine;
     uint8_t		_wxPosition;
     uint8_t		_wyPosition;
-    unsigned int	_nbrRefresh;
 
     Palette		_bgPalette;
     Palette		_spritePalette0;
@@ -57,38 +59,26 @@ namespace Graphics {
     TileOffset		_windowTile;
     TileOffset		_bgWindowTile;
     TileOffset		_bgTile;
-    GPU();
+
+    bool		isFrameDone;
+    SDL_Texture		*_buffer;
+    SDL_Surface		*_tmpBuffer;
+    Uint32		*_pixels;
+    Uint32		_format;
+
     
+    GPU();
+
+    void RenderTiles();
+    void RenderSprites();
+    void RenderT();
   public:
+    unsigned int	_nbrRefresh;
 
     static GPU *Instance();
 
     ~GPU();
-    
-    void EnableLCD();
-    void EnableWindow();
-    void EnableSpriteDisplay();
-    void EnableCoincidenceInterrupt();
 
-    void DisableLCD();
-    void DisableWindow();
-    void DisableSpriteDisplay();
-    
-    bool IsLCDEnabled();
-    bool IsWindowDisplayEnabled();
-    bool IsSpriteDisplayEnabled();
-    bool IsBackgroundEnabled();
-    
-    bool GetWindowTileMapDisplaySelect();
-    bool GetBGWindowTileDataSelect();
-    bool GetBGTileMapDisplaySelect();
-    bool GetSpriteSize();
-
-    unsigned int GetTotalRefreshes();
-    
-    void SetLCDStatus(uint8_t status);
-
-    void Tick(CPU::Z80 *);
-    void Process();
+    void DrawScanLine(CPU::Z80 *);
   };
 };

@@ -6,8 +6,8 @@
 namespace CPU {
 
   typedef struct s_timer_clock {
-    uint16_t t;
-    uint16_t m;
+    int t;
+    int m;
   } CLOCK;
   
   class Z80 {

@@ -9,19 +9,19 @@ void Engine::RAM::Initialize() {
   DEBUG_PRINT("Initializing RAM");
   switch (rom->GetMBCType()) {
   case ROMONLY:
-    _ramSize = 0;
+    _ramSize = 131072;
     break;
   case 0x01 ... 0x03:
-    _ramSize = 32768;
+    _ramSize = 131072;
     break;
   case 0x05 ... 0x06:
-    _ramSize = 512*4;
+    _ramSize = 131072;
     break;
   case 0x0F ... 0x13:
-    _ramSize = 32768;
+    _ramSize = 131072;
     break;
   case 0x15 ... 0x17:
-    _ramSize = 32768;
+    _ramSize = 131072;
     break;
   case 0x19 ... 0x1E:
     _ramSize = 131072;
@@ -41,6 +41,7 @@ void Engine::RAM::Initialize() {
   memset(Engine::RAM::_ram, 0, _ramSize);
   DEBUG_PRINT("Done");
   DEBUG_PRINT("Loading first 16kb of ROM data in the first memory bank");
+  memset(Engine::RAM::_ram, 0, 0x9FFF - 0x8000);
   Engine::RAM::LoadBIOS();
   Engine::RAM::GetROMChunk(0x0100, 0x0100, 0x3FFF);
   DEBUG_PRINT("Done");
@@ -48,6 +49,12 @@ void Engine::RAM::Initialize() {
 
 uint8_t Engine::RAM::GetByte(uint16_t pos) {
   return (_ram[pos]);
+}
+
+uint8_t Engine::RAM::GetROMByte(uint16_t addr) {
+  Loader::ROM *rom = Loader::ROM::Instance();
+
+  return (rom->GetROMData()[addr]);
 }
 
 void Engine::RAM::SetByte(uint16_t pos, uint8_t value) {
@@ -66,4 +73,9 @@ void Engine::RAM::GetROMChunk(uint16_t startRAM, uint16_t start, uint16_t end) {
 
 uint8_t *Engine::RAM::GetRAM() {
   return (Engine::RAM::_ram);
+}
+
+void Engine::RAM::TurnOffDMGRom() {
+  Engine::RAM::GetROMChunk(0x0000, 0x0000, 0x0100);
+  HexDump(Engine::RAM::_ram, 0x0000, 0x0100);
 }

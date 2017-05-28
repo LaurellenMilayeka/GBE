@@ -17,10 +17,13 @@ void CPU::Disasm::Dis0x00(CPU::Z80 *) {
 // Load the value of 16-bits direct in 16-bits register BC
 
 void CPU::Disasm::Dis0x01(CPU::Z80 *cpu) {
-  cpu->bc = Engine::RAM::GetByte(cpu->pc + 1);
-  cpu->bc <<= 8;
-  cpu->bc += Engine::RAM::GetByte(cpu->pc + 2);
-  cpu->bc = (cpu->bc >> 8) | (cpu->bc << 8);
+  uint16_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->pc + 1);
+  tmp <<= 8;
+  tmp += Engine::RAM::GetByte(cpu->pc + 2);
+  tmp = (tmp >> 8) | (tmp << 8);  
+  cpu->bc = tmp;
 }
 
 // LD Instruction
@@ -105,8 +108,12 @@ void CPU::Disasm::Dis0x07(CPU::Z80 *cpu) {
   
   tmp = cpu->af >> 8;
   flags = (cpu->af & 0xFF);
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
-  flags &= ~(0 << 7);
+  tmp = (tmp << 1);
+  if (!tmp) {
+    flags |= (1 << 7);
+  } else {
+    flags &= ~(1 << 7);
+  }
   flags &= ~(0 << 6);
   flags &= ~(0 << 5);
   if (((tmp >> 0) & 1) == 0) {
@@ -225,7 +232,7 @@ void CPU::Disasm::Dis0x0E(CPU::Z80 *cpu) {
   uint8_t tmp;
 
   tmp = Engine::RAM::GetByte(cpu->pc + 1);
-  cpu->bc = ((cpu->bc >> 8) << 8) + (tmp & 0xFF);
+  cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
 }
 
 // RRCA Instruction
@@ -260,11 +267,12 @@ void CPU::Disasm::Dis0x10(CPU::Z80 *) {
 // Load the value of 16-bits direct in 16-bits register DE
 
 void CPU::Disasm::Dis0x11(CPU::Z80 *cpu) {
-  uint8_t tmp;
+  uint16_t tmp;
 
   tmp = Engine::RAM::GetByte(cpu->pc + 1);
-  cpu->de = (tmp << 8) + Engine::RAM::GetByte(cpu->pc + 2);
-  cpu->de = (cpu->de >> 8) | (cpu->de << 8);
+  tmp = (tmp << 8) + Engine::RAM::GetByte(cpu->pc + 2);
+  tmp = (tmp >> 8) | (tmp << 8);
+  cpu->de = tmp;
 }
 
 // LD Instruction
@@ -333,7 +341,10 @@ void CPU::Disasm::Dis0x15(CPU::Z80 *cpu) {
 // Load the value of 8-bits direct in 8-bits register D
 
 void CPU::Disasm::Dis0x16(CPU::Z80 *cpu) {
-  cpu->de = (Engine::RAM::GetByte(cpu->pc + 1) << 8) + (cpu->de & 0xFF);
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->pc + 1);
+  cpu->de = (tmp << 8) + (cpu->de & 0xFF);
 }
 
 // RLA Instruction
@@ -344,20 +355,24 @@ void CPU::Disasm::Dis0x17(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->af >> 8;
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  tmp = (tmp << 1);
   flags = (cpu->af & 0xFF);
-  flags &= ~(1 << 7);
   flags &= ~(1 << 6);
   flags &= ~(1 << 5);
-  if ((((cpu->af >> 8) >> 7) & 1) == 1) {
-    flags |= (1 << 4);
+  if (!tmp) {
+    flags |= (1 << 7);
   } else {
-    flags &= ~(1 << 4);
+    flags &= ~(1 << 7);
   }
   if (((flags >> 4) & 1) == 1) {
     tmp |= (1 << 0);
   } else {
     tmp &= ~(1 << 0);
+  }
+  if ((((cpu->af >> 8) >> 7) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
   }
   cpu->af = (tmp << 8) + flags;
 }
@@ -398,7 +413,10 @@ void CPU::Disasm::Dis0x19(CPU::Z80 *cpu) {
 // Load the value of 8-bits direct at the address pointed by 16-bits register DE in 8-bits register A
 
 void CPU::Disasm::Dis0x1A(CPU::Z80 *cpu) {
-  cpu->af = (Engine::RAM::GetByte(cpu->de) << 8) + (cpu->af & 0xFF);
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->de);
+  cpu->af = (tmp << 8) + (cpu->af & 0xFF);
 }
 
 // DEC Instruction
@@ -460,7 +478,10 @@ void CPU::Disasm::Dis0x1D(CPU::Z80 *cpu) {
 // Load the value of 8-bits direct in 8-bits register E
 
 void CPU::Disasm::Dis0x1E(CPU::Z80 *cpu) {
-  cpu->de = ((cpu->de >> 8) << 8) + Engine::RAM::GetByte(cpu->pc + 1);
+  uint8_t tmp;
+
+  tmp = Engine::RAM::GetByte(cpu->pc + 1);
+  cpu->de = ((cpu->de >> 8) << 8) + tmp;
 }
 
 // RRA Instruction
@@ -506,11 +527,12 @@ void CPU::Disasm::Dis0x20(CPU::Z80 *cpu) {
 // Load the value of 16-bits direct in 16-bits register HL
 
 void CPU::Disasm::Dis0x21(CPU::Z80 *cpu) {
-  uint8_t tmp;
+  uint16_t tmp;
 
   tmp = Engine::RAM::GetByte(cpu->pc + 1);
-  cpu->hl = (tmp << 8) + Engine::RAM::GetByte(cpu->pc + 2);
-  cpu->hl = (cpu->hl >> 8) | (cpu->hl << 8);
+  tmp = (tmp << 8) + Engine::RAM::GetByte(cpu->pc + 2);
+  tmp = (tmp >> 8) | (tmp << 8);
+  cpu->hl = tmp;
 }
 
 // LD+ Instruction
@@ -1349,7 +1371,7 @@ void CPU::Disasm::Dis0x75(CPU::Z80 *cpu) {
 // TODO ????
 
 void CPU::Disasm::Dis0x76(CPU::Z80 *) {
-  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
+  std::cerr << "[ERROR] Error occured. Quitting... HALT" << std::endl;
   DEBUG_PRINT("Instruction 0x76 : HALT : Not Implemented");
   exit(EXIT_FAILURE);
 }
@@ -3693,22 +3715,18 @@ void CPU::Disasm::Dis0xF1(CPU::Z80 *cpu) {
   cpu->sp += 2;
 }
 
-/*
-
-// Unimplemented Instruction
+// LD Instruction
+// Load the value of 8-bits direct located at the address pointed by 0xFF00 + 8-bits register C in 8-bits register A
 
 void CPU::Disasm::Dis0xF2(CPU::Z80 *cpu) {
+  cpu->af = (Engine::RAM::GetByte(0xFF00 + (cpu->bc & 0xFF)) << 8) + (cpu->af & 0xFF);
 }
 
-*/
-
 // DI Instruction
-// TODO ????
+// Disable all interrupts
 
 void CPU::Disasm::Dis0xF3(CPU::Z80 *) {
-  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
-  DEBUG_PRINT("Instruction 0xF3 : DI : Not Implemented");
-  exit(EXIT_FAILURE);
+  Engine::RAM::SetByte(0xFFFF, 0);
 }
 
 /*
@@ -3816,12 +3834,10 @@ void CPU::Disasm::Dis0xFA(CPU::Z80 *cpu) {
 }
 
 // EI Instruction
-// TODO ????
+// Enable all interrupts
 
 void CPU::Disasm::Dis0xFB(CPU::Z80 *) {
-  std::cerr << "[ERROR] Error occured. Quitting..." << std::endl;
-  DEBUG_PRINT("Instruction 0xFB : EI : Not Implemented");
-  exit(EXIT_FAILURE);
+  Engine::RAM::SetByte(0xFFFF, 0xFF);
 }
 
 /*
@@ -3888,7 +3904,7 @@ void CPU::Disasm::DisCB0x00(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->bc >> 8;
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  tmp = (tmp << 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -3897,7 +3913,7 @@ void CPU::Disasm::DisCB0x00(CPU::Z80 *cpu) {
   }
   flags &= ~(0 << 6);
   flags &= ~(0 << 5);
-  if (((tmp >> 0) & 1) == 0) {
+  if ((((cpu->bc >> 8) >> 0) & 1) == 0) {
     flags &= ~(1 << 4);
   } else {
     flags |= (1 << 4);
@@ -3914,7 +3930,7 @@ void CPU::Disasm::DisCB0x01(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->bc & 0xFF;
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  tmp = (tmp << 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -3923,7 +3939,7 @@ void CPU::Disasm::DisCB0x01(CPU::Z80 *cpu) {
   }
   flags &= ~(0 << 6);
   flags &= ~(0 << 5);
-  if (((tmp >> 0) & 1) == 0) {
+  if ((((cpu->bc & 0xFF) >> 0) & 1) == 0) {
     flags &= ~(1 << 4);
   } else {
     flags |= (1 << 4);
@@ -3940,7 +3956,7 @@ void CPU::Disasm::DisCB0x02(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->de >> 8;
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  tmp = (tmp << 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -3949,7 +3965,7 @@ void CPU::Disasm::DisCB0x02(CPU::Z80 *cpu) {
   }
   flags &= ~(0 << 6);
   flags &= ~(0 << 5);
-  if (((tmp >> 0) & 1) == 0) {
+  if ((((cpu->de >> 8) >> 0) & 1) == 0) {
     flags &= ~(1 << 4);
   } else {
     flags |= (1 << 4);
@@ -3966,7 +3982,7 @@ void CPU::Disasm::DisCB0x03(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->de & 0xFF;
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  tmp = (tmp << 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -3975,7 +3991,7 @@ void CPU::Disasm::DisCB0x03(CPU::Z80 *cpu) {
   }
   flags &= ~(0 << 6);
   flags &= ~(0 << 5);
-  if (((tmp >> 0) & 1) == 0) {
+  if ((((cpu->de & 0xFF) >> 0) & 1) == 0) {
     flags &= ~(1 << 4);
   } else {
     flags |= (1 << 4);
@@ -3992,7 +4008,7 @@ void CPU::Disasm::DisCB0x04(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->hl >> 8;
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  tmp = (tmp << 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4001,7 +4017,7 @@ void CPU::Disasm::DisCB0x04(CPU::Z80 *cpu) {
   }
   flags &= ~(0 << 6);
   flags &= ~(0 << 5);
-  if (((tmp >> 0) & 1) == 0) {
+  if ((((cpu->hl >> 8) >> 0) & 1) == 0) {
     flags &= ~(1 << 4);
   } else {
     flags |= (1 << 4);
@@ -4018,7 +4034,7 @@ void CPU::Disasm::DisCB0x05(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->hl & 0xFF;
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  tmp = (tmp << 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4027,7 +4043,7 @@ void CPU::Disasm::DisCB0x05(CPU::Z80 *cpu) {
   }
   flags &= ~(0 << 6);
   flags &= ~(0 << 5);
-  if (((tmp >> 0) & 1) == 0) {
+  if ((((cpu->hl & 0xFF) >> 0) & 1) == 0) {
     flags &= ~(1 << 4);
   } else {
     flags |= (1 << 4);
@@ -4045,7 +4061,7 @@ void CPU::Disasm::DisCB0x06(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = Engine::RAM::GetByte(cpu->hl);
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  tmp = (tmp << 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4054,7 +4070,7 @@ void CPU::Disasm::DisCB0x06(CPU::Z80 *cpu) {
   }
   flags &= ~(0 << 6);
   flags &= ~(0 << 5);
-  if (((tmp >> 0) & 1) == 0) {
+  if (((Engine::RAM::GetByte(cpu->hl) >> 0) & 1) == 0) {
     flags &= ~(1 << 4);
   } else {
     flags |= (1 << 4);
@@ -4071,7 +4087,7 @@ void CPU::Disasm::DisCB0x07(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->af >> 8;
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  tmp = (tmp << 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4080,7 +4096,7 @@ void CPU::Disasm::DisCB0x07(CPU::Z80 *cpu) {
   }
   flags &= ~(0 << 6);
   flags &= ~(0 << 5);
-  if (((tmp >> 0) & 1) == 0) {
+  if ((((cpu->af >> 8) >> 0) & 1) == 0) {
     flags &= ~(1 << 4);
   } else {
     flags |= (1 << 4);
@@ -4096,7 +4112,7 @@ void CPU::Disasm::DisCB0x08(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->bc >> 8;
-  tmp = (tmp >> 1) | (tmp << (sizeof(uint8_t)*8 - 1));
+  tmp = (tmp >> 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4105,7 +4121,7 @@ void CPU::Disasm::DisCB0x08(CPU::Z80 *cpu) {
   }
   flags &= ~(0 << 6);
   flags &= ~(0 << 5);
-  if (((tmp >> 7) & 1) == 0) {
+  if ((((cpu->bc >> 8) >> 7) & 1) == 0) {
     flags &= ~(1 << 4);
   } else {
     flags |= (1 << 4);
@@ -4122,7 +4138,7 @@ void CPU::Disasm::DisCB0x09(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->bc & 0xFF;
-  tmp = (tmp >> 1) | (tmp << (sizeof(uint8_t)*8 - 1));
+  tmp = (tmp >> 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4131,7 +4147,7 @@ void CPU::Disasm::DisCB0x09(CPU::Z80 *cpu) {
   }
   flags &= ~(0 << 6);
   flags &= ~(0 << 5);
-  if (((tmp >> 7) & 1) == 0) {
+  if ((((cpu->bc & 0xFF) >> 7) & 1) == 0) {
     flags &= ~(1 << 4);
   } else {
     flags |= (1 << 4);
@@ -4148,7 +4164,7 @@ void CPU::Disasm::DisCB0x0A(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->de >> 8;
-  tmp = (tmp >> 1) | (tmp << (sizeof(uint8_t)*8 - 1));
+  tmp = (tmp >> 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4157,7 +4173,7 @@ void CPU::Disasm::DisCB0x0A(CPU::Z80 *cpu) {
   }
   flags &= ~(0 << 6);
   flags &= ~(0 << 5);
-  if (((tmp >> 7) & 1) == 0) {
+  if ((((cpu->de >> 8) >> 7) & 1) == 0) {
     flags &= ~(1 << 4);
   } else {
     flags |= (1 << 4);
@@ -4174,7 +4190,7 @@ void CPU::Disasm::DisCB0x0B(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->de & 0xFF;
-  tmp = (tmp >> 1) | (tmp << (sizeof(uint8_t)*8 - 1));
+  tmp = (tmp >> 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4183,7 +4199,7 @@ void CPU::Disasm::DisCB0x0B(CPU::Z80 *cpu) {
   }
   flags &= ~(0 << 6);
   flags &= ~(0 << 5);
-  if (((tmp >> 7) & 1) == 0) {
+  if ((((cpu->de & 0xFF) >> 7) & 1) == 0) {
     flags &= ~(1 << 4);
   } else {
     flags |= (1 << 4);
@@ -4200,7 +4216,7 @@ void CPU::Disasm::DisCB0x0C(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->hl >> 8;
-  tmp = (tmp >> 1) | (tmp << (sizeof(uint8_t)*8 - 1));
+  tmp = (tmp >> 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4209,7 +4225,7 @@ void CPU::Disasm::DisCB0x0C(CPU::Z80 *cpu) {
   }
   flags &= ~(0 << 6);
   flags &= ~(0 << 5);
-  if (((tmp >> 7) & 1) == 0) {
+  if ((((cpu->hl >> 8) >> 7) & 1) == 0) {
     flags &= ~(1 << 4);
   } else {
     flags |= (1 << 4);
@@ -4226,7 +4242,7 @@ void CPU::Disasm::DisCB0x0D(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->hl & 0xFF;
-  tmp = (tmp >> 1) | (tmp << (sizeof(uint8_t)*8 - 1));
+  tmp = (tmp >> 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4235,7 +4251,7 @@ void CPU::Disasm::DisCB0x0D(CPU::Z80 *cpu) {
   }
   flags &= ~(0 << 6);
   flags &= ~(0 << 5);
-  if (((tmp >> 7) & 1) == 0) {
+  if ((((cpu->hl & 0xFF) >> 7) & 1) == 0) {
     flags &= ~(1 << 4);
   } else {
     flags |= (1 << 4);
@@ -4253,7 +4269,7 @@ void CPU::Disasm::DisCB0x0E(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = Engine::RAM::GetByte(cpu->hl);
-  tmp = (tmp >> 1) | (tmp << (sizeof(uint8_t)*8 - 1));
+  tmp = (tmp >> 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4262,7 +4278,7 @@ void CPU::Disasm::DisCB0x0E(CPU::Z80 *cpu) {
   }
   flags &= ~(0 << 6);
   flags &= ~(0 << 5);
-  if (((tmp >> 7) & 1) == 0) {
+  if (((Engine::RAM::GetByte(cpu->hl) >> 7) & 1) == 0) {
     flags &= ~(1 << 4);
   } else {
     flags |= (1 << 4);
@@ -4279,7 +4295,7 @@ void CPU::Disasm::DisCB0x0F(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->af >> 8;
-  tmp = (tmp >> 1) | (tmp << (sizeof(uint8_t)*8 - 1));
+  tmp = (tmp >> 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4288,7 +4304,7 @@ void CPU::Disasm::DisCB0x0F(CPU::Z80 *cpu) {
   }
   flags &= ~(0 << 6);
   flags &= ~(0 << 5);
-  if (((tmp >> 7) & 1) == 0) {
+  if ((((cpu->af >> 8) >> 7) & 1) == 0) {
     flags &= ~(1 << 4);
   } else {
     flags |= (1 << 4);
@@ -4304,7 +4320,7 @@ void CPU::Disasm::DisCB0x10(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->bc >> 8;
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  tmp = (tmp << 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4313,15 +4329,15 @@ void CPU::Disasm::DisCB0x10(CPU::Z80 *cpu) {
   }
   flags &= ~(1 << 6);
   flags &= ~(1 << 5);
-  if (((tmp >> 7) & 1) == 1) {
-    flags |= (1 << 4);
-  } else {
-    flags &= ~(1 << 4);
-  }
   if (((flags >> 4) & 1) == 1) {
     tmp |= (1 << 0);
   } else {
     tmp &= ~(1 << 0);
+  }
+  if ((((cpu->bc >> 8) >> 7) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
   }
   cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->af = ((cpu->af >> 8) << 8) + flags;
@@ -4335,7 +4351,7 @@ void CPU::Disasm::DisCB0x11(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->bc & 0xFF;
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  tmp = (tmp << 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4344,15 +4360,15 @@ void CPU::Disasm::DisCB0x11(CPU::Z80 *cpu) {
   }
   flags &= ~(1 << 6);
   flags &= ~(1 << 5);
-  if (((tmp >> 7) & 1) == 1) {
-    flags |= (1 << 4);
-  } else {
-    flags &= ~(1 << 4);
-  }
   if (((flags >> 4) & 1) == 1) {
     tmp |= (1 << 0);
   } else {
     tmp &= ~(1 << 0);
+  }
+  if ((((cpu->bc & 0xFF) >> 7) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
   }
   cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->af = ((cpu->af >> 8) << 8) + flags;
@@ -4366,7 +4382,7 @@ void CPU::Disasm::DisCB0x12(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->de >> 8;
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  tmp = (tmp << 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4375,15 +4391,15 @@ void CPU::Disasm::DisCB0x12(CPU::Z80 *cpu) {
   }
   flags &= ~(1 << 6);
   flags &= ~(1 << 5);
-  if (((tmp >> 7) & 1) == 1) {
-    flags |= (1 << 4);
-  } else {
-    flags &= ~(1 << 4);
-  }
   if (((flags >> 4) & 1) == 1) {
     tmp |= (1 << 0);
   } else {
     tmp &= ~(1 << 0);
+  }
+  if ((((cpu->de >> 8) >> 7) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
   }
   cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->af = ((cpu->af >> 8) << 8) + flags;
@@ -4397,7 +4413,7 @@ void CPU::Disasm::DisCB0x13(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->de & 0xFF;
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  tmp = (tmp << 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4406,15 +4422,15 @@ void CPU::Disasm::DisCB0x13(CPU::Z80 *cpu) {
   }
   flags &= ~(1 << 6);
   flags &= ~(1 << 5);
-  if (((tmp >> 7) & 1) == 1) {
-    flags |= (1 << 4);
-  } else {
-    flags &= ~(1 << 4);
-  }
   if (((flags >> 4) & 1) == 1) {
     tmp |= (1 << 0);
   } else {
     tmp &= ~(1 << 0);
+  }
+  if ((((cpu->de & 0xFF) >> 7) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
   }
   cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->af = ((cpu->af >> 8) << 8) + flags;
@@ -4428,7 +4444,7 @@ void CPU::Disasm::DisCB0x14(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->hl >> 8;
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  tmp = (tmp << 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4437,15 +4453,15 @@ void CPU::Disasm::DisCB0x14(CPU::Z80 *cpu) {
   }
   flags &= ~(1 << 6);
   flags &= ~(1 << 5);
-  if (((tmp >> 7) & 1) == 1) {
-    flags |= (1 << 4);
-  } else {
-    flags &= ~(1 << 4);
-  }
   if (((flags >> 4) & 1) == 1) {
     tmp |= (1 << 0);
   } else {
     tmp &= ~(1 << 0);
+  }
+  if ((((cpu->hl >> 8) >> 7) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
   }
   cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->af = ((cpu->af >> 8) << 8) + flags;
@@ -4459,7 +4475,7 @@ void CPU::Disasm::DisCB0x15(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->hl & 0xFF;
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  tmp = (tmp << 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4468,15 +4484,15 @@ void CPU::Disasm::DisCB0x15(CPU::Z80 *cpu) {
   }
   flags &= ~(1 << 6);
   flags &= ~(1 << 5);
-  if (((tmp >> 7) & 1) == 1) {
-    flags |= (1 << 4);
-  } else {
-    flags &= ~(1 << 4);
-  }
   if (((flags >> 4) & 1) == 1) {
     tmp |= (1 << 0);
   } else {
     tmp &= ~(1 << 0);
+  }
+  if ((((cpu->hl & 0xFF) >> 7) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
   }
   cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->af = ((cpu->af >> 8) << 8) + flags;
@@ -4491,7 +4507,7 @@ void CPU::Disasm::DisCB0x16(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = Engine::RAM::GetByte(cpu->hl);
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  tmp = (tmp << 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4500,15 +4516,15 @@ void CPU::Disasm::DisCB0x16(CPU::Z80 *cpu) {
   }
   flags &= ~(1 << 6);
   flags &= ~(1 << 5);
-  if (((tmp >> 7) & 1) == 1) {
-    flags |= (1 << 4);
-  } else {
-    flags &= ~(1 << 4);
-  }
   if (((flags >> 4) & 1) == 1) {
     tmp |= (1 << 0);
   } else {
     tmp &= ~(1 << 0);
+  }
+  if (((Engine::RAM::GetByte(cpu->hl) >> 7) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
   }
   Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->af = ((cpu->af >> 8) << 8) + flags;
@@ -4522,7 +4538,7 @@ void CPU::Disasm::DisCB0x17(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->af >> 8;
-  tmp = (tmp << 1) | (tmp >> (sizeof(uint8_t) * 8 - 1));
+  tmp = (tmp << 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4531,15 +4547,15 @@ void CPU::Disasm::DisCB0x17(CPU::Z80 *cpu) {
   }
   flags &= ~(1 << 6);
   flags &= ~(1 << 5);
-  if (((tmp >> 7) & 1) == 1) {
-    flags |= (1 << 4);
-  } else {
-    flags &= ~(1 << 4);
-  }
   if (((flags >> 4) & 1) == 1) {
     tmp |= (1 << 0);
   } else {
     tmp &= ~(1 << 0);
+  }
+  if ((((cpu->af >> 8) >> 7) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
   }
   cpu->af = (tmp << 8) + flags;
 }
@@ -4552,7 +4568,7 @@ void CPU::Disasm::DisCB0x18(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->bc >> 8;
-  tmp = (tmp >> 1) | (tmp << (sizeof(uint8_t)*8 - 1));
+  tmp = (tmp >> 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4561,15 +4577,15 @@ void CPU::Disasm::DisCB0x18(CPU::Z80 *cpu) {
   }
   flags &= ~(1 << 6);
   flags &= ~(1 << 5);
-  if (((tmp >> 0) & 1) == 1) {
-    flags |= (1 << 4);
-  } else {
-    flags &= ~(1 << 4);
-  }
   if (((flags >> 4) & 1) == 1) {
     tmp |= (1 << 7);
   } else {
     tmp &= ~(1 << 7);
+  }
+  if ((((cpu->bc >> 8) >> 0) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
   }
   cpu->bc = (tmp << 8) + (cpu->bc & 0xFF);
   cpu->af = ((cpu->af >> 8) << 8) + flags;
@@ -4583,7 +4599,7 @@ void CPU::Disasm::DisCB0x19(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->bc & 0xFF;
-  tmp = (tmp >> 1) | (tmp << (sizeof(uint8_t)*8 - 1));
+  tmp = (tmp >> 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4592,15 +4608,15 @@ void CPU::Disasm::DisCB0x19(CPU::Z80 *cpu) {
   }
   flags &= ~(1 << 6);
   flags &= ~(1 << 5);
-  if (((tmp >> 0) & 1) == 1) {
-    flags |= (1 << 4);
-  } else {
-    flags &= ~(1 << 4);
-  }
   if (((flags >> 4) & 1) == 1) {
     tmp |= (1 << 7);
   } else {
     tmp &= ~(1 << 7);
+  }
+  if ((((cpu->bc & 0xFF) >> 0) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
   }
   cpu->bc = ((cpu->bc >> 8) << 8) + tmp;
   cpu->af = ((cpu->af >> 8) << 8) + flags;
@@ -4614,7 +4630,7 @@ void CPU::Disasm::DisCB0x1A(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->de >> 8;
-  tmp = (tmp >> 1) | (tmp << (sizeof(uint8_t)*8 - 1));
+  tmp = (tmp >> 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4623,15 +4639,15 @@ void CPU::Disasm::DisCB0x1A(CPU::Z80 *cpu) {
   }
   flags &= ~(1 << 6);
   flags &= ~(1 << 5);
-  if (((tmp >> 0) & 1) == 1) {
-    flags |= (1 << 4);
-  } else {
-    flags &= ~(1 << 4);
-  }
   if (((flags >> 4) & 1) == 1) {
     tmp |= (1 << 7);
   } else {
     tmp &= ~(1 << 7);
+  }
+  if ((((cpu->de >> 8) >> 0) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
   }
   cpu->de = (tmp << 8) + (cpu->de & 0xFF);
   cpu->af = ((cpu->af >> 8) << 8) + flags;
@@ -4645,7 +4661,7 @@ void CPU::Disasm::DisCB0x1B(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->de & 0xFF;
-  tmp = (tmp >> 1) | (tmp << (sizeof(uint8_t)*8 - 1));
+  tmp = (tmp >> 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4654,15 +4670,15 @@ void CPU::Disasm::DisCB0x1B(CPU::Z80 *cpu) {
   }
   flags &= ~(1 << 6);
   flags &= ~(1 << 5);
-  if (((tmp >> 0) & 1) == 1) {
-    flags |= (1 << 4);
-  } else {
-    flags &= ~(1 << 4);
-  }
   if (((flags >> 4) & 1) == 1) {
     tmp |= (1 << 7);
   } else {
     tmp &= ~(1 << 7);
+  }
+  if ((((cpu->de & 0xFF) >> 0) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
   }
   cpu->de = ((cpu->de >> 8) << 8) + tmp;
   cpu->af = ((cpu->af >> 8) << 8) + flags;
@@ -4676,7 +4692,7 @@ void CPU::Disasm::DisCB0x1C(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->hl >> 8;
-  tmp = (tmp >> 1) | (tmp << (sizeof(uint8_t)*8 - 1));
+  tmp = (tmp >> 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4685,15 +4701,15 @@ void CPU::Disasm::DisCB0x1C(CPU::Z80 *cpu) {
   }
   flags &= ~(1 << 6);
   flags &= ~(1 << 5);
-  if (((tmp >> 0) & 1) == 1) {
-    flags |= (1 << 4);
-  } else {
-    flags &= ~(1 << 4);
-  }
   if (((flags >> 4) & 1) == 1) {
     tmp |= (1 << 7);
   } else {
     tmp &= ~(1 << 7);
+  }
+  if ((((cpu->hl >> 8) >> 0) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
   }
   cpu->hl = (tmp << 8) + (cpu->hl & 0xFF);
   cpu->af = ((cpu->af >> 8) << 8) + flags;
@@ -4707,7 +4723,7 @@ void CPU::Disasm::DisCB0x1D(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->hl & 0xFF;
-  tmp = (tmp >> 1) | (tmp << (sizeof(uint8_t)*8 - 1));
+  tmp = (tmp >> 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4716,15 +4732,15 @@ void CPU::Disasm::DisCB0x1D(CPU::Z80 *cpu) {
   }
   flags &= ~(1 << 6);
   flags &= ~(1 << 5);
-  if (((tmp >> 0) & 1) == 1) {
-    flags |= (1 << 4);
-  } else {
-    flags &= ~(1 << 4);
-  }
   if (((flags >> 4) & 1) == 1) {
     tmp |= (1 << 7);
   } else {
     tmp &= ~(1 << 7);
+  }
+  if ((((cpu->hl & 0xFF) >> 0) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
   }
   cpu->hl = ((cpu->hl >> 8) << 8) + tmp;
   cpu->af = ((cpu->af >> 8) << 8) + flags;
@@ -4739,7 +4755,7 @@ void CPU::Disasm::DisCB0x1E(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = Engine::RAM::GetByte(cpu->hl);
-  tmp = (tmp >> 1) | (tmp << (sizeof(uint8_t)*8 - 1));
+  tmp = (tmp >> 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4748,15 +4764,15 @@ void CPU::Disasm::DisCB0x1E(CPU::Z80 *cpu) {
   }
   flags &= ~(1 << 6);
   flags &= ~(1 << 5);
-  if (((tmp >> 0) & 1) == 1) {
-    flags |= (1 << 4);
-  } else {
-    flags &= ~(1 << 4);
-  }
   if (((flags >> 4) & 1) == 1) {
     tmp |= (1 << 7);
   } else {
     tmp &= ~(1 << 7);
+  }
+  if (((Engine::RAM::GetByte(cpu->hl) >> 0) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
   }
   Engine::RAM::SetByte(cpu->hl, tmp);
   cpu->af = ((cpu->af >> 8) << 8) + flags;
@@ -4770,7 +4786,7 @@ void CPU::Disasm::DisCB0x1F(CPU::Z80 *cpu) {
   uint8_t flags;
   
   tmp = cpu->af >> 8;
-  tmp = (tmp >> 1) | (tmp << (sizeof(uint8_t)*8 - 1));
+  tmp = (tmp >> 1);
   flags = (cpu->af & 0xFF);
   if (!tmp) {
     flags |= (1 << 7);
@@ -4779,15 +4795,15 @@ void CPU::Disasm::DisCB0x1F(CPU::Z80 *cpu) {
   }
   flags &= ~(1 << 6);
   flags &= ~(1 << 5);
-  if (((tmp >> 0) & 1) == 1) {
-    flags |= (1 << 4);
-  } else {
-    flags &= ~(1 << 4);
-  }
   if (((flags >> 4) & 1) == 1) {
     tmp |= (1 << 7);
   } else {
     tmp &= ~(1 << 7);
+  }
+  if ((((cpu->af >> 8) >> 0) & 1) == 1) {
+    flags |= (1 << 4);
+  } else {
+    flags &= ~(1 << 4);
   }
   cpu->af = (tmp << 8) + flags;
 }

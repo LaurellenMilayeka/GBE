@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <bitset>
+#include <SDL2/SDL.h>
+#include <thread>
 #include "Opcodes.hpp"
 #include "ROMLoader.hpp"
 #include "Boot.hpp"
 #include "RAM.hpp"
 #include "DebugShell.hpp"
+#include "CoreWindow.hpp"
 #include "GPU.hpp"
 
 void RegDump(CPU::Z80 *cpu) {
@@ -23,7 +26,7 @@ void RegDump(CPU::Z80 *cpu) {
   dprintf(1, "[DEBUG] : Clock _m Register : %d\n", cpu->clock.m);
 }
 
-void GPURegDump(Graphics::GPU *gpu) {
+/*void GPURegDump(Graphics::GPU *gpu) {
   dprintf(1, "[DEBUG] : LCD Control Status :\n");
   dprintf(1, "[DEBUG] : \t0xFF40 Value : 0x%02X\n", Engine::RAM::GetByte(0xFF40));
   dprintf(1, "[DEBUG] : \tLCD Enabled : %s\n", (gpu->IsLCDEnabled()) ? "TRUE" : "FALSE");
@@ -35,7 +38,7 @@ void GPURegDump(Graphics::GPU *gpu) {
   dprintf(1, "[DEBUG] : \tAddress plage for Background display : %s\n", (gpu->GetBGTileMapDisplaySelect()) ? "0x9C00-0x9FFF" : "0x9800-0x9BFF");
   dprintf(1, "[DEBUG] : \tSprite size in pixels : %s\n", (gpu->GetSpriteSize()) ? "8x16" : "8x8");
   dprintf(1, "[DEBUG] : \tLine being treated : %d\n", Engine::RAM::GetByte(0xFF44));
-}
+  }*/
 
 void Addr0xFFXDump() {
   dprintf(1, "[DEBUG] : [0xFF05] = 0x%02X\n", Engine::RAM::GetByte(0xFF05));
@@ -71,6 +74,47 @@ void Addr0xFFXDump() {
   dprintf(1, "[DEBUG] : [0xFFFF] = 0x%02X\n", Engine::RAM::GetByte(0xFFFF));
 }
 
+void InitRegistersAndControls(CPU::Z80 *cpu) {
+  cpu->af = 0x01B0;
+  cpu->bc = 0x0013;
+  cpu->de = 0x00D8;
+  cpu->hl = 0x014D;
+  cpu->sp = 0xFFFE;
+  cpu->pc = 0x0100;
+  Engine::RAM::SetByte(0xFF05, 0x00);
+  Engine::RAM::SetByte(0xFF06, 0x00);
+  Engine::RAM::SetByte(0xFF07, 0x00);
+  Engine::RAM::SetByte(0xFF10, 0x80);
+  Engine::RAM::SetByte(0xFF11, 0xBF);
+  Engine::RAM::SetByte(0xFF12, 0xF3);
+  Engine::RAM::SetByte(0xFF14, 0xBF);
+  Engine::RAM::SetByte(0xFF16, 0x3F);
+  Engine::RAM::SetByte(0xFF17, 0x00);
+  Engine::RAM::SetByte(0xFF19, 0xBF);
+  Engine::RAM::SetByte(0xFF1A, 0x7F);
+  Engine::RAM::SetByte(0xFF1B, 0xFF);
+  Engine::RAM::SetByte(0xFF1C, 0x9F);
+  Engine::RAM::SetByte(0xFF1E, 0xBF);
+  Engine::RAM::SetByte(0xFF20, 0xFF);
+  Engine::RAM::SetByte(0xFF21, 0x00);
+  Engine::RAM::SetByte(0xFF22, 0x00);
+  Engine::RAM::SetByte(0xFF23, 0xBF);
+  Engine::RAM::SetByte(0xFF24, 0x77);
+  Engine::RAM::SetByte(0xFF25, 0xF3);
+  Engine::RAM::SetByte(0xFF26, 0xF1);
+  Engine::RAM::SetByte(0xFF40, 0x91);
+  Engine::RAM::SetByte(0xFF42, 0x00);
+  Engine::RAM::SetByte(0xFF43, 0x00);
+  Engine::RAM::SetByte(0xFF45, 0x00);
+  Engine::RAM::SetByte(0xFF47, 0xFC);
+  Engine::RAM::SetByte(0xFF48, 0xFF);
+  Engine::RAM::SetByte(0xFF49, 0xFF);
+  Engine::RAM::SetByte(0xFF4A, 0x00);
+  Engine::RAM::SetByte(0xFF4B, 0x00);
+  Engine::RAM::SetByte(0xFFFF, 0x00);
+  Engine::RAM::GetROMChunk(0x0000, 0x0000, 0x0100);
+}
+
 int main(int ac, char **av) {
 
   Loader::ROM *rom;
@@ -78,60 +122,62 @@ int main(int ac, char **av) {
   Graphics::GPU *gpu;
   int i;
   bool found;
+  Core::Window *window;
+  bool useDMG = true;
   
   if (ac == 2) {
-    
+
+    window = Core::Window::Instance();
+    window->Init("GBEmulator", 160, 144);
     cpu = CPU::Z80::Instance();
-    gpu = Graphics::GPU::Instance();
     Engine::Boot::BootInit();
     rom = Loader::ROM::Instance();
     rom->Load(av[1]);
     Engine::RAM::Initialize();
-    
-#ifdef DEBUG
-    HexDump(Engine::RAM::GetRAM(), 0x0000, 0x3FFF);
-#endif
-    
-    while (cpu->pc < 0x100) {
+    gpu = Graphics::GPU::Instance();
+
+    //InitRegistersAndControls(cpu);
+    //useDMG = false;
+    while (true) {
       i = 0;
       found = false;
       while (opcodes[i].byteLength != 0 && !found) {
 	if (Engine::RAM::GetByte(cpu->pc) == opcodes[i].code) {
 
 #ifdef DEBUG
-	  dprintf(1, "\n[DEBUG] : ------------------------------START---------------------------------\n");
-	  dprintf(1, "[DEBUG] : Program Counter value : 0x%04X\n", cpu->pc);
+	  dprintf(1, "+-------------------------------START--------------------------------+\n");
+	  dprintf(1, "[DEBUG] : Actual PC : 0x%04X\n", cpu->pc);
 	  dprintf(1, "[DEBUG] : Instruction 0x%02X found\n", opcodes[i].code);
+	  dprintf(1, "[DEBUG] : Instruction label : %s\n", opcodes[i].label);
 #endif
+	  if (cpu->pc == 0x00FE && useDMG) {
+	    Engine::RAM::TurnOffDMGRom();
+	    useDMG = false;
+	  }
 	  
 	  opcodes[i].fptr(cpu);
 	  cpu->clock.t += opcodes[i].nbrClockCycles;
 	  cpu->clock.m += opcodes[i].nbrClockCycles / 4;
-	  gpu->Tick(cpu);
-	  gpu->Process();
+	  cpu->pc += opcodes[i].byteLength;
 
 #ifdef DEBUG
-	  RegDump(cpu);
-	  GPURegDump(gpu);
-	  Addr0xFFXDump();
-	  dprintf(1, "[DEBUG] : ---------------------------------END----------------------------------\n");
+	  RegDump(cpu);	  
+	  dprintf(1, "+--------------------------------END---------------------------------+\n");
 
 #ifdef STS_DBG
 	  getchar();
 #endif
-
+	  
 #endif
-	  cpu->pc += opcodes[i].byteLength;
 	  found = true;
 	}
 	i++;
       }
+      gpu->DrawScanLine(cpu);
+      if (cpu->clock.t > 70224)
+	cpu->clock.t = 0;
     }
-    RegDump(cpu);
-    dprintf(1, "\n");
-    Addr0xFFXDump();
-    dprintf(1, "Total V-Blank calls : %u\n", (gpu->GetTotalRefreshes()));
-    //HexDump(rom->GetROMData(), 0x8000, 0x9FFF);
+    dprintf(1, "Nbr Refresh %d\n", gpu->_nbrRefresh);
   }
   return (0);
 }
