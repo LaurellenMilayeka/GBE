@@ -20,6 +20,8 @@ SRC=		$(SRCDIR)main.cpp \
 \
 		$(SRCDIR)window/CoreWindow.cpp \
 \
+		$(SRCDIR)control/Joypad.cpp \
+\
 		$(SRCDIR)debug/Hexdump.cpp \
 		$(SRCDIR)debug/RegDump.cpp \
 		$(SRCDIR)debug/DebugShell.cpp
@@ -27,17 +29,22 @@ SRC=		$(SRCDIR)main.cpp \
 OBJS=		$(SRC:.cpp=.o)
 
 CXXFLAGS=	-Wall -Wextra -std=c++11 -g3
-CXXFLAGS+=	-I $(INCDIR)cpu/ -I $(INCDIR)loader/ -I $(INCDIR)bios/ -I $(INCDIR)ram/ -I $(INCDIR) -I $(INCDIR)video/ -I $(INCDIR)debug/ -I $(INCDIR)window/
+CXXFLAGS+=	-I $(INCDIR)cpu/ -I $(INCDIR)loader/ -I $(INCDIR)bios/ -I $(INCDIR)ram/ -I $(INCDIR) -I $(INCDIR)video/ -I $(INCDIR)debug/ -I $(INCDIR)window/ -I $(INCDIR)sound/ -I $(INCDIR)control/
 
 ifeq ($(DEBUG), true)
+LDFLAGS=	-lGL -lGLEW -lSDL2 -lSDL2main -lpthread
 CXXFLAGS+= -DDEBUG
 endif
 
 ifeq ($(STS), true)
+LDFLAGS=	-lGL -lGLEW -lSDL2 -lSDL2main -lpthread
 CXXFLAGS+= -DSTS_DBG
 endif
 
-LDFLAGS=	-lGL -lGLEW -lSDL2 -lSDL2main -lpthread
+ifeq ($(NO_GRAPHICS), true)
+LDFLAGS=
+CXXFLAGS+= -DNOGRAPHICS
+endif
 
 CXX=		g++
 

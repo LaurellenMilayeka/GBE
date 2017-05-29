@@ -5,6 +5,7 @@ uint8_t *Engine::RAM::_ram = nullptr;
 
 void Engine::RAM::Initialize() {
   Loader::ROM *rom = Loader::ROM::Instance();
+  uint8_t timer;
   
   DEBUG_PRINT("Initializing RAM");
   switch (rom->GetMBCType()) {
@@ -44,6 +45,9 @@ void Engine::RAM::Initialize() {
   memset(Engine::RAM::_ram, 0, 0x9FFF - 0x8000);
   Engine::RAM::LoadBIOS();
   Engine::RAM::GetROMChunk(0x0100, 0x0100, 0x3FFF);
+  timer = Engine::RAM::GetByte(0xFF07);
+  timer |= (1 << 2);
+  Engine::RAM::SetByte(0xFF07, timer);
   DEBUG_PRINT("Done");
 }
 
@@ -57,8 +61,12 @@ uint8_t Engine::RAM::GetROMByte(uint16_t addr) {
   return (rom->GetROMData()[addr]);
 }
 
-void Engine::RAM::SetByte(uint16_t pos, uint8_t value) {
-  _ram[pos] = value;
+void Engine::RAM::SetByte(uint16_t pos, uint8_t value, bool user) {
+  if (pos == 0xFF04 && user) {
+    _ram[pos] = 0;
+  } else {
+    _ram[pos] = value;
+  }
 }
 
 void Engine::RAM::LoadBIOS() {

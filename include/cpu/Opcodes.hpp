@@ -3,10 +3,6 @@
 #include <stdint.h>
 #include "Disasm.hpp"
 
-namespace CPU {
-  class Z80;
-};
-
 typedef enum E_FLAGS_STATE {
   CLEAR, /* Clear the flag to 0 */
   SET, /* Set the flag to 1 */

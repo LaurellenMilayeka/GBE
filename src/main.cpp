@@ -1,14 +1,21 @@
 #include <stdio.h>
 #include <bitset>
+
+#ifndef NOGRAPHICS
+
 #include <SDL2/SDL.h>
+#include "CoreWindow.hpp"
+
+#endif
+
 #include <thread>
 #include "Opcodes.hpp"
 #include "ROMLoader.hpp"
 #include "Boot.hpp"
 #include "RAM.hpp"
 #include "DebugShell.hpp"
-#include "CoreWindow.hpp"
 #include "GPU.hpp"
+#include "Joypad.hpp"
 
 void RegDump(CPU::Z80 *cpu) {
   dprintf(1, "[DEBUG] : AF Register : 0x%04X\n", cpu->af);
@@ -122,13 +129,26 @@ int main(int ac, char **av) {
   Graphics::GPU *gpu;
   int i;
   bool found;
+  bool useDMG = true, running = true;
+  uint8_t iFlags;
+  
+#ifndef NOGRAPHICS
+  
+  uint8_t inputCheck;
   Core::Window *window;
-  bool useDMG = true;
+  SDL_Event event;
+
+#endif
   
   if (ac == 2) {
 
+#ifndef NOGRAPHICS
+    
     window = Core::Window::Instance();
     window->Init("GBEmulator", 160, 144);
+
+#endif
+    
     cpu = CPU::Z80::Instance();
     Engine::Boot::BootInit();
     rom = Loader::ROM::Instance();
@@ -138,34 +158,128 @@ int main(int ac, char **av) {
 
     //InitRegistersAndControls(cpu);
     //useDMG = false;
-    while (true) {
+    while (running) {
       i = 0;
       found = false;
+      iFlags = Engine::RAM::GetByte(0xFF0F);
+      
+#ifndef NOGRAPHICS
+
+      inputCheck = Engine::RAM::GetByte(0xFF00);
+      while (SDL_PollEvent(&event)) {
+	if (event.type == SDL_QUIT) {
+	  running = false;
+	} else if (event.type = SDL_KEYDOWN) {
+	  Engine::Joypad::ProcessEvent(event);
+	}
+      }
+
+      if (inputCheck != Engine::RAM::GetByte(0xFF00)) {
+	inputCheck = Engine::RAM::GetByte(0xFF00);
+	if (((inputCheck >> 5) & 1) == 0) {
+	  if (((inputCheck >> 0) & 1) == 0) {
+	    dprintf(1, "[DEBUG] : A Button pressed\n");
+	  } else if (((inputCheck >> 1) & 1) == 0) {
+	    dprintf(1, "[DEBUG] : B Button pressed\n");
+	  } else if (((inputCheck >> 2) & 1) == 0) {
+	    dprintf(1, "[DEBUG] : SELECT Button pressed\n");
+	  } else if (((inputCheck >> 3) & 1) == 0) {
+	    dprintf(1, "[DEBUG] : START Button pressed\n");
+	  }
+	} else if (((inputCheck >> 4) & 1) == 0) {
+	  if (((inputCheck >> 0) & 1) == 0) {
+	    dprintf(1, "[DEBUG] : RIGHT Button pressed\n");
+	  } else if (((inputCheck >> 1) & 1) == 0) {
+	    dprintf(1, "[DEBUG] : LEFT Button pressed\n");
+	  } else if (((inputCheck >> 2) & 1) == 0) {
+	    dprintf(1, "[DEBUG] : UP Button pressed\n");
+	  } else if (((inputCheck >> 3) & 1) == 0) {
+	    dprintf(1, "[DEBUG] : DOWN Button pressed\n");
+	  }
+	}
+      }
+
+#endif
+      
       while (opcodes[i].byteLength != 0 && !found) {
 	if (Engine::RAM::GetByte(cpu->pc) == opcodes[i].code) {
 
 #ifdef DEBUG
+
 	  dprintf(1, "+-------------------------------START--------------------------------+\n");
 	  dprintf(1, "[DEBUG] : Actual PC : 0x%04X\n", cpu->pc);
 	  dprintf(1, "[DEBUG] : Instruction 0x%02X found\n", opcodes[i].code);
 	  dprintf(1, "[DEBUG] : Instruction label : %s\n", opcodes[i].label);
+
 #endif
+
 	  if (cpu->pc == 0x00FE && useDMG) {
 	    Engine::RAM::TurnOffDMGRom();
 	    useDMG = false;
 	  }
 	  
 	  opcodes[i].fptr(cpu);
+	  cpu->nextInstructionDuration = opcodes[i].nbrClockCycles;
 	  cpu->clock.t += opcodes[i].nbrClockCycles;
 	  cpu->clock.m += opcodes[i].nbrClockCycles / 4;
+	  cpu->Tick();
 	  cpu->pc += opcodes[i].byteLength;
 
+	  if (cpu->ime == 1) {
+	    uint8_t interruptRegister = Engine::RAM::GetByte(0xFFFF);
+
+	    if (((iFlags >> 0) & 1) == 1 && ((interruptRegister >> 0) & 1) == 1) {
+	      iFlags &= ~(1 << 0);
+	      cpu->ime = 0;
+	      cpu->sp -= 2;
+	      Engine::RAM::SetByte(0xFF0F, iFlags);
+	      Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
+	      Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
+	      cpu->pc = 0x0040;
+	    } else if (((iFlags >> 1) & 1) == 1 && ((interruptRegister >> 1) & 1) == 1) {
+	      iFlags &= ~(1 << 1);
+	      cpu->ime = 0;
+	      cpu->sp -= 2;
+	      Engine::RAM::SetByte(0xFF0F, iFlags);
+	      Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
+	      Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
+	      cpu->pc = 0x0048;
+	    } else if (((iFlags >> 2) & 1) == 1 && ((interruptRegister >> 2) & 1) == 1) {
+	      iFlags &= ~(1 << 2);
+	      cpu->ime = 0;
+	      cpu->sp -= 2;
+	      Engine::RAM::SetByte(0xFF0F, iFlags);
+	      Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
+	      Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
+	      cpu->pc = 0x0050;
+	    } else if (((iFlags >> 3) & 1) == 1 && ((interruptRegister >> 3) & 1) == 1) {
+	      iFlags &= ~(1 << 3);
+	      cpu->ime = 0;
+	      cpu->sp -= 2;
+	      Engine::RAM::SetByte(0xFF0F, iFlags);
+	      Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
+	      Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
+	      cpu->pc = 0x0058;
+	    } else if (((iFlags >> 4) & 1) == 1 && ((interruptRegister >> 4) & 1) == 1) {
+	      iFlags &= ~(1 << 4);
+	      cpu->ime = 0;
+	      cpu->sp -= 2;
+	      Engine::RAM::SetByte(0xFF0F, iFlags);
+	      Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
+	      Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
+	      cpu->pc = 0x0060;
+	    }
+	  }
+
 #ifdef DEBUG
+	  
 	  RegDump(cpu);	  
 	  dprintf(1, "+--------------------------------END---------------------------------+\n");
 
 #ifdef STS_DBG
+	  
 	  getchar();
+
 #endif
 	  
 #endif
@@ -173,11 +287,24 @@ int main(int ac, char **av) {
 	}
 	i++;
       }
+      
+#ifndef NOGRPAHICS
+
       gpu->DrawScanLine(cpu);
-      if (cpu->clock.t > 70224)
+
+#endif
+
+      if (cpu->clock.t > 70224) {
 	cpu->clock.t = 0;
+	cpu->clock.m = 0;
+      }
     }
-    dprintf(1, "Nbr Refresh %d\n", gpu->_nbrRefresh);
+#ifdef DEBUG
+    
+    dprintf(1, "[DEBUG] : Nbr Refresh %d\n", gpu->_nbrRefresh);
+
+#endif
+    
   }
   return (0);
 }

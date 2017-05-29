@@ -3427,6 +3427,7 @@ void CPU::Disasm::Dis0xD8(CPU::Z80 *cpu) {
 // Set 16-bits register PC to his old value stocked in stack
 
 void CPU::Disasm::Dis0xD9(CPU::Z80 *cpu) {
+  cpu->ime = 1;
   cpu->pc = (Engine::RAM::GetByte(cpu->sp - 1) << 8) + Engine::RAM::GetByte(cpu->sp);
   cpu->pc--;
 }
@@ -3725,8 +3726,8 @@ void CPU::Disasm::Dis0xF2(CPU::Z80 *cpu) {
 // DI Instruction
 // Disable all interrupts
 
-void CPU::Disasm::Dis0xF3(CPU::Z80 *) {
-  Engine::RAM::SetByte(0xFFFF, 0);
+void CPU::Disasm::Dis0xF3(CPU::Z80 *cpu) {
+  cpu->ime = 0;
 }
 
 /*
@@ -3836,8 +3837,8 @@ void CPU::Disasm::Dis0xFA(CPU::Z80 *cpu) {
 // EI Instruction
 // Enable all interrupts
 
-void CPU::Disasm::Dis0xFB(CPU::Z80 *) {
-  Engine::RAM::SetByte(0xFFFF, 0xFF);
+void CPU::Disasm::Dis0xFB(CPU::Z80 *cpu) {
+  cpu->ime = 1;
 }
 
 /*

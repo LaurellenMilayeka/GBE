@@ -1,8 +1,14 @@
 #pragma once
 
 #include <cstdint>
+
+#ifndef NOGRAPHICS
+
 #include "CoreWindow.hpp"
 #include <GL/gl.h>
+
+#endif
+
 #include "Z80.hpp"
 
 #define GB_SCR_HEIGHT	144
@@ -61,11 +67,6 @@ namespace Graphics {
     TileOffset		_bgTile;
 
     bool		isFrameDone;
-    SDL_Texture		*_buffer;
-    SDL_Surface		*_tmpBuffer;
-    Uint32		*_pixels;
-    Uint32		_format;
-
     
     GPU();
 

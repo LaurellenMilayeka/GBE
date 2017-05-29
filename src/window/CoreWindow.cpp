@@ -3,7 +3,9 @@
 
 Core::Window *Core::Window::_instance = nullptr;
 
-Core::Window::Window() {
+#ifndef NOGRAPHICS
+
+Core::Window::Window() {  
   DEBUG_PRINT("Initializing graphic library...");
   if (SDL_Init(SDL_INIT_VIDEO) == -1) {
     DEBUG_PRINT("Error during initialization : " << SDL_GetError());
@@ -25,6 +27,9 @@ Core::Window *Core::Window::Instance() {
 }
 
 void Core::Window::Init(std::string title, size_t width, size_t height) {
+
+#ifndef NOGRAPHICS
+
   DEBUG_PRINT("Creating window and renderer with following parameters :");
   DEBUG_PRINT("Title : " << title << "\nWidth : " << width << "\nHeight : " << height);
   if (SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL, &(this->_window), &(this->_renderer))) {
@@ -40,14 +45,28 @@ void Core::Window::Init(std::string title, size_t width, size_t height) {
   glewInit();
   SDL_SetWindowTitle(this->_window, title.c_str());
   DEBUG_PRINT("Window and renderer created");
+
+#endif
+  
 }
 
 void Core::Window::Destroy() {
+
+#ifndef NOGRAPHICS
+
   SDL_DestroyRenderer(this->_renderer);
   SDL_DestroyWindow(this->_window);
+
+#endif
+
   this->_renderer = nullptr;
   this->_window = nullptr;
 }
+
+#endif
+
+
+#ifndef NOGRAPHICS
 
 SDL_Renderer *Core::Window::GetRenderer() {
   return (this->_renderer);
@@ -56,3 +75,5 @@ SDL_Renderer *Core::Window::GetRenderer() {
 SDL_Window *Core::Window::GetWindow() {
   return (this->_window);
 }
+
+#endif

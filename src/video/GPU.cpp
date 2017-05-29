@@ -5,9 +5,15 @@ Graphics::GPU *Graphics::GPU::_singleton = nullptr;
 
 Graphics::GPU::GPU() {
   this->_nbrRefresh = 0;
+
+#ifndef NOGRAPHICS
+
   glClearColor(1.0, 1.0, 1.0, 1.0);
   glClear(GL_COLOR_BUFFER_BIT);
   SDL_GL_SwapWindow(Core::Window::Instance()->GetWindow());
+
+#endif
+
 }
 
 Graphics::GPU::~GPU() {
@@ -24,7 +30,18 @@ Graphics::GPU *Graphics::GPU::Instance() {
 void Graphics::GPU::DrawScanLine(CPU::Z80 *cpu) {
   uint8_t status = Engine::RAM::GetByte(0xFF40);
   uint8_t lcdc_status = Engine::RAM::GetByte(0xFF41);
-  
+
+  if (Engine::RAM::GetByte(0xFF45) == Engine::RAM::GetByte(0xFF44)) {
+    uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
+
+    iFlags |= (1 << 1);
+    lcdc_status |= (1 << 2);
+    Engine::RAM::SetByte(0xFF41, lcdc_status);
+    Engine::RAM::SetByte(0xFF0F, iFlags);
+  } else {
+    lcdc_status &= ~(1 << 2);
+    Engine::RAM::SetByte(0xFF41, lcdc_status);
+  }
   this->_lcdc = status;
   switch ((lcdc_status & 3)) {
   case 0:
@@ -55,15 +72,25 @@ void Graphics::GPU::DrawScanLine(CPU::Z80 *cpu) {
     break;
   case 1:
     if (cpu->clock.t >= 456) {
+      uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
+      
       this->_nbrRefresh++;
+      iFlags |= (1 << 0);
+      Engine::RAM::SetByte(0xFF0F, iFlags);
       Engine::RAM::SetByte(0xFF44, Engine::RAM::GetByte(0xFF44) + 1);
       if (Engine::RAM::GetByte(0xFF44) > 153) {
+
+#ifndef NOGRAPHICS
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	glRasterPos2i(-1, 1);
 	glPixelZoom(1, -1);
 	glDrawPixels(160, 144, GL_RGB, GL_UNSIGNED_BYTE, this->_data);
 	SDL_GL_SwapWindow(Core::Window::Instance()->GetWindow());
+
+#endif
+	
 	Engine::RAM::SetByte(0xFF44, 0);
 	lcdc_status |= (1 << 1);
 	lcdc_status |= (1 << 0);
