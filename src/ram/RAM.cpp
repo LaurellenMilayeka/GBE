@@ -11,6 +11,19 @@ void Engine::RAM::Initialize() {
   switch (rom->GetMBCType()) {
   case ROMONLY:
     _ramSize = 131072;
+    
+    if ((Engine::RAM::_ram = (uint8_t*)malloc(sizeof(uint8_t) * _ramSize)) == nullptr) {
+      std::cerr << "Error allocation RAM" << std::endl;
+      exit(EXIT_FAILURE);
+    }
+
+    Engine::RAM::LoadBIOS();
+    Engine::RAM::GetROMChunk(0x0100, 0x0100, 0x7FFF);
+
+    timer = Engine::RAM::GetByte(0xFF07);
+    timer |= (1 << 2);
+    Engine::RAM::SetByte(0xFF07, timer);
+
     break;
   case 0x01 ... 0x03:
     _ramSize = 131072;
@@ -34,21 +47,22 @@ void Engine::RAM::Initialize() {
     _ramSize = 131072;
     break;
   }
-  if ((Engine::RAM::_ram = (uint8_t*)malloc(sizeof(uint8_t) * _ramSize)) == nullptr) {
-    std::cerr << "Error allocation RAM" << std::endl;
-    exit(EXIT_FAILURE);
+  if (rom->GetMBCType() != ROMONLY) {
+    if ((Engine::RAM::_ram = (uint8_t*)malloc(sizeof(uint8_t) * _ramSize)) == nullptr) {
+      std::cerr << "Error allocation RAM" << std::endl;
+      exit(EXIT_FAILURE);
+    }
+    DEBUG_PRINT("Setting all bytes to 0");
+    memset(Engine::RAM::_ram, 0, _ramSize);
+    DEBUG_PRINT("Done");
+    DEBUG_PRINT("Loading first 16kb of ROM data in the first memory bank");
+    Engine::RAM::LoadBIOS();
+    Engine::RAM::GetROMChunk(0x0100, 0x0100, 0x3FFF);
+    timer = Engine::RAM::GetByte(0xFF07);
+    timer |= (1 << 2);
+    Engine::RAM::SetByte(0xFF07, timer);
+    DEBUG_PRINT("Done");
   }
-  DEBUG_PRINT("Setting all bytes to 0");
-  memset(Engine::RAM::_ram, 0, _ramSize);
-  DEBUG_PRINT("Done");
-  DEBUG_PRINT("Loading first 16kb of ROM data in the first memory bank");
-  memset(Engine::RAM::_ram, 0, 0x9FFF - 0x8000);
-  Engine::RAM::LoadBIOS();
-  Engine::RAM::GetROMChunk(0x0100, 0x0100, 0x3FFF);
-  timer = Engine::RAM::GetByte(0xFF07);
-  timer |= (1 << 2);
-  Engine::RAM::SetByte(0xFF07, timer);
-  DEBUG_PRINT("Done");
 }
 
 uint8_t Engine::RAM::GetByte(uint16_t pos) {
@@ -64,6 +78,13 @@ uint8_t Engine::RAM::GetROMByte(uint16_t addr) {
 void Engine::RAM::SetByte(uint16_t pos, uint8_t value, bool user) {
   if (pos == 0xFF04 && user) {
     _ram[pos] = 0;
+  } else if (pos == 0xFF46) {
+    uint16_t data = value << 8;
+
+    dprintf(1, "Sprites copy\n");
+    for (uint8_t i = 0; i < 0xA0; i++) {
+      _ram[0xFE00 + i] = _ram[data + i];
+    }
   } else {
     _ram[pos] = value;
   }

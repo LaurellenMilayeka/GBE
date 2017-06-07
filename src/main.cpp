@@ -33,19 +33,11 @@ void RegDump(CPU::Z80 *cpu) {
   dprintf(1, "[DEBUG] : Clock _m Register : %d\n", cpu->clock.m);
 }
 
-/*void GPURegDump(Graphics::GPU *gpu) {
+void GPURegDump(Graphics::GPU *gpu) {
   dprintf(1, "[DEBUG] : LCD Control Status :\n");
   dprintf(1, "[DEBUG] : \t0xFF40 Value : 0x%02X\n", Engine::RAM::GetByte(0xFF40));
-  dprintf(1, "[DEBUG] : \tLCD Enabled : %s\n", (gpu->IsLCDEnabled()) ? "TRUE" : "FALSE");
-  dprintf(1, "[DEBUG] : \tWindow Enabled : %s\n", (gpu->IsWindowDisplayEnabled()) ? "TRUE" : "FALSE");
-  dprintf(1, "[DEBUG] : \tSprite Display Enabled : %s\n", (gpu->IsSpriteDisplayEnabled()) ? "TRUE" : "FALSE");
-  dprintf(1, "[DEBUG] : \tBackground Enabled : %s\n", (gpu->IsBackgroundEnabled()) ? "TRUE" : "FALSE");
-  dprintf(1, "[DEBUG] : \tAddress plage for Window tile map : %s\n", (gpu->GetWindowTileMapDisplaySelect()) ? "0x9C00-0x9FFF" : "0x9800-0x9BFF");
-  dprintf(1, "[DEBUG] : \tAddress plage for Background and Window tile data : %s\n", (gpu->GetBGWindowTileDataSelect()) ? "0x8000-0x8FFF" : "0x8800-0x97FF");
-  dprintf(1, "[DEBUG] : \tAddress plage for Background display : %s\n", (gpu->GetBGTileMapDisplaySelect()) ? "0x9C00-0x9FFF" : "0x9800-0x9BFF");
-  dprintf(1, "[DEBUG] : \tSprite size in pixels : %s\n", (gpu->GetSpriteSize()) ? "8x16" : "8x8");
   dprintf(1, "[DEBUG] : \tLine being treated : %d\n", Engine::RAM::GetByte(0xFF44));
-  }*/
+}
 
 void Addr0xFFXDump() {
   dprintf(1, "[DEBUG] : [0xFF05] = 0x%02X\n", Engine::RAM::GetByte(0xFF05));
@@ -120,6 +112,7 @@ void InitRegistersAndControls(CPU::Z80 *cpu) {
   Engine::RAM::SetByte(0xFF4B, 0x00);
   Engine::RAM::SetByte(0xFFFF, 0x00);
   Engine::RAM::GetROMChunk(0x0000, 0x0000, 0x0100);
+  cpu->_rom = true;
 }
 
 int main(int ac, char **av) {
@@ -131,6 +124,15 @@ int main(int ac, char **av) {
   bool found;
   bool useDMG = true, running = true;
   uint8_t iFlags;
+
+#ifdef STS_DBG
+
+  bool sts = false;
+  
+#endif
+
+  uint16_t prev_pc = 0;
+  int count = 0;
   
 #ifndef NOGRAPHICS
   
@@ -156,8 +158,8 @@ int main(int ac, char **av) {
     Engine::RAM::Initialize();
     gpu = Graphics::GPU::Instance();
 
-    //InitRegistersAndControls(cpu);
-    //useDMG = false;
+    InitRegistersAndControls(cpu);
+    useDMG = false;
     while (running) {
       i = 0;
       found = false;
@@ -169,7 +171,7 @@ int main(int ac, char **av) {
       while (SDL_PollEvent(&event)) {
 	if (event.type == SDL_QUIT) {
 	  running = false;
-	} else if (event.type = SDL_KEYDOWN) {
+	} else if (event.type == SDL_KEYDOWN) {
 	  Engine::Joypad::ProcessEvent(event);
 	}
       }
@@ -200,93 +202,154 @@ int main(int ac, char **av) {
       }
 
 #endif
-      
-      while (opcodes[i].byteLength != 0 && !found) {
-	if (Engine::RAM::GetByte(cpu->pc) == opcodes[i].code) {
 
+      if (cpu->_halt != 1) {
+	while (opcodes[i].byteLength != 0 && !found) {
+	  if (Engine::RAM::GetByte(cpu->pc) == opcodes[i].code) {
+	    
 #ifdef DEBUG
-
-	  dprintf(1, "+-------------------------------START--------------------------------+\n");
-	  dprintf(1, "[DEBUG] : Actual PC : 0x%04X\n", cpu->pc);
-	  dprintf(1, "[DEBUG] : Instruction 0x%02X found\n", opcodes[i].code);
-	  dprintf(1, "[DEBUG] : Instruction label : %s\n", opcodes[i].label);
-
+	    
+	    dprintf(1, "+-------------------------------START--------------------------------+\n");
+	    dprintf(1, "[DEBUG] : Actual PC : 0x%04X\n", cpu->pc);
+	    dprintf(1, "[DEBUG] : Instruction 0x%02X found\n", opcodes[i].code);
+	    dprintf(1, "[DEBUG] : Instruction label : %s\n", opcodes[i].label);
+	    
 #endif
-
-	  if (cpu->pc == 0x00FE && useDMG) {
-	    Engine::RAM::TurnOffDMGRom();
-	    useDMG = false;
-	  }
-	  
-	  opcodes[i].fptr(cpu);
-	  cpu->nextInstructionDuration = opcodes[i].nbrClockCycles;
-	  cpu->clock.t += opcodes[i].nbrClockCycles;
-	  cpu->clock.m += opcodes[i].nbrClockCycles / 4;
-	  cpu->Tick();
-	  cpu->pc += opcodes[i].byteLength;
-
-	  if (cpu->ime == 1) {
-	    uint8_t interruptRegister = Engine::RAM::GetByte(0xFFFF);
-
-	    if (((iFlags >> 0) & 1) == 1 && ((interruptRegister >> 0) & 1) == 1) {
-	      iFlags &= ~(1 << 0);
-	      cpu->ime = 0;
-	      cpu->sp -= 2;
-	      Engine::RAM::SetByte(0xFF0F, iFlags);
-	      Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
-	      Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
-	      cpu->pc = 0x0040;
-	    } else if (((iFlags >> 1) & 1) == 1 && ((interruptRegister >> 1) & 1) == 1) {
-	      iFlags &= ~(1 << 1);
-	      cpu->ime = 0;
-	      cpu->sp -= 2;
-	      Engine::RAM::SetByte(0xFF0F, iFlags);
-	      Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
-	      Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
-	      cpu->pc = 0x0048;
-	    } else if (((iFlags >> 2) & 1) == 1 && ((interruptRegister >> 2) & 1) == 1) {
-	      iFlags &= ~(1 << 2);
-	      cpu->ime = 0;
-	      cpu->sp -= 2;
-	      Engine::RAM::SetByte(0xFF0F, iFlags);
-	      Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
-	      Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
-	      cpu->pc = 0x0050;
-	    } else if (((iFlags >> 3) & 1) == 1 && ((interruptRegister >> 3) & 1) == 1) {
-	      iFlags &= ~(1 << 3);
-	      cpu->ime = 0;
-	      cpu->sp -= 2;
-	      Engine::RAM::SetByte(0xFF0F, iFlags);
-	      Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
-	      Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
-	      cpu->pc = 0x0058;
-	    } else if (((iFlags >> 4) & 1) == 1 && ((interruptRegister >> 4) & 1) == 1) {
-	      iFlags &= ~(1 << 4);
-	      cpu->ime = 0;
-	      cpu->sp -= 2;
-	      Engine::RAM::SetByte(0xFF0F, iFlags);
-	      Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
-	      Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
-	      cpu->pc = 0x0060;
+	    
+	    if (cpu->pc == 0x00FE && useDMG) {
+	      Engine::RAM::TurnOffDMGRom();
+	      useDMG = false;
+	      cpu->_rom = true;
 	    }
-	  }
 
+	    opcodes[i].fptr(cpu);
+	    cpu->nextInstructionDuration = opcodes[i].nbrClockCycles;
+	    cpu->clock.t += opcodes[i].nbrClockCycles;
+	    cpu->clock.m += opcodes[i].nbrClockCycles / 4;
+	    cpu->Tick();
+	    cpu->pc += opcodes[i].byteLength;
+	    
 #ifdef DEBUG
-	  
-	  RegDump(cpu);	  
-	  dprintf(1, "+--------------------------------END---------------------------------+\n");
+	    GPURegDump(gpu);	    
+	    RegDump(cpu);	  
+	    dprintf(1, "+--------------------------------END---------------------------------+\n");
+
+	    if (cpu->ime == 1) {
+	      uint8_t interruptRegister = Engine::RAM::GetByte(0xFFFF);
+	      
+	      if (((iFlags >> 0) & 1) == 1 && ((interruptRegister >> 0) & 1) == 1) {
+		iFlags &= ~(1 << 0);
+		cpu->ime = 0;
+		cpu->sp -= 2;
+		Engine::RAM::SetByte(0xFF0F, iFlags);
+		Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
+		Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
+		cpu->pc = 0x0040;
+		cpu->_halt = 0;
+		
+#ifdef DEBUG
+		
+		dprintf(1, "VBLANK Interrupt\n");
+		
+#endif
+		
+	      } else if (((iFlags >> 1) & 1) == 1 && ((interruptRegister >> 1) & 1) == 1) {
+		iFlags &= ~(1 << 1);
+		cpu->ime = 0;
+		cpu->sp -= 2;
+		Engine::RAM::SetByte(0xFF0F, iFlags);
+		Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
+		Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
+		cpu->pc = 0x0048;
+		cpu->_halt = 0;
+		
+#ifdef DEBUG
+		
+		dprintf(1, "STAT Interrupt\n");
+		
+#endif
+		
+	      } else if (((iFlags >> 2) & 1) == 1 && ((interruptRegister >> 2) & 1) == 1) {
+		iFlags &= ~(1 << 2);
+		cpu->ime = 0;
+		cpu->sp -= 2;
+		Engine::RAM::SetByte(0xFF0F, iFlags);
+		Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
+		Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
+		cpu->pc = 0x0050;
+		cpu->_halt = 0;
+		
+#ifdef DEBUG
+		
+		dprintf(1, "Timer Interrupt\n");
+		
+#endif
+		
+	      } else if (((iFlags >> 3) & 1) == 1 && ((interruptRegister >> 3) & 1) == 1) {
+		iFlags &= ~(1 << 3);
+		cpu->ime = 0;
+		cpu->sp -= 2;
+		Engine::RAM::SetByte(0xFF0F, iFlags);
+		Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
+		Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
+		cpu->pc = 0x0058;
+		cpu->_halt = 0;
+		
+#ifdef DEBUG
+		
+		dprintf(1, "Serial Interrupt\n");
+		
+#endif
+		
+	      } else if (((iFlags >> 4) & 1) == 1 && ((interruptRegister >> 4) & 1) == 1) {
+		iFlags &= ~(1 << 4);
+		cpu->ime = 0;
+		cpu->sp -= 2;
+		Engine::RAM::SetByte(0xFF0F, iFlags);
+		Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc >> 8));
+		Engine::RAM::SetByte(cpu->sp, (cpu->pc & 0xFF));
+		cpu->pc = 0x0060;
+		cpu->_halt = 0;
+		
+#ifdef DEBUG
+		
+		dprintf(1, "Joypad Interrupt\n");
+		
+#endif
+	      }
+	    }
+
+	    if (prev_pc != cpu->pc) {
+	      prev_pc = cpu->pc;
+	      count = 0;
+	    } else {
+	      count++;
+	    }
+	    
+	    if (count == 3) {
+	      dprintf(1, "[DEBUG] : Infinite loop, quitting\n");
+	      exit(EXIT_FAILURE);
+	    }
 
 #ifdef STS_DBG
-	  
-	  getchar();
-
+		
+		
+		if (cpu->pc == 0x112F) {
+		  sts = true;
+		}
+		
+		if (sts) {
+		  getchar();
+		}
+		
 #endif
-	  
+		
 #endif
-	  found = true;
-	}
-	i++;
-      }
+		found = true;
+	      }
+	      i++;
+	    }
+	  }	  
       
 #ifndef NOGRPAHICS
 
@@ -297,6 +360,7 @@ int main(int ac, char **av) {
       if (cpu->clock.t > 70224) {
 	cpu->clock.t = 0;
 	cpu->clock.m = 0;
+	gpu->SetFrameStatus(false);
       }
     }
 #ifdef DEBUG

@@ -31,13 +31,13 @@ OBJS=		$(SRC:.cpp=.o)
 CXXFLAGS=	-Wall -Wextra -std=c++11 -g3
 CXXFLAGS+=	-I $(INCDIR)cpu/ -I $(INCDIR)loader/ -I $(INCDIR)bios/ -I $(INCDIR)ram/ -I $(INCDIR) -I $(INCDIR)video/ -I $(INCDIR)debug/ -I $(INCDIR)window/ -I $(INCDIR)sound/ -I $(INCDIR)control/
 
-ifeq ($(DEBUG), true)
 LDFLAGS=	-lGL -lGLEW -lSDL2 -lSDL2main -lpthread
+
+ifeq ($(DEBUG), true)
 CXXFLAGS+= -DDEBUG
 endif
 
 ifeq ($(STS), true)
-LDFLAGS=	-lGL -lGLEW -lSDL2 -lSDL2main -lpthread
 CXXFLAGS+= -DSTS_DBG
 endif
 

@@ -1370,10 +1370,8 @@ void CPU::Disasm::Dis0x75(CPU::Z80 *cpu) {
 // HALT Instruction
 // TODO ????
 
-void CPU::Disasm::Dis0x76(CPU::Z80 *) {
-  std::cerr << "[ERROR] Error occured. Quitting... HALT" << std::endl;
-  DEBUG_PRINT("Instruction 0x76 : HALT : Not Implemented");
-  exit(EXIT_FAILURE);
+void CPU::Disasm::Dis0x76(CPU::Z80 *cpu) {
+  cpu->_halt = 1;
 }
 
 // LD Instruction
@@ -3084,7 +3082,7 @@ void CPU::Disasm::Dis0xBF(CPU::Z80 *cpu) {
 // Store the 16-bits value in 16-bits register PC
 
 void CPU::Disasm::Dis0xC0(CPU::Z80 *cpu) {
-  if (((cpu->af & 0xFF) & 1) != 1) {
+  if ((((cpu->af & 0xFF) >> 7) & 1) != 1) {
     cpu->pc = (Engine::RAM::GetByte(cpu->sp + 1) << 8) + Engine::RAM::GetByte(cpu->sp); 
     cpu->pc--;
     cpu->sp += 2;
@@ -3188,7 +3186,7 @@ void CPU::Disasm::Dis0xC7(CPU::Z80 *cpu) {
 // Store the result in 16-bits register PC
 
 void CPU::Disasm::Dis0xC8(CPU::Z80 *cpu) {
-  if (((cpu->af & 0xFF) & 1) == 1) {
+  if ((((cpu->af & 0xFF) >> 7) & 1) == 1) {
     cpu->pc = (Engine::RAM::GetByte(cpu->sp + 1) << 8) + Engine::RAM::GetByte(cpu->sp);
     cpu->pc--;
     cpu->sp += 2;
@@ -3209,7 +3207,7 @@ void CPU::Disasm::Dis0xC9(CPU::Z80 *cpu) {
 // Jump to given address if Zero flag = 1
 
 void CPU::Disasm::Dis0xCA(CPU::Z80 *cpu) {
-  if (((cpu->af & 0xFF) & 1) == 1) {
+  if ((((cpu->af & 0xFF) >> 7) & 1) == 1) {
     cpu->pc = (Engine::RAM::GetByte(cpu->pc + 2) << 8) + Engine::RAM::GetByte(cpu->pc + 1);
     cpu->pc -= 3;
   }
@@ -3248,7 +3246,7 @@ void CPU::Disasm::Dis0xCB(CPU::Z80 *cpu) {
 // Push next instruction address in stack and jump to given address if Zero flag = 1
 
 void CPU::Disasm::Dis0xCC(CPU::Z80 *cpu) {
-  if ((((cpu->af & 0xFF) >> 7) & 1) != 1) {
+  if ((((cpu->af & 0xFF) >> 7) & 1) == 1) {
     cpu->sp -= 2;
     Engine::RAM::SetByte(cpu->sp, (cpu->pc + 3) & 0xFF);
     Engine::RAM::SetByte(cpu->sp + 1, (cpu->pc + 3) >> 8);
@@ -3428,7 +3426,8 @@ void CPU::Disasm::Dis0xD8(CPU::Z80 *cpu) {
 
 void CPU::Disasm::Dis0xD9(CPU::Z80 *cpu) {
   cpu->ime = 1;
-  cpu->pc = (Engine::RAM::GetByte(cpu->sp - 1) << 8) + Engine::RAM::GetByte(cpu->sp);
+  cpu->pc = (Engine::RAM::GetByte(cpu->sp + 1) << 8) + Engine::RAM::GetByte(cpu->sp);
+  cpu->sp += 2;
   cpu->pc--;
 }
 
@@ -3638,7 +3637,7 @@ void CPU::Disasm::Dis0xE8(CPU::Z80 *cpu) {
 // Jump to the address located by the value of 16-bits register HL
 
 void CPU::Disasm::Dis0xE9(CPU::Z80 *cpu) {
-  cpu->pc = (Engine::RAM::GetByte(cpu->hl + 1) << 8) + Engine::RAM::GetByte(cpu->hl);
+  cpu->pc = cpu->hl;
   cpu->pc--;
 }
 
@@ -5558,9 +5557,9 @@ void CPU::Disasm::DisCB0x40(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->bc >> 8) >> 0) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= (1 << 7);
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5575,9 +5574,9 @@ void CPU::Disasm::DisCB0x41(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->bc & 0xFF) >> 0) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= (1 << 7);
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5592,9 +5591,9 @@ void CPU::Disasm::DisCB0x42(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->de >> 8) >> 0) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5609,9 +5608,9 @@ void CPU::Disasm::DisCB0x43(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->de & 0xFF) >> 0) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5626,9 +5625,9 @@ void CPU::Disasm::DisCB0x44(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->hl >> 8) >> 0) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5643,9 +5642,9 @@ void CPU::Disasm::DisCB0x45(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->hl & 0xFF) >> 0) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5660,9 +5659,9 @@ void CPU::Disasm::DisCB0x46(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if (((Engine::RAM::GetByte(cpu->hl) >> 0) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5677,9 +5676,9 @@ void CPU::Disasm::DisCB0x47(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->af >> 8) >> 0) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5694,9 +5693,9 @@ void CPU::Disasm::DisCB0x48(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->bc >> 8) >> 1) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5711,9 +5710,9 @@ void CPU::Disasm::DisCB0x49(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->bc & 0xFF) >> 1) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5728,9 +5727,9 @@ void CPU::Disasm::DisCB0x4A(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->de >> 8) >> 1) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5745,9 +5744,9 @@ void CPU::Disasm::DisCB0x4B(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->de & 0xFF) >> 1) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5762,9 +5761,9 @@ void CPU::Disasm::DisCB0x4C(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->hl >> 8) >> 1) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5779,9 +5778,9 @@ void CPU::Disasm::DisCB0x4D(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->hl & 0xFF) >> 1) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5796,9 +5795,9 @@ void CPU::Disasm::DisCB0x4E(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if (((Engine::RAM::GetByte(cpu->hl) >> 1) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5813,9 +5812,9 @@ void CPU::Disasm::DisCB0x4F(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->af >> 8) >> 1) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5830,9 +5829,9 @@ void CPU::Disasm::DisCB0x50(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->bc >> 8) >> 2) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5847,9 +5846,9 @@ void CPU::Disasm::DisCB0x51(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->bc & 0xFF) >> 2) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5864,9 +5863,9 @@ void CPU::Disasm::DisCB0x52(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->de >> 8) >> 2) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5881,9 +5880,9 @@ void CPU::Disasm::DisCB0x53(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->de & 0xFF) >> 2) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5898,9 +5897,9 @@ void CPU::Disasm::DisCB0x54(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->hl >> 8) >> 2) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5915,9 +5914,9 @@ void CPU::Disasm::DisCB0x55(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->hl & 0xFF) >> 0) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5932,9 +5931,9 @@ void CPU::Disasm::DisCB0x56(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if (((Engine::RAM::GetByte(cpu->hl) >> 2) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5949,9 +5948,9 @@ void CPU::Disasm::DisCB0x57(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->af >> 8) >> 2) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5966,9 +5965,9 @@ void CPU::Disasm::DisCB0x58(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->bc >> 8) >> 3) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -5983,9 +5982,9 @@ void CPU::Disasm::DisCB0x59(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->bc & 0xFF) >> 3) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6000,9 +5999,9 @@ void CPU::Disasm::DisCB0x5A(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->de >> 8) >> 3) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6017,9 +6016,9 @@ void CPU::Disasm::DisCB0x5B(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->de & 0xFF) >> 3) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6034,9 +6033,9 @@ void CPU::Disasm::DisCB0x5C(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->hl >> 8) >> 3) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6051,9 +6050,9 @@ void CPU::Disasm::DisCB0x5D(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->hl & 0xFF) >> 3) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6068,9 +6067,9 @@ void CPU::Disasm::DisCB0x5E(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if (((Engine::RAM::GetByte(cpu->hl) >> 3) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6085,9 +6084,9 @@ void CPU::Disasm::DisCB0x5F(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->af >> 8) >> 3) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6102,9 +6101,9 @@ void CPU::Disasm::DisCB0x60(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->bc >> 8) >> 4) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6119,9 +6118,9 @@ void CPU::Disasm::DisCB0x61(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->bc & 0xFF) >> 4) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6136,9 +6135,9 @@ void CPU::Disasm::DisCB0x62(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->de >> 8) >> 4) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6153,9 +6152,9 @@ void CPU::Disasm::DisCB0x63(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->de & 0xFF) >> 4) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6170,9 +6169,9 @@ void CPU::Disasm::DisCB0x64(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->hl >> 8) >> 4) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6187,9 +6186,9 @@ void CPU::Disasm::DisCB0x65(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->hl & 0xFF) >> 4) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6204,9 +6203,9 @@ void CPU::Disasm::DisCB0x66(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if (((Engine::RAM::GetByte(cpu->hl) >> 4) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6221,9 +6220,9 @@ void CPU::Disasm::DisCB0x67(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->af >> 8) >> 4) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6238,9 +6237,9 @@ void CPU::Disasm::DisCB0x68(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->bc >> 8) >> 5) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6255,9 +6254,9 @@ void CPU::Disasm::DisCB0x69(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->bc & 0xFF) >> 5) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6272,9 +6271,9 @@ void CPU::Disasm::DisCB0x6A(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->de >> 8) >> 5) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6289,9 +6288,9 @@ void CPU::Disasm::DisCB0x6B(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->de & 0xFF) >> 5) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6306,9 +6305,9 @@ void CPU::Disasm::DisCB0x6C(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->hl >> 8) >> 5) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6323,9 +6322,9 @@ void CPU::Disasm::DisCB0x6D(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->hl & 0xFF) >> 5) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6340,9 +6339,9 @@ void CPU::Disasm::DisCB0x6E(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if (((Engine::RAM::GetByte(cpu->hl) >> 5) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6357,9 +6356,9 @@ void CPU::Disasm::DisCB0x6F(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->af >> 8) >> 5) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6374,9 +6373,9 @@ void CPU::Disasm::DisCB0x70(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->bc >> 8) >> 6) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6391,9 +6390,9 @@ void CPU::Disasm::DisCB0x71(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->bc & 0xFF) >> 6) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6408,9 +6407,9 @@ void CPU::Disasm::DisCB0x72(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->de >> 8) >> 6) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6425,9 +6424,9 @@ void CPU::Disasm::DisCB0x73(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->de & 0xFF) >> 6) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6442,9 +6441,9 @@ void CPU::Disasm::DisCB0x74(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->hl >> 8) >> 6) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6459,9 +6458,9 @@ void CPU::Disasm::DisCB0x75(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->hl & 0xFF) >> 6) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6476,9 +6475,9 @@ void CPU::Disasm::DisCB0x76(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if (((Engine::RAM::GetByte(cpu->hl) >> 6) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6493,9 +6492,9 @@ void CPU::Disasm::DisCB0x77(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->af >> 8) >> 6) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6510,9 +6509,9 @@ void CPU::Disasm::DisCB0x78(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->bc >> 8) >> 7) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6527,9 +6526,9 @@ void CPU::Disasm::DisCB0x79(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->bc & 0xFF) >> 7) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6544,9 +6543,9 @@ void CPU::Disasm::DisCB0x7A(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->de >> 8) >> 7) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6561,9 +6560,9 @@ void CPU::Disasm::DisCB0x7B(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->de & 0xFF) >> 7) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6578,7 +6577,7 @@ void CPU::Disasm::DisCB0x7C(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->hl >> 8) >> 7) & 1) == 1) {
-    tmp |= 1 << 7;
+    tmp |= (1 << 7);
   } else {
     tmp &= ~(1 << 7);
   }
@@ -6595,9 +6594,9 @@ void CPU::Disasm::DisCB0x7D(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->hl & 0xFF) >> 7) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6612,9 +6611,9 @@ void CPU::Disasm::DisCB0x7E(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if (((Engine::RAM::GetByte(cpu->hl) >> 7) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
@@ -6629,9 +6628,9 @@ void CPU::Disasm::DisCB0x7F(CPU::Z80 *cpu) {
 
   tmp = (cpu->af & 0xFF);
   if ((((cpu->af >> 8) >> 7) & 1) == 1) {
-    tmp |= 1 << 7;
-  } else {
     tmp &= ~(1 << 7);
+  } else {
+    tmp |= 1 << 7;
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;

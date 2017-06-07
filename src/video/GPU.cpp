@@ -27,78 +27,120 @@ Graphics::GPU *Graphics::GPU::Instance() {
   return (Graphics::GPU::_singleton);
 }
 
+void Graphics::GPU::SetFrameStatus(bool value) {
+  this->isFrameDone = value;
+}
+
 void Graphics::GPU::DrawScanLine(CPU::Z80 *cpu) {
   uint8_t status = Engine::RAM::GetByte(0xFF40);
   uint8_t lcdc_status = Engine::RAM::GetByte(0xFF41);
+  static int cycles = 0;
 
+  cycles += cpu->nextInstructionDuration;
   if (Engine::RAM::GetByte(0xFF45) == Engine::RAM::GetByte(0xFF44)) {
-    uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
+    if (((Engine::RAM::GetByte(0xFF41) >> 6) & 1) == 1) {
+      uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
 
-    iFlags |= (1 << 1);
+      iFlags |= (1 << 1);
+      Engine::RAM::SetByte(0xFF0F, iFlags);
+    }
     lcdc_status |= (1 << 2);
     Engine::RAM::SetByte(0xFF41, lcdc_status);
-    Engine::RAM::SetByte(0xFF0F, iFlags);
   } else {
     lcdc_status &= ~(1 << 2);
     Engine::RAM::SetByte(0xFF41, lcdc_status);
   }
   this->_lcdc = status;
-  switch ((lcdc_status & 3)) {
-  case 0:
-    if (cpu->clock.t >= 204) {
-      Engine::RAM::SetByte(0xFF44, Engine::RAM::GetByte(0xFF44) + 1);
-      lcdc_status |= (1 << 1);
-      lcdc_status |= (1 << 0);
-      Engine::RAM::SetByte(0xFF41, lcdc_status);
-    }
-    break;
-  case 3:
-    if (cpu->clock.t >= 172) {
-      if (Engine::RAM::GetByte(0xFF44) < 144) {
-	if (((this->_lcdc >> 0) & 1) == 1) {
-	  this->RenderTiles();
-	}
-	/*if (((this->_lcdc >> 1) & 1) == 1) {
-	  this->RenderSprites();
-	  }*/
-	lcdc_status &= ~(1 << 0);
-	lcdc_status &= ~(1 << 1);
-      } else {
-	lcdc_status |= (1 << 0);
-	lcdc_status &= ~(1 << 1);
-      }
-      Engine::RAM::SetByte(0xFF41, lcdc_status);
-    }
-    break;
-  case 1:
-    if (cpu->clock.t >= 456) {
-      uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
-      
-      this->_nbrRefresh++;
-      iFlags |= (1 << 0);
-      Engine::RAM::SetByte(0xFF0F, iFlags);
-      Engine::RAM::SetByte(0xFF44, Engine::RAM::GetByte(0xFF44) + 1);
-      if (Engine::RAM::GetByte(0xFF44) > 153) {
-
-#ifndef NOGRAPHICS
-	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
-	glRasterPos2i(-1, 1);
-	glPixelZoom(1, -1);
-	glDrawPixels(160, 144, GL_RGB, GL_UNSIGNED_BYTE, this->_data);
-	SDL_GL_SwapWindow(Core::Window::Instance()->GetWindow());
-
-#endif
-	
-	Engine::RAM::SetByte(0xFF44, 0);
+  if (this->isFrameDone == false) {
+    switch ((lcdc_status & 3)) {
+    case 0:
+      if (cycles >= 201) {
+	Engine::RAM::SetByte(0xFF44, Engine::RAM::GetByte(0xFF44) + 1);
 	lcdc_status |= (1 << 1);
 	lcdc_status |= (1 << 0);
 	Engine::RAM::SetByte(0xFF41, lcdc_status);
-	isFrameDone = true;
+	if (((Engine::RAM::GetByte(0xFF41) >> 3) & 1) == 1) {
+	  uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
+
+	  iFlags |= (1 << 1);
+	  Engine::RAM::SetByte(0xFF0F, iFlags);
+	}
+	cycles = 0;
       }
+      break;
+    case 3:
+      if (cycles >= 169) {
+	if (Engine::RAM::GetByte(0xFF44) < 144) {
+	  if (((this->_lcdc >> 0) & 1) == 1) {
+	    this->RenderTiles(cpu);
+	  }
+	  if (((this->_lcdc >> 1) & 1) == 1) {
+	    this->RenderSprites(cpu);
+	  }
+	  lcdc_status &= ~(1 << 0);
+	  lcdc_status &= ~(1 << 1);
+	} else {
+	  lcdc_status |= (1 << 0);
+	  lcdc_status &= ~(1 << 1);
+	}
+	Engine::RAM::SetByte(0xFF41, lcdc_status);
+	cycles = 0;
+      }
+      break;
+    case 2:
+      if (cycles >= 77) {
+	lcdc_status |= (1 << 1);
+	lcdc_status |= (1 << 0);
+	Engine::RAM::SetByte(0xFF41, lcdc_status);
+	if (((Engine::RAM::GetByte(0xFF41) >> 5) & 1) == 1) {
+	  uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
+
+	  iFlags |= (1 << 1);
+	  Engine::RAM::SetByte(0xFF0F, iFlags);
+	}
+	cycles = 0;
+      }
+      break;
+    case 1:
+      if (cycles >= 456) {
+	
+	this->_nbrRefresh++;
+	Engine::RAM::SetByte(0xFF44, Engine::RAM::GetByte(0xFF44) + 1);
+	if (Engine::RAM::GetByte(0xFF44) > 153)  {
+	  uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
+	  
+	  iFlags |= (1 << 0);
+	  if (((Engine::RAM::GetByte(0xFF41) >> 4) & 1) == 1) {
+	    iFlags |= (1 << 1);
+	  }
+	  Engine::RAM::SetByte(0xFF0F, iFlags);
+	  
+#ifndef NOGRAPHICS
+	  
+	  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	  glLoadIdentity();
+	  glRasterPos2i(-1, 1);
+	  glPixelZoom(1, -1);
+	  glDrawPixels(160, 144, GL_RGB, GL_UNSIGNED_BYTE, this->_data);
+	  SDL_GL_SwapWindow(Core::Window::Instance()->GetWindow());
+
+#endif
+	  
+	  Engine::RAM::SetByte(0xFF44, 0);
+	  lcdc_status |= (1 << 1);
+	  lcdc_status &= ~(1 << 0);
+	  Engine::RAM::SetByte(0xFF41, lcdc_status);
+	  isFrameDone = true;
+	  cycles = 0;
+	} else {
+	  lcdc_status &= ~(1 << 1);
+	  lcdc_status &= ~(1 << 0);
+	  Engine::RAM::SetByte(0xFF41, lcdc_status);
+	  cycles = 0;
+	}
+      }
+      break; 
     }
-    break; 
   }
 }
 
@@ -122,7 +164,7 @@ int GetColour(uint8_t colour, uint16_t address) {
   return ret_colour;
 }
 
-void Graphics::GPU::RenderTiles() {
+void Graphics::GPU::RenderTiles(CPU::Z80 *cpu) {
   uint16_t tileData = 0;
   uint16_t backgroundMemory = 0;
   bool unsig = true;
@@ -166,7 +208,7 @@ void Graphics::GPU::RenderTiles() {
   tileRow = (((yPos / 8)) * 32);
   for (int x = 0 ; x < GB_SCR_WIDTH; x++)
     {
-      uint8_t xPos = x+scrollX;
+      uint8_t xPos = x + scrollX;
       uint16_t tileCol = 0;
       short tileNum = 0;
       uint16_t tileAddress = 0;
@@ -200,7 +242,7 @@ void Graphics::GPU::RenderTiles() {
       line = yPos % 8;
       line *= 2;
       data1 = Engine::RAM::GetByte(tileLocation + line);
-      data2 = Engine::RAM::GetByte(tileLocation + line + 1);
+      data2 = Engine::RAM::GetByte(tileLocation + line + 1);	
       colourBit = xPos % 8;
       colourBit -= 7;
       colourBit *= -1;
@@ -226,11 +268,96 @@ void Graphics::GPU::RenderTiles() {
 	break;
       }
       scanline = Engine::RAM::GetByte(0xFF44) ;
-      /*if ((scanline < 0) || (scanline > 143) || (x < 0) || (x > (GB_SCR_WIDTH - 1))) {
-	continue;
-	}*/
+
       this->_data[scanline][x][0] = red;
       this->_data[scanline][x][1] = green;
       this->_data[scanline][x][2] = blue;
+    }
+}
+
+void Graphics::GPU::RenderSprites(CPU::Z80 *cpu) {
+  bool use8x16 = false;
+  if (((this->_lcdc >> 2) & 1) == 1)
+    use8x16 = true;
+
+  for (int sprite = 0 ; sprite < 40; sprite++)
+    {
+      uint8_t index = sprite*4 ;
+      uint8_t yPos = Engine::RAM::GetByte(0xFE00+index) - 16;
+      uint8_t xPos = Engine::RAM::GetByte(0xFE00+index+1)-8;
+      uint8_t tileLocation = Engine::RAM::GetByte(0xFE00+index+2) ;
+      uint8_t attributes = Engine::RAM::GetByte(0xFE00+index+3) ;
+
+      bool yFlip = (((attributes >> 6) & 1) == 1) ? true : false ;
+      bool xFlip = (((attributes >> 5) & 1) == 1) ? true : false ;
+
+      int scanline = Engine::RAM::GetByte(0xFF44);
+
+      int ysize = 8;
+      if (use8x16)
+	ysize = 16;
+
+      if ((scanline >= yPos) && (scanline < (yPos+ysize)))
+	{
+	  int line = scanline - yPos ;
+
+	  if (yFlip)
+	    {
+	      line -= ysize ;
+	      line *= -1 ;
+	    }
+
+	  line *= 2;
+	  uint16_t dataAddress = (0x8000 + (tileLocation * 16)) + line ;
+	  uint8_t data1 = 0;
+	  uint8_t data2 = 0;
+	  if (cpu->_rom) {
+	    data1 = Engine::RAM::GetROMByte( dataAddress ) ;
+	    data2 = Engine::RAM::GetROMByte( dataAddress +1 ) ;
+	  } else {
+	    data1 = Engine::RAM::GetByte( dataAddress ) ;
+	    data2 = Engine::RAM::GetByte( dataAddress +1 ) ;
+	  }
+	  for (int tilePixel = 7; tilePixel >= 0; tilePixel--)
+	    {
+	      int colourbit = tilePixel ;
+	      if (xFlip)
+		{
+		  colourbit -= 7 ;
+		  colourbit *= -1 ;
+		}
+
+	      int colourNum = ((data2 >> colourbit) & 1);
+	      colourNum <<= 1;
+	      colourNum |= ((data1 >> colourbit) & 1);
+
+	      uint8_t colourAddress = ((attributes >> 4) & 1);
+	      colourAddress = (colourAddress == 1) ? 0xFF49 : 0xFF48;
+	      int col=GetColour(colourNum, colourAddress ) ;
+
+	      if (col == 0)
+		continue ;
+
+	      int red = 0;
+	      int green = 0;
+	      int blue = 0;
+
+	      switch(col)
+		{
+		case 0: red =255;green=255;blue=255;break ;
+		case 1:red =0xCC;green=0xCC ;blue=0xCC;break ;
+		case 2:red=0x77;green=0x77;blue=0x77;break ;
+		}
+
+	      int xPix = 0 - tilePixel ;
+	      xPix += 7 ;
+
+	      int pixel = xPos+xPix ;
+
+	      this->_data[scanline][pixel][0] = red ;
+	      this->_data[scanline][pixel][1] = green ;
+	      this->_data[scanline][pixel][2] = blue ;
+	    }
+	}
     }
 }

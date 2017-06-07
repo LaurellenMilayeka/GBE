@@ -1,4 +1,5 @@
 #include "Joypad.hpp"
+#include "RAM.hpp"
 
 Engine::JoypadKeys Engine::Joypad::_prevKey = NONE;
 
@@ -17,7 +18,7 @@ void Engine::Joypad::ProcessEvent(SDL_Event event) {
   uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
   
   switch (event.key.keysym.sym) {
-  case SDLK_A:
+  case SDLK_a:
     if (Engine::Joypad::_prevKey != A) {
       iFlags |= (1 << 2);
       key_reg = 0xFF;
@@ -26,7 +27,7 @@ void Engine::Joypad::ProcessEvent(SDL_Event event) {
       Engine::Joypad::_prevKey = Engine::A;
     }
     break;
-  case SDLK_B:
+  case SDLK_b:
     if (Engine::Joypad::_prevKey != B) {
       iFlags |= (1 << 2);
       key_reg = 0xFF;

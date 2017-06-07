@@ -14,6 +14,9 @@ CPU::Z80::Z80() {
 
   this->clock.t = 0;
   this->clock.m = 0;
+
+  this->_halt = 0;
+  this->_rom = false;
 }
 
 CPU::Z80::~Z80() {

@@ -70,8 +70,8 @@ namespace Graphics {
     
     GPU();
 
-    void RenderTiles();
-    void RenderSprites();
+    void RenderTiles(CPU::Z80*);
+    void RenderSprites(CPU::Z80*);
     void RenderT();
   public:
     unsigned int	_nbrRefresh;
@@ -80,6 +80,7 @@ namespace Graphics {
 
     ~GPU();
 
+    void SetFrameStatus(bool);
     void DrawScanLine(CPU::Z80 *);
   };
 };

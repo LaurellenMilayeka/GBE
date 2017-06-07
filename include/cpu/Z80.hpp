@@ -47,10 +47,13 @@ namespace CPU {
     uint16_t sp;
     uint16_t pc;
 
+    bool _rom;
+    
     /* Interrupt registers */
     uint8_t ime;
     InterruptState iState;
-
+    uint8_t _halt;
+    
     /* Clock */
     
     CLOCK    clock;
