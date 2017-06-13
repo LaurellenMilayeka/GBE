@@ -1,4 +1,4 @@
-#include <iomanip>
+include <iomanip>
 #include "Opcodes.hpp"
 #include "Disasm.hpp"
 #include <bitset>
@@ -3541,8 +3541,6 @@ void CPU::Disasm::Dis0xE0(CPU::Z80 *cpu) {
 
 void CPU::Disasm::Dis0xE1(CPU::Z80 *cpu) {
   cpu->hl = (Engine::RAM::GetByte(cpu->sp + 1) << 8) + Engine::RAM::GetByte(cpu->sp);
-  if (cpu->pc == 0x0029)
-    cpu->hl -= 2;
   cpu->sp += 2;
 }
 

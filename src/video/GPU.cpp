@@ -1,5 +1,5 @@
 #include "GPU.hpp"
-#include "RAM.hpp"
+#include "IRAM.hpp"
 
 Graphics::GPU *Graphics::GPU::_singleton = nullptr;
 
@@ -36,112 +36,133 @@ void Graphics::GPU::DrawScanLine(CPU::Z80 *cpu) {
   uint8_t lcdc_status = Engine::RAM::GetByte(0xFF41);
   static int cycles = 0;
 
-  cycles += cpu->nextInstructionDuration;
-  if (Engine::RAM::GetByte(0xFF45) == Engine::RAM::GetByte(0xFF44)) {
-    if (((Engine::RAM::GetByte(0xFF41) >> 6) & 1) == 1) {
-      uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
-
-      iFlags |= (1 << 1);
-      Engine::RAM::SetByte(0xFF0F, iFlags);
-    }
-    lcdc_status |= (1 << 2);
-    Engine::RAM::SetByte(0xFF41, lcdc_status);
-  } else {
-    lcdc_status &= ~(1 << 2);
-    Engine::RAM::SetByte(0xFF41, lcdc_status);
-  }
-  this->_lcdc = status;
-  if (this->isFrameDone == false) {
-    switch ((lcdc_status & 3)) {
-    case 0:
-      if (cycles >= 201) {
-	Engine::RAM::SetByte(0xFF44, Engine::RAM::GetByte(0xFF44) + 1);
-	lcdc_status |= (1 << 1);
-	lcdc_status |= (1 << 0);
-	Engine::RAM::SetByte(0xFF41, lcdc_status);
-	if (((Engine::RAM::GetByte(0xFF41) >> 3) & 1) == 1) {
-	  uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
-
-	  iFlags |= (1 << 1);
-	  Engine::RAM::SetByte(0xFF0F, iFlags);
-	}
-	cycles = 0;
-      }
-      break;
-    case 3:
-      if (cycles >= 169) {
-	if (Engine::RAM::GetByte(0xFF44) < 144) {
-	  if (((this->_lcdc >> 0) & 1) == 1) {
-	    this->RenderTiles(cpu);
-	  }
-	  if (((this->_lcdc >> 1) & 1) == 1) {
-	    this->RenderSprites(cpu);
-	  }
-	  lcdc_status &= ~(1 << 0);
-	  lcdc_status &= ~(1 << 1);
-	} else {
-	  lcdc_status |= (1 << 0);
-	  lcdc_status &= ~(1 << 1);
-	}
-	Engine::RAM::SetByte(0xFF41, lcdc_status);
-	cycles = 0;
-      }
-      break;
-    case 2:
-      if (cycles >= 77) {
-	lcdc_status |= (1 << 1);
-	lcdc_status |= (1 << 0);
-	Engine::RAM::SetByte(0xFF41, lcdc_status);
-	if (((Engine::RAM::GetByte(0xFF41) >> 5) & 1) == 1) {
-	  uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
-
-	  iFlags |= (1 << 1);
-	  Engine::RAM::SetByte(0xFF0F, iFlags);
-	}
-	cycles = 0;
-      }
-      break;
-    case 1:
-      if (cycles >= 456) {
+  if (((status >> 7) & 1) == 1) {
+    cycles += cpu->nextInstructionDuration;
+    if (Engine::RAM::GetByte(0xFF45) == Engine::RAM::GetByte(0xFF44)) {
+      if (((Engine::RAM::GetByte(0xFF41) >> 6) & 1) == 1) {
+	uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
 	
-	this->_nbrRefresh++;
-	Engine::RAM::SetByte(0xFF44, Engine::RAM::GetByte(0xFF44) + 1);
-	if (Engine::RAM::GetByte(0xFF44) > 153)  {
-	  uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
-	  
-	  iFlags |= (1 << 0);
-	  if (((Engine::RAM::GetByte(0xFF41) >> 4) & 1) == 1) {
-	    iFlags |= (1 << 1);
-	  }
-	  Engine::RAM::SetByte(0xFF0F, iFlags);
-	  
-#ifndef NOGRAPHICS
-	  
-	  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	  glLoadIdentity();
-	  glRasterPos2i(-1, 1);
-	  glPixelZoom(1, -1);
-	  glDrawPixels(160, 144, GL_RGB, GL_UNSIGNED_BYTE, this->_data);
-	  SDL_GL_SwapWindow(Core::Window::Instance()->GetWindow());
-
-#endif
-	  
-	  Engine::RAM::SetByte(0xFF44, 0);
+	iFlags |= (1 << 1);
+	Engine::RAM::SetByte(0xFF0F, iFlags, false);
+      }
+      lcdc_status |= (1 << 2);
+      Engine::RAM::SetByte(0xFF41, lcdc_status, false);
+    } else {
+      lcdc_status &= ~(1 << 2);
+      Engine::RAM::SetByte(0xFF41, lcdc_status, false);
+    }
+    this->_lcdc = status;
+    if (this->isFrameDone == false) {
+      switch ((lcdc_status & 3)) {
+      case 0:
+	if (cycles >= 201) {
+	  Engine::RAM::SetByte(0xFF44, Engine::RAM::GetByte(0xFF44) + 1);
 	  lcdc_status |= (1 << 1);
-	  lcdc_status &= ~(1 << 0);
-	  Engine::RAM::SetByte(0xFF41, lcdc_status);
-	  isFrameDone = true;
-	  cycles = 0;
-	} else {
-	  lcdc_status &= ~(1 << 1);
-	  lcdc_status &= ~(1 << 0);
-	  Engine::RAM::SetByte(0xFF41, lcdc_status);
+	  lcdc_status |= (1 << 0);
+	  Engine::RAM::SetByte(0xFF41, lcdc_status, false);
+	  if (((Engine::RAM::GetByte(0xFF41) >> 3) & 1) == 1) {
+	    uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
+	    
+	    iFlags |= (1 << 1);
+	    Engine::RAM::SetByte(0xFF0F, iFlags, false);
+	  } else {
+	    uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
+	    
+	    iFlags &= ~(1 << 1);
+	    Engine::RAM::SetByte(0xFF0F, iFlags, false);
+	  }
 	  cycles = 0;
 	}
+	break;
+      case 3:
+	if (cycles >= 169) {
+	  if (Engine::RAM::GetByte(0xFF44) < 144) {
+	    if (((this->_lcdc >> 0) & 1) == 1) {
+	      this->RenderTiles(cpu);
+	    }
+	    if (((this->_lcdc >> 1) & 1) == 1) {
+	      this->RenderSprites(cpu);
+	    }
+	    lcdc_status &= ~(1 << 0);
+	    lcdc_status &= ~(1 << 1);
+	  } else {
+	    lcdc_status |= (1 << 0);
+	    lcdc_status &= ~(1 << 1);
+	  }
+	  Engine::RAM::SetByte(0xFF41, lcdc_status, false);
+	  cycles = 0;
+	}
+	break;
+      case 2:
+	if (cycles >= 77) {
+	  lcdc_status |= (1 << 1);
+	  lcdc_status |= (1 << 0);
+	  Engine::RAM::SetByte(0xFF41, lcdc_status, false);
+	  if (((Engine::RAM::GetByte(0xFF41) >> 5) & 1) == 1) {
+	    uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
+	    
+	    iFlags |= (1 << 1);
+	    Engine::RAM::SetByte(0xFF0F, iFlags, false);
+	  } else {
+	    uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
+	    
+	    iFlags &= ~(1 << 1);
+	    Engine::RAM::SetByte(0xFF0F, iFlags, false);
+	  }
+	  cycles = 0;
+	}
+	break;
+      case 1:
+	if (Engine::RAM::GetByte(0xFF44) >= 144) {
+	    uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
+	    
+	    iFlags |= (1 << 0);
+	    Engine::RAM::SetByte(0xFF0F, iFlags, false);
+	}
+	if (cycles >= 456) {
+	  
+	  this->_nbrRefresh++;
+	  Engine::RAM::SetByte(0xFF44, Engine::RAM::GetByte(0xFF44) + 1, false);
+	  if (Engine::RAM::GetByte(0xFF44) > 153)  {
+	    
+#ifndef NOGRAPHICS
+	    
+	    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	    glLoadIdentity();
+	    glRasterPos2i(-1, 1);
+	    glPixelZoom(1, -1);
+	    glDrawPixels(160, 144, GL_RGB, GL_UNSIGNED_BYTE, this->_data);
+	    SDL_GL_SwapWindow(Core::Window::Instance()->GetWindow());
+	    
+#endif
+	    
+	    Engine::RAM::SetByte(0xFF44, 0, false);
+	    lcdc_status |= (1 << 1);
+	    lcdc_status &= ~(1 << 0);
+	    Engine::RAM::SetByte(0xFF41, lcdc_status, false);
+	    isFrameDone = true;
+	    cycles = 0;
+	  } else {
+	    lcdc_status &= ~(1 << 1);
+	    lcdc_status &= ~(1 << 0);
+	    Engine::RAM::SetByte(0xFF41, lcdc_status, false);
+	    cycles = 0;
+	  }
+	}
+	break; 
       }
-      break; 
     }
+  } else {
+    this->_lcdc = status;
+    Engine::RAM::SetByte(0xFF44, 0, false);
+    Engine::RAM::SetByte(0xFF41, 0x80, false);
   }
+}
+
+bool Graphics::GPU::IsLCDEnabled() {
+  if (((this->_lcdc >> 7) & 1) == 1)
+    return (true);
+  return (false);
 }
 
 int GetColour(uint8_t colour, uint16_t address) {

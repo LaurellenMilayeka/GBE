@@ -1,4 +1,4 @@
-#include "RAM.hpp"
+#include "IRAM.hpp"
 
 unsigned int Engine::RAM::_ramSize = 0;
 uint8_t *Engine::RAM::_ram = nullptr;
@@ -76,15 +76,39 @@ uint8_t Engine::RAM::GetROMByte(uint16_t addr) {
 }
 
 void Engine::RAM::SetByte(uint16_t pos, uint8_t value, bool user) {
+
   if (pos == 0xFF04 && user) {
     _ram[pos] = 0;
   } else if (pos == 0xFF46) {
     uint16_t data = value << 8;
-
-    dprintf(1, "Sprites copy\n");
+    
     for (uint8_t i = 0; i < 0xA0; i++) {
       _ram[0xFE00 + i] = _ram[data + i];
     }
+  } else if (pos == 0xFF0F) {
+    if (user) {
+      _ram[pos] = 0xE0 | value;
+    } else {
+      dprintf(1, "Plop\n");
+      _ram[pos] = value;
+    }
+  } else if (pos == 0xFF41) {
+    if (!user) {
+      _ram[pos] = 0x80 | value;
+    }
+  } else if (pos == 0xFF00) {
+    if (user) {
+      uint8_t tmp = Engine::RAM::GetByte(0xFF00);
+      
+      tmp = 0x0C;
+      tmp += (value >> 4);
+      _ram[pos] = (tmp << 4) | 0x0F;
+    } else {
+      _ram[pos] = value;
+    }
+  } else if (pos >= 0xE000 && pos <= 0xFDFF) {
+    _ram[pos] = value;
+    _ram[0xC000 | (pos & 0x0FFF)] = value;
   } else {
     _ram[pos] = value;
   }

@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 #include <cstdlib>
-#include "RAM.hpp"
+#include "IRAM.hpp"
 
 #define FREQUENCY 4194304
 

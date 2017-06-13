@@ -5,7 +5,7 @@
 
 #include "ROMLoader.hpp"
 #include "Define.hpp"
-#include "RAM.hpp"
+#include "IRAM.hpp"
 
 namespace Engine {
 

@@ -73,7 +73,9 @@ namespace Graphics {
     void RenderTiles(CPU::Z80*);
     void RenderSprites(CPU::Z80*);
     void RenderT();
+
   public:
+
     unsigned int	_nbrRefresh;
 
     static GPU *Instance();
@@ -82,5 +84,6 @@ namespace Graphics {
 
     void SetFrameStatus(bool);
     void DrawScanLine(CPU::Z80 *);
+    bool IsLCDEnabled();
   };
 };

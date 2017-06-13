@@ -1,5 +1,5 @@
 #include "Joypad.hpp"
-#include "RAM.hpp"
+#include "IRAM.hpp"
 
 Engine::JoypadKeys Engine::Joypad::_prevKey = NONE;
 
@@ -96,8 +96,8 @@ void Engine::Joypad::ProcessEvent(SDL_Event event) {
     Engine::Joypad::_prevKey = Engine::NONE;
     break;
   }
-  Engine::RAM::SetByte(0xFF0F, iFlags);
-  Engine::RAM::SetByte(0xFF00, key_reg);
+  Engine::RAM::SetByte(0xFF0F, iFlags, false);
+  Engine::RAM::SetByte(0xFF00, key_reg, false);
 }
 
 #endif

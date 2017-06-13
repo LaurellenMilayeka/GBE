@@ -10,7 +10,9 @@ void Engine::Boot::BootInit() {
   DEBUG_PRINT("BIOS Loaded");
 
 #ifdef DEBUG
+
   HexDump(Engine::Boot::_biosData, 0x0000, 0x00FF);
+
 #endif
   
 }

@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include "RAM.hpp"
+#include "IRAM.hpp"
 #include "Z80.hpp"
 
 namespace CPU {
