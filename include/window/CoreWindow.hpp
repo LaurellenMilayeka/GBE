@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <string>
 
+#define GLEW_STATIC
+
 #ifndef NOGRAPHICS
 
 #include <GL/glew.h>

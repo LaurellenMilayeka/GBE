@@ -3,26 +3,30 @@
 
 Loader::ROM *Loader::ROM::_singleton = NULL;
 
-Loader::ROM::ROM() {
-
+Loader::ROM::ROM()
+{
 }
 
-Loader::ROM::~ROM() {
-
+Loader::ROM::~ROM()
+{
 }
 
-Loader::ROM *Loader::ROM::Instance() {
-  if (_singleton == NULL) {
+Loader::ROM *Loader::ROM::Instance()
+{
+  if (_singleton == NULL)
+  {
     _singleton = new Loader::ROM();
   }
   return (_singleton);
 }
 
-void Loader::ROM::Destroy() {
-  delete(_singleton);
+void Loader::ROM::Destroy()
+{
+  delete (_singleton);
 }
 
-size_t GetROMSize(const char *romPath) {
+size_t GetROMSize(const char *romPath)
+{
   std::ifstream mySource;
 
   mySource.open(romPath, std::ios_base::binary);
@@ -32,26 +36,32 @@ size_t GetROMSize(const char *romPath) {
   return (size);
 }
 
-void Loader::ROM::Load(const char *romPath) {
+void Loader::ROM::Load(const char *romPath)
+{
   std::ifstream file(romPath);
 
   DEBUG_PRINT("Opening rom " << romPath);
-  if (!file) {
+  if (!file)
+  {
     std::cerr << "[ERROR] : Could not open rom " << romPath << std::endl;
     DEBUG_PRINT("An error occured : " << std::strerror(errno));
   }
   this->_romSize = GetROMSize(romPath);
-  if ((this->_romData = (uint8_t*)malloc(sizeof(uint8_t) * this->_romSize)) == NULL) {
+  if ((this->_romData = (uint8_t *)malloc(sizeof(uint8_t) * this->_romSize)) == NULL)
+  {
     std::cerr << "[ERROR] : Error allocation ROM memory" << std::endl;
   }
-  file.read((char*)this->_romData, this->_romSize);
-  if (file) {
+  file.read((char *)this->_romData, this->_romSize);
+  if (file)
+  {
     std::cout << "[INFO] : ROM Loading complete" << std::endl;
     DEBUG_PRINT("Read " << this->_romSize << " bytes.");
-  } else {
+  }
+  else
+  {
     std::cerr << "[ERROR] : A problem occured" << std::endl;
     DEBUG_PRINT("Could only read " << file.gcount() << " bytes out of " << this->_romSize);
-    exit(EXIT_FAILURE);
+    //exit(EXIT_FAILURE);
   }
   DEBUG_PRINT("Temporary program counter initialized at 0x104");
   DEBUG_PRINT("Fetching nintendo scrolling graphics bytecode...");
@@ -62,23 +72,29 @@ void Loader::ROM::Load(const char *romPath) {
   int i;
 
   i = 0;
-  while (i < 48) {
-    if ((i % 16) == 0 && i != 0) {
+  while (i < 48)
+  {
+    if ((i % 16) == 0 && i != 0)
+    {
       write(1, "\n", 1);
-      dprintf(1, "[DEBUG] : ");
-      dprintf(1, "0x%02X ", this->_nintendoScrollingGraphics[i]);
-    } else if (i == 0) {
-      dprintf(1, "[DEBUG] : ");
-      dprintf(1, "0x%02X ", this->_nintendoScrollingGraphics[i]);
-    } else {
-      dprintf(1, "0x%02X ", this->_nintendoScrollingGraphics[i]);
+      printf("[DEBUG] : ");
+      printf("0x%02X ", this->_nintendoScrollingGraphics[i]);
+    }
+    else if (i == 0)
+    {
+      printf("[DEBUG] : ");
+      printf("0x%02X ", this->_nintendoScrollingGraphics[i]);
+    }
+    else
+    {
+      printf("0x%02X ", this->_nintendoScrollingGraphics[i]);
     }
     i++;
   }
-  dprintf(1, "\n");
+  printf("\n");
 #endif
 
-    DEBUG_PRINT("Temporary program counter initialized at 0x134");
+  DEBUG_PRINT("Temporary program counter initialized at 0x134");
   DEBUG_PRINT("Fetching ROM title...");
   memcpy(this->_name, &(this->_romData)[0x134], 16);
   DEBUG_PRINT("Retrieved 16 bytes");
@@ -91,13 +107,18 @@ void Loader::ROM::Load(const char *romPath) {
   DEBUG_PRINT("Fetched manufacturer code : 0x" << std::hex << this->_manufacturer);
   DEBUG_PRINT("Temporary program counter initialized at 0x143");
   DEBUG_PRINT("Fetching CGB support...");
-  if (this->_romData[0x143] == 0x80) {
+  if (this->_romData[0x143] == 0x80)
+  {
     this->_cgbFunctions = COMPATIBLE;
     DEBUG_PRINT("CGB cartridge, C/GB compatible");
-  } else if (this->_romData[0x143] == 0xC0) {
+  }
+  else if (this->_romData[0x143] == 0xC0)
+  {
     this->_cgbFunctions = CGB_ONLY;
     DEBUG_PRINT("CGB cartridge, CGB only");
-  } else {
+  }
+  else
+  {
     this->_cgbFunctions = GB_ONLY;
     DEBUG_PRINT("GB cartridge, GB only");
   }
@@ -107,17 +128,21 @@ void Loader::ROM::Load(const char *romPath) {
   DEBUG_PRINT("Fetched licensee code : " << this->_licenseeCode);
   DEBUG_PRINT("Temporary program counter initialized at 0x146");
   DEBUG_PRINT("Fetching SGB support...");
-  if (this->_romData[0x146] == 0x03) {
+  if (this->_romData[0x146] == 0x03)
+  {
     DEBUG_PRINT("Supports SGB functions");
     this->_sgbFunctions = COMPATIBLE;
-  } else {
+  }
+  else
+  {
     DEBUG_PRINT("C/GB ROM only. SGB support skipped");
     this->_sgbFunctions = GB_ONLY;
   }
   DEBUG_PRINT("Temporary program counter initialized at 0x147");
   DEBUG_PRINT("Fetching cartridge type...");
   this->_memoryBank = this->_romData[0x147];
-  switch (this->_memoryBank) {
+  switch (this->_memoryBank)
+  {
   case ROMONLY:
     DEBUG_PRINT("Memory bank set to ROM ONLY");
     break;
@@ -216,7 +241,8 @@ void Loader::ROM::Load(const char *romPath) {
   DEBUG_PRINT("Temporary program counter initialized at 0x148");
   DEBUG_PRINT("Fetching ROM size...");
   this->_romSize = this->_romData[0x148];
-  switch (this->_romSize) {
+  switch (this->_romSize)
+  {
   case R32KB:
     DEBUG_PRINT("ROM size set to 32kb");
     std::cout << "[INFO] : ROM size set to 32kb" << std::endl;
@@ -270,7 +296,8 @@ void Loader::ROM::Load(const char *romPath) {
   DEBUG_PRINT("Temporary program counter initialized at 0x149");
   DEBUG_PRINT("Fetching RAM size...");
   this->_ramSize = this->_romData[0x149];
-  switch (this->_ramSize) {
+  switch (this->_ramSize)
+  {
   case NONE:
     DEBUG_PRINT("RAM size set to NONE");
     std::cout << "[INFO] : RAM size set to NONE" << std::endl;
@@ -301,9 +328,12 @@ void Loader::ROM::Load(const char *romPath) {
   this->_destination = this->_romData[0x14A];
   DEBUG_PRINT("Fetched destination");
   DEBUG_PRINT("Found : " << std::hex << this->_destination);
-  if (this->_destination == 0x00) {
+  if (this->_destination == 0x00)
+  {
     std::cout << "[INFO] : Japanese cartridge" << std::endl;
-  } else {
+  }
+  else
+  {
     std::cout << "[INFO] : Non-japanese cartridge" << std::endl;
   }
   DEBUG_PRINT("Temporary program counter initialized at 0x14C");
@@ -326,18 +356,21 @@ void Loader::ROM::Load(const char *romPath) {
   file.close();
 }
 
-void Loader::ROM::Unload() {
-
+void Loader::ROM::Unload()
+{
 }
 
-uint8_t Loader::ROM::GetByte(uint16_t addr) {
+uint8_t Loader::ROM::GetByte(uint16_t addr)
+{
   return (this->_romData[addr]);
 }
 
-uint8_t Loader::ROM::GetMBCType() const {
+uint8_t Loader::ROM::GetMBCType() const
+{
   return (this->_memoryBank);
 }
 
-uint8_t *Loader::ROM::GetROMData() const {
+uint8_t *Loader::ROM::GetROMData() const
+{
   return (this->_romData);
 }

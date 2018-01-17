@@ -3,16 +3,19 @@
 unsigned int Engine::RAM::_ramSize = 0;
 uint8_t *Engine::RAM::_ram = nullptr;
 
-void Engine::RAM::Initialize() {
+void Engine::RAM::Initialize()
+{
   Loader::ROM *rom = Loader::ROM::Instance();
   uint8_t timer;
-  
+
   DEBUG_PRINT("Initializing RAM");
-  switch (rom->GetMBCType()) {
+  switch (rom->GetMBCType())
+  {
   case ROMONLY:
     _ramSize = 131072;
-    
-    if ((Engine::RAM::_ram = (uint8_t*)malloc(sizeof(uint8_t) * _ramSize)) == nullptr) {
+
+    if ((Engine::RAM::_ram = (uint8_t *)malloc(sizeof(uint8_t) * _ramSize)) == nullptr)
+    {
       std::cerr << "Error allocation RAM" << std::endl;
       exit(EXIT_FAILURE);
     }
@@ -47,8 +50,10 @@ void Engine::RAM::Initialize() {
     _ramSize = 131072;
     break;
   }
-  if (rom->GetMBCType() != ROMONLY) {
-    if ((Engine::RAM::_ram = (uint8_t*)malloc(sizeof(uint8_t) * _ramSize)) == nullptr) {
+  if (rom->GetMBCType() != ROMONLY)
+  {
+    if ((Engine::RAM::_ram = (uint8_t *)malloc(sizeof(uint8_t) * _ramSize)) == nullptr)
+    {
       std::cerr << "Error allocation RAM" << std::endl;
       exit(EXIT_FAILURE);
     }
@@ -65,70 +70,97 @@ void Engine::RAM::Initialize() {
   }
 }
 
-uint8_t Engine::RAM::GetByte(uint16_t pos) {
+uint8_t Engine::RAM::GetByte(uint16_t pos)
+{
   return (_ram[pos]);
 }
 
-uint8_t Engine::RAM::GetROMByte(uint16_t addr) {
+uint8_t Engine::RAM::GetROMByte(uint16_t addr)
+{
   Loader::ROM *rom = Loader::ROM::Instance();
 
   return (rom->GetROMData()[addr]);
 }
 
-void Engine::RAM::SetByte(uint16_t pos, uint8_t value, bool user) {
+void Engine::RAM::SetByte(uint16_t pos, uint8_t value, bool user)
+{
 
-  if (pos == 0xFF04 && user) {
+  if (pos == 0xFF04 && user)
+  {
     _ram[pos] = 0;
-  } else if (pos == 0xFF46) {
+  }
+  else if (pos == 0xFF46)
+  {
     uint16_t data = value << 8;
-    
-    for (uint8_t i = 0; i < 0xA0; i++) {
+
+    for (uint8_t i = 0; i < 0xA0; i++)
+    {
       _ram[0xFE00 + i] = _ram[data + i];
     }
-  } else if (pos == 0xFF0F) {
-    if (user) {
+  }
+  else if (pos == 0xFF0F)
+  {
+    if (user)
+    {
       _ram[pos] = 0xE0 | value;
-    } else {
-      dprintf(1, "Plop\n");
+    }
+    else
+    {
       _ram[pos] = value;
     }
-  } else if (pos == 0xFF41) {
-    if (!user) {
+  }
+  else if (pos == 0xFF41)
+  {
+    if (!user)
+    {
       _ram[pos] = 0x80 | value;
     }
-  } else if (pos == 0xFF00) {
-    if (user) {
+  }
+  else if (pos == 0xFF00)
+  {
+    if (user)
+    {
       uint8_t tmp = Engine::RAM::GetByte(0xFF00);
-      
+
       tmp = 0x0C;
       tmp += (value >> 4);
       _ram[pos] = (tmp << 4) | 0x0F;
-    } else {
+    }
+    else
+    {
       _ram[pos] = value;
     }
-  } else if (pos >= 0xE000 && pos <= 0xFDFF) {
+  }
+  else if (pos >= 0xE000 && pos <= 0xFDFF)
+  {
     _ram[pos] = value;
     _ram[0xC000 | (pos & 0x0FFF)] = value;
-  } else {
+  }
+  else
+  {
     _ram[pos] = value;
   }
 }
 
-void Engine::RAM::LoadBIOS() {
+void Engine::RAM::LoadBIOS()
+{
   memcpy(Engine::RAM::_ram, Engine::Boot::GetBiosData(), 0x100);
 }
 
-void Engine::RAM::GetROMChunk(uint16_t startRAM, uint16_t start, uint16_t end) {
+void Engine::RAM::GetROMChunk(uint16_t startRAM, uint16_t start, uint16_t end)
+{
   Loader::ROM *rom = Loader::ROM::Instance();
-  
+
   memcpy(&(Engine::RAM::_ram)[startRAM], &(rom->GetROMData())[start], (end - start));
 }
 
-uint8_t *Engine::RAM::GetRAM() {
+uint8_t *Engine::RAM::GetRAM()
+{
   return (Engine::RAM::_ram);
 }
 
-void Engine::RAM::TurnOffDMGRom() {
+void Engine::RAM::TurnOffDMGRom()
+{
   Engine::RAM::GetROMChunk(0x0000, 0x0000, 0x0100);
   HexDump(Engine::RAM::_ram, 0x0000, 0x0100);
 }

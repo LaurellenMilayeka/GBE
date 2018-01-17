@@ -3,23 +3,26 @@
 
 Engine::JoypadKeys Engine::Joypad::_prevKey = NONE;
 
-Engine::Joypad::Joypad() {
-  
+Engine::Joypad::Joypad()
+{
 }
 
-Engine::Joypad::~Joypad() {
-
+Engine::Joypad::~Joypad()
+{
 }
 
 #ifndef NOGRAPHICS
 
-void Engine::Joypad::ProcessEvent(SDL_Event event) {
+void Engine::Joypad::ProcessEvent(SDL_Event event)
+{
   uint8_t key_reg = Engine::RAM::GetByte(0xFF00);
   uint8_t iFlags = Engine::RAM::GetByte(0xFF0F);
-  
-  switch (event.key.keysym.sym) {
+
+  switch (event.key.keysym.sym)
+  {
   case SDLK_a:
-    if (Engine::Joypad::_prevKey != A) {
+    if (Engine::Joypad::_prevKey != A)
+    {
       iFlags |= (1 << 2);
       key_reg = 0xFF;
       key_reg |= (1 << 5);
@@ -28,7 +31,8 @@ void Engine::Joypad::ProcessEvent(SDL_Event event) {
     }
     break;
   case SDLK_b:
-    if (Engine::Joypad::_prevKey != B) {
+    if (Engine::Joypad::_prevKey != B)
+    {
       iFlags |= (1 << 2);
       key_reg = 0xFF;
       key_reg &= ~(1 << 5);
@@ -37,7 +41,8 @@ void Engine::Joypad::ProcessEvent(SDL_Event event) {
     }
     break;
   case SDLK_SPACE:
-    if (Engine::Joypad::_prevKey != START) {
+    if (Engine::Joypad::_prevKey != START)
+    {
       iFlags |= (1 << 2);
       key_reg = 0xFF;
       key_reg &= ~(1 << 5);
@@ -46,7 +51,8 @@ void Engine::Joypad::ProcessEvent(SDL_Event event) {
     }
     break;
   case SDLK_RETURN:
-    if (Engine::Joypad::_prevKey != SELECT) {
+    if (Engine::Joypad::_prevKey != SELECT)
+    {
       iFlags |= (1 << 2);
       key_reg = 0xFF;
       key_reg &= ~(1 << 5);
@@ -55,7 +61,8 @@ void Engine::Joypad::ProcessEvent(SDL_Event event) {
     }
     break;
   case SDLK_UP:
-    if (Engine::Joypad::_prevKey != Engine::UP) {
+    if (Engine::Joypad::_prevKey != Engine::UP)
+    {
       iFlags |= (1 << 2);
       key_reg = 0xFF;
       key_reg &= ~(1 << 4);
@@ -64,7 +71,8 @@ void Engine::Joypad::ProcessEvent(SDL_Event event) {
     }
     break;
   case SDLK_DOWN:
-    if (Engine::Joypad::_prevKey != Engine::DOWN) {
+    if (Engine::Joypad::_prevKey != Engine::DOWN)
+    {
       iFlags |= (1 << 2);
       key_reg = 0xFF;
       key_reg &= ~(1 << 4);
@@ -73,7 +81,8 @@ void Engine::Joypad::ProcessEvent(SDL_Event event) {
     }
     break;
   case SDLK_RIGHT:
-    if (Engine::Joypad::_prevKey != Engine::RIGHT) {
+    if (Engine::Joypad::_prevKey != Engine::RIGHT)
+    {
       iFlags |= (1 << 2);
       key_reg = 0xFF;
       key_reg &= ~(1 << 4);
@@ -82,7 +91,8 @@ void Engine::Joypad::ProcessEvent(SDL_Event event) {
     }
     break;
   case SDLK_LEFT:
-    if (Engine::Joypad::_prevKey != Engine::LEFT) {
+    if (Engine::Joypad::_prevKey != Engine::LEFT)
+    {
       iFlags |= (1 << 2);
       key_reg = 0xFF;
       key_reg &= ~(1 << 4);

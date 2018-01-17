@@ -7,16 +7,19 @@
 #include "Define.hpp"
 #include "IRAM.hpp"
 
-namespace Engine {
+namespace Engine
+{
 
-  class BIOS {
+  class BIOS
+  {
 
-    static uint8_t _nintendoBIOSVerification[48];
-
-  public:
-
-    static void CheckBIOSIntegrity();
+    private:
     
-  };
+      static uint8_t _nintendoBIOSVerification[48];
+
+    public:
+    
+      static void CheckBIOSIntegrity();
   
+  };
 };
