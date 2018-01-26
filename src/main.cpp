@@ -176,7 +176,7 @@ int main(int ac, char *av[])
     Engine::RAM::Initialize();
     gpu = Graphics::GPU::Instance();
 
-    //InitRegistersAndControls(cpu);
+    InitRegistersAndControls(cpu);
     useDMG = false;
     while (running)
     {

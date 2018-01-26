@@ -8217,11 +8217,11 @@ void CPU::Disasm::DisCB0x7C(CPU::Z80 *cpu)
   tmp = (cpu->af & 0xFF);
   if ((((cpu->hl >> 8) >> 7) & 1) == 1)
   {
-    tmp |= (1 << 7);
+    tmp &= ~(1 << 7);
   }
   else
   {
-    tmp &= ~(1 << 7);
+    tmp |= (1 << 7);
   }
   tmp &= ~(1 << 6);
   tmp |= 1 << 5;
