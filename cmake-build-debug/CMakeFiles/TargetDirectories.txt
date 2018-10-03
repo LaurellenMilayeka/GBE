@@ -1,0 +1,3 @@
+C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/cmake-build-debug/CMakeFiles/GameBoy_Emulator.dir
+C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -34,3 +34,7 @@
 
 # Test BIOS
 *.bin
+
+# Build directories
+./build/
+./cmake-build-debug/

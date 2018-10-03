@@ -1,0 +1,166 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/CPU.hpp
+bitset
+-
+stack
+-
+GBE.hpp
+../include/GBE.hpp
+
+../include/Debug.hpp
+GBE.hpp
+../include/GBE.hpp
+CPU.hpp
+../include/CPU.hpp
+
+../include/Disasm.hpp
+CPU.hpp
+../include/CPU.hpp
+
+../include/Display.hpp
+GBE.hpp
+../include/GBE.hpp
+GPU.hpp
+../include/GPU.hpp
+
+../include/GBE.hpp
+SDL2/SDL.h
+-
+
+../include/GPU.hpp
+bitset
+-
+CPU.hpp
+../include/CPU.hpp
+
+../include/Loader.hpp
+string
+-
+
+../include/OpCodes.hpp
+string
+-
+GBE.hpp
+../include/GBE.hpp
+CPU.hpp
+../include/CPU.hpp
+
+../include/RAM.hpp
+GBE.hpp
+../include/GBE.hpp
+
+../include/ROM.hpp
+string
+-
+
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/main.cpp
+iostream
+-
+OpCodes.hpp
+-
+Loader.hpp
+-
+Debug.hpp
+-
+RAM.hpp
+-
+CPU.hpp
+-
+GPU.hpp
+-
+Display.hpp
+-
+cstring
+-
+
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/CPU.cpp
+RAM.hpp
+-
+CPU.hpp
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/CPU.hpp
+
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Debug.cpp
+ROM.hpp
+-
+RAM.hpp
+-
+iostream
+-
+fstream
+-
+GPU.hpp
+-
+Debug.hpp
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Debug.hpp
+
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Disasm.cpp
+RAM.hpp
+-
+Debug.hpp
+-
+iostream
+-
+OpCodes.hpp
+-
+Disasm.hpp
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Disasm.hpp
+
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Display.cpp
+iostream
+-
+Display.hpp
+-
+RAM.hpp
+-
+cstring
+-
+
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/GPU.cpp
+RAM.hpp
+-
+Display.hpp
+-
+iostream
+-
+GPU.hpp
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/GPU.hpp
+
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Loader.cpp
+iostream
+-
+fstream
+-
+RAM.hpp
+-
+ROM.hpp
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/ROM.hpp
+Loader.hpp
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Loader.hpp
+
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/OpCodes.cpp
+iostream
+-
+OpCodes.hpp
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/OpCodes.hpp
+Disasm.hpp
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Disasm.hpp
+
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/RAM.cpp
+cstring
+-
+cstdio
+-
+RAM.hpp
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/RAM.hpp
+
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/ROM.cpp
+ROM.hpp
+/mnt/c/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/ROM.hpp
+
