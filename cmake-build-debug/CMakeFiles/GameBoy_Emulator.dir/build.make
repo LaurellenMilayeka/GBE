@@ -33,19 +33,19 @@ cmake_force:
 SHELL = cmd.exe
 
 # The CMake executable.
-CMAKE_COMMAND = "C:\Program Files\JetBrains\CLion 2018.2.2\bin\cmake\win\bin\cmake.exe"
+CMAKE_COMMAND = "C:\Program Files\CMake\bin\cmake.exe"
 
 # The command to remove a file.
-RM = "C:\Program Files\JetBrains\CLion 2018.2.2\bin\cmake\win\bin\cmake.exe" -E remove -f
+RM = "C:\Program Files\CMake\bin\cmake.exe" -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator"
+CMAKE_SOURCE_DIR = "C:\Users\Flox Ajuro\GBE"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\cmake-build-debug"
+CMAKE_BINARY_DIR = "C:\Users\Flox Ajuro\GBE\cmake-build-debug"
 
 # Include any dependencies generated for this target.
 include CMakeFiles/GameBoy_Emulator.dir/depend.make
@@ -59,142 +59,156 @@ include CMakeFiles/GameBoy_Emulator.dir/flags.make
 CMakeFiles/GameBoy_Emulator.dir/src/OpCodes.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/flags.make
 CMakeFiles/GameBoy_Emulator.dir/src/OpCodes.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/includes_CXX.rsp
 CMakeFiles/GameBoy_Emulator.dir/src/OpCodes.cpp.obj: ../src/OpCodes.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/OpCodes.cpp.obj"
-	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\OpCodes.cpp.obj -c "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\OpCodes.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\GBE\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/OpCodes.cpp.obj"
+	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\OpCodes.cpp.obj -c "C:\Users\Flox Ajuro\GBE\src\OpCodes.cpp"
 
 CMakeFiles/GameBoy_Emulator.dir/src/OpCodes.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameBoy_Emulator.dir/src/OpCodes.cpp.i"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\OpCodes.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\OpCodes.cpp.i
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\GBE\src\OpCodes.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\OpCodes.cpp.i
 
 CMakeFiles/GameBoy_Emulator.dir/src/OpCodes.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameBoy_Emulator.dir/src/OpCodes.cpp.s"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\OpCodes.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\OpCodes.cpp.s
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\GBE\src\OpCodes.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\OpCodes.cpp.s
 
 CMakeFiles/GameBoy_Emulator.dir/main.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/flags.make
 CMakeFiles/GameBoy_Emulator.dir/main.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/includes_CXX.rsp
 CMakeFiles/GameBoy_Emulator.dir/main.cpp.obj: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/main.cpp.obj"
-	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\main.cpp.obj -c "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\main.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\GBE\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/main.cpp.obj"
+	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\main.cpp.obj -c "C:\Users\Flox Ajuro\GBE\main.cpp"
 
 CMakeFiles/GameBoy_Emulator.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameBoy_Emulator.dir/main.cpp.i"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\main.cpp" > CMakeFiles\GameBoy_Emulator.dir\main.cpp.i
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\GBE\main.cpp" > CMakeFiles\GameBoy_Emulator.dir\main.cpp.i
 
 CMakeFiles/GameBoy_Emulator.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameBoy_Emulator.dir/main.cpp.s"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\main.cpp" -o CMakeFiles\GameBoy_Emulator.dir\main.cpp.s
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\GBE\main.cpp" -o CMakeFiles\GameBoy_Emulator.dir\main.cpp.s
 
 CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/flags.make
 CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/includes_CXX.rsp
 CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.obj: ../src/RAM.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.obj"
-	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\RAM.cpp.obj -c "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\RAM.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\GBE\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.obj"
+	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\RAM.cpp.obj -c "C:\Users\Flox Ajuro\GBE\src\RAM.cpp"
 
 CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.i"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\RAM.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\RAM.cpp.i
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\GBE\src\RAM.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\RAM.cpp.i
 
 CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.s"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\RAM.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\RAM.cpp.s
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\GBE\src\RAM.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\RAM.cpp.s
 
 CMakeFiles/GameBoy_Emulator.dir/src/ROM.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/flags.make
 CMakeFiles/GameBoy_Emulator.dir/src/ROM.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/includes_CXX.rsp
 CMakeFiles/GameBoy_Emulator.dir/src/ROM.cpp.obj: ../src/ROM.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/ROM.cpp.obj"
-	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\ROM.cpp.obj -c "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\ROM.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\GBE\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/ROM.cpp.obj"
+	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\ROM.cpp.obj -c "C:\Users\Flox Ajuro\GBE\src\ROM.cpp"
 
 CMakeFiles/GameBoy_Emulator.dir/src/ROM.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameBoy_Emulator.dir/src/ROM.cpp.i"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\ROM.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\ROM.cpp.i
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\GBE\src\ROM.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\ROM.cpp.i
 
 CMakeFiles/GameBoy_Emulator.dir/src/ROM.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameBoy_Emulator.dir/src/ROM.cpp.s"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\ROM.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\ROM.cpp.s
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\GBE\src\ROM.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\ROM.cpp.s
 
 CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/flags.make
 CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/includes_CXX.rsp
 CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.obj: ../src/Loader.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.obj"
-	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\Loader.cpp.obj -c "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\Loader.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\GBE\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.obj"
+	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\Loader.cpp.obj -c "C:\Users\Flox Ajuro\GBE\src\Loader.cpp"
 
 CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.i"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\Loader.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\Loader.cpp.i
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\GBE\src\Loader.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\Loader.cpp.i
 
 CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.s"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\Loader.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\Loader.cpp.s
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\GBE\src\Loader.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\Loader.cpp.s
 
 CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/flags.make
 CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/includes_CXX.rsp
 CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.obj: ../src/Debug.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.obj"
-	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\Debug.cpp.obj -c "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\Debug.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\GBE\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.obj"
+	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\Debug.cpp.obj -c "C:\Users\Flox Ajuro\GBE\src\Debug.cpp"
 
 CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.i"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\Debug.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\Debug.cpp.i
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\GBE\src\Debug.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\Debug.cpp.i
 
 CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.s"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\Debug.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\Debug.cpp.s
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\GBE\src\Debug.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\Debug.cpp.s
 
 CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/flags.make
 CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/includes_CXX.rsp
 CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.obj: ../src/CPU.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.obj"
-	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\CPU.cpp.obj -c "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\CPU.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\GBE\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.obj"
+	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\CPU.cpp.obj -c "C:\Users\Flox Ajuro\GBE\src\CPU.cpp"
 
 CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.i"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\CPU.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\CPU.cpp.i
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\GBE\src\CPU.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\CPU.cpp.i
 
 CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.s"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\CPU.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\CPU.cpp.s
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\GBE\src\CPU.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\CPU.cpp.s
 
 CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/flags.make
 CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/includes_CXX.rsp
 CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj: ../src/Disasm.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj"
-	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\Disasm.cpp.obj -c "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\Disasm.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\GBE\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj"
+	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\Disasm.cpp.obj -c "C:\Users\Flox Ajuro\GBE\src\Disasm.cpp"
 
 CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.i"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\Disasm.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\Disasm.cpp.i
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\GBE\src\Disasm.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\Disasm.cpp.i
 
 CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.s"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\Disasm.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\Disasm.cpp.s
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\GBE\src\Disasm.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\Disasm.cpp.s
 
 CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/flags.make
 CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/includes_CXX.rsp
 CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj: ../src/GPU.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj"
-	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\GPU.cpp.obj -c "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\GPU.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\GBE\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj"
+	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\GPU.cpp.obj -c "C:\Users\Flox Ajuro\GBE\src\GPU.cpp"
 
 CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.i"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\GPU.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\GPU.cpp.i
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\GBE\src\GPU.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\GPU.cpp.i
 
 CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.s"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\GPU.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\GPU.cpp.s
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\GBE\src\GPU.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\GPU.cpp.s
 
 CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/flags.make
 CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/includes_CXX.rsp
 CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj: ../src/Display.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj"
-	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\Display.cpp.obj -c "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\Display.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\GBE\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj"
+	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\Display.cpp.obj -c "C:\Users\Flox Ajuro\GBE\src\Display.cpp"
 
 CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.i"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\Display.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\Display.cpp.i
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\GBE\src\Display.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\Display.cpp.i
 
 CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.s"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\src\Display.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\Display.cpp.s
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\GBE\src\Display.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\Display.cpp.s
+
+CMakeFiles/GameBoy_Emulator.dir/src/Input.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/flags.make
+CMakeFiles/GameBoy_Emulator.dir/src/Input.cpp.obj: CMakeFiles/GameBoy_Emulator.dir/includes_CXX.rsp
+CMakeFiles/GameBoy_Emulator.dir/src/Input.cpp.obj: ../src/Input.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Flox Ajuro\GBE\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/GameBoy_Emulator.dir/src/Input.cpp.obj"
+	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\GameBoy_Emulator.dir\src\Input.cpp.obj -c "C:\Users\Flox Ajuro\GBE\src\Input.cpp"
+
+CMakeFiles/GameBoy_Emulator.dir/src/Input.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameBoy_Emulator.dir/src/Input.cpp.i"
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Flox Ajuro\GBE\src\Input.cpp" > CMakeFiles\GameBoy_Emulator.dir\src\Input.cpp.i
+
+CMakeFiles/GameBoy_Emulator.dir/src/Input.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameBoy_Emulator.dir/src/Input.cpp.s"
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Flox Ajuro\GBE\src\Input.cpp" -o CMakeFiles\GameBoy_Emulator.dir\src\Input.cpp.s
 
 # Object files for target GameBoy_Emulator
 GameBoy_Emulator_OBJECTS = \
@@ -207,7 +221,8 @@ GameBoy_Emulator_OBJECTS = \
 "CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.obj" \
 "CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj" \
 "CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj" \
-"CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj"
+"CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj" \
+"CMakeFiles/GameBoy_Emulator.dir/src/Input.cpp.obj"
 
 # External object files for target GameBoy_Emulator
 GameBoy_Emulator_EXTERNAL_OBJECTS =
@@ -222,11 +237,12 @@ GameBoy_Emulator.exe: CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.obj
 GameBoy_Emulator.exe: CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj
 GameBoy_Emulator.exe: CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj
 GameBoy_Emulator.exe: CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj
+GameBoy_Emulator.exe: CMakeFiles/GameBoy_Emulator.dir/src/Input.cpp.obj
 GameBoy_Emulator.exe: CMakeFiles/GameBoy_Emulator.dir/build.make
 GameBoy_Emulator.exe: CMakeFiles/GameBoy_Emulator.dir/linklibs.rsp
 GameBoy_Emulator.exe: CMakeFiles/GameBoy_Emulator.dir/objects1.rsp
 GameBoy_Emulator.exe: CMakeFiles/GameBoy_Emulator.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable GameBoy_Emulator.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="C:\Users\Flox Ajuro\GBE\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable GameBoy_Emulator.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\GameBoy_Emulator.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -239,6 +255,6 @@ CMakeFiles/GameBoy_Emulator.dir/clean:
 .PHONY : CMakeFiles/GameBoy_Emulator.dir/clean
 
 CMakeFiles/GameBoy_Emulator.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator" "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator" "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\cmake-build-debug" "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\cmake-build-debug" "C:\Users\Flox Ajuro\CLionProjects\GameBoy Emulator\cmake-build-debug\CMakeFiles\GameBoy_Emulator.dir\DependInfo.cmake" --color=$(COLOR)
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" "C:\Users\Flox Ajuro\GBE" "C:\Users\Flox Ajuro\GBE" "C:\Users\Flox Ajuro\GBE\cmake-build-debug" "C:\Users\Flox Ajuro\GBE\cmake-build-debug" "C:\Users\Flox Ajuro\GBE\cmake-build-debug\CMakeFiles\GameBoy_Emulator.dir\DependInfo.cmake" --color=$(COLOR)
 .PHONY : CMakeFiles/GameBoy_Emulator.dir/depend
 

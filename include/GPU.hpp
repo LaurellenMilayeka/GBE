@@ -22,7 +22,7 @@ namespace GBE {
     } LCDControl;
 
     typedef enum {
-        LYC_INTERRRUPT = 1 << 6,
+        LYC_INTERRUPT = 1 << 6,
         OAM_INTERRUPT = 1 << 5,
         VBLANK_INTERRUPT = 1 << 4,
         HBLANK_INTERRUPT = 1 << 3,
@@ -68,8 +68,8 @@ namespace GBE {
             unsigned short _gpuClock;
 
             PixelData _data[160];
+            Byte _color[160];
 
-            VideoMode GetVideoMode();
             void SetVideoMode(VideoMode videoMode);
 
             Word GetBGTileMapAddress();
@@ -82,12 +82,19 @@ namespace GBE {
 
             bool IsLCDEnabled() const;
 
+            std::string VideoModeToString() {
+                return ("Hello");
+            }
+
         public:
 
             GPU();
             ~GPU();
 
+            bool IsStatusInterruptEnabled(LCDStatus toCheck);
+
             void Step(CPU& cpu);
+            VideoMode GetVideoMode();
 
     };
 

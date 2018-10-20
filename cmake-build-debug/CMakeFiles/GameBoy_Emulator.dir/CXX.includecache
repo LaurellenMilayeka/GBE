@@ -19,10 +19,8 @@ GBE.hpp
 ../include/GBE.hpp
 CPU.hpp
 ../include/CPU.hpp
-
-../include/Disasm.hpp
-CPU.hpp
-../include/CPU.hpp
+OpCodes.hpp
+../include/OpCodes.hpp
 
 ../include/Display.hpp
 GBE.hpp
@@ -40,6 +38,10 @@ bitset
 CPU.hpp
 ../include/CPU.hpp
 
+../include/Input.hpp
+GBE.hpp
+../include/GBE.hpp
+
 ../include/Loader.hpp
 string
 -
@@ -55,12 +57,20 @@ CPU.hpp
 ../include/RAM.hpp
 GBE.hpp
 ../include/GBE.hpp
+ROM.hpp
+../include/ROM.hpp
+Input.hpp
+../include/Input.hpp
+Debug.hpp
+../include/Debug.hpp
 
 ../include/ROM.hpp
 string
 -
+GBE.hpp
+../include/GBE.hpp
 
-C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/main.cpp
+C:/Users/Flox Ajuro/GBE/main.cpp
 iostream
 -
 OpCodes.hpp
@@ -77,52 +87,12 @@ GPU.hpp
 -
 Display.hpp
 -
+Input.hpp
+C:/Users/Flox Ajuro/GBE/Input.hpp
 cstring
 -
 
-C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/CPU.cpp
-RAM.hpp
--
-CPU.hpp
-C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/CPU.hpp
-
-C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Debug.cpp
-ROM.hpp
--
-RAM.hpp
--
-iostream
--
-fstream
--
-GPU.hpp
--
-Debug.hpp
-C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Debug.hpp
-
-C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Disasm.cpp
-RAM.hpp
--
-Debug.hpp
--
-iostream
--
-OpCodes.hpp
--
-Disasm.hpp
-C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Disasm.hpp
-
-C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Display.cpp
-iostream
--
-Display.hpp
--
-RAM.hpp
--
-cstring
--
-
-C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/GPU.cpp
+C:/Users/Flox Ajuro/GBE/src/GPU.cpp
 RAM.hpp
 -
 Display.hpp
@@ -130,13 +100,5 @@ Display.hpp
 iostream
 -
 GPU.hpp
-C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/GPU.hpp
-
-C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/OpCodes.cpp
-iostream
--
-OpCodes.hpp
-C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/OpCodes.hpp
-Disasm.hpp
-C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Disasm.hpp
+C:/Users/Flox Ajuro/GBE/src/GPU.hpp
 

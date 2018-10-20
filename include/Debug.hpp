@@ -8,16 +8,21 @@
 #include "GBE.hpp"
 #include "CPU.hpp"
 
+#include "OpCodes.hpp"
+
 namespace GBE {
 
     class Debug {
 
         private:
 
+            static std::string const& ReplaceInString(std::string const& src, std::string const& haystack, std::string const& toInsert);
+
         public:
 
             static void Dump(Byte* toDump);
             static void DumpFromTo(Byte* toDump, Word from, Word to);
+            static void DebugInstr(OpCode instr, CPU &cpu);
             static void DumpRegistries(CPU const& cpu);
             static void DumpRAMRegistries();
             static void DebugJoypad();

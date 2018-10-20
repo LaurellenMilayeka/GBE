@@ -13,6 +13,7 @@
 typedef struct {
     std::string mnemo;
     Byte opCode;
+    Byte length;
     char cycles;
     void (*f)(GBE::CPU&);
 } OpCode;

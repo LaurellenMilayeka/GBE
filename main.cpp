@@ -6,6 +6,7 @@
 #include <CPU.hpp>
 #include <GPU.hpp>
 #include <Display.hpp>
+#include "Input.hpp"
 #include <cstring>
 
 using namespace GBE;
@@ -75,8 +76,6 @@ int main(int ac, char**av) {
     CPU cpu;
     GPU gpu;
     Display screen;
-    Byte instr;
-    SDL_Event event;
     bool isRunning = true;
 
     if (ac < 2) {
@@ -87,45 +86,26 @@ int main(int ac, char**av) {
     printf("Welcome to GBE ( GameBoy Emulator )\n");
     Loader::LoadROM(av[1]);
     //Loader::LoadBootloader();
-    cpu.SetRegistry16Value(Registry16::PC, 0x0100);
     InitRegisters(cpu);
+    cpu.SetRegistry16Value(Registry16::PC, 0x0100);
 
     while (isRunning) {
         unsigned int cycles = 0;
         Uint64 frameStart = SDL_GetPerformanceCounter();
 
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                    isRunning = false;
-                    break;
-            }
+        if (Input::Update() == false) {
+            isRunning = false;
         }
 
         while (cycles < CYCLES_PER_FRAME) {
-            instr = cpu.GetNextInstruction();
-            opCodes[instr].f(cpu);
-            cpu.TickClock(opCodes[instr].cycles);
-            cpu.SetLastInstrCycles((Byte) opCodes[instr].cycles);
-            cycles += opCodes[instr].cycles;
-            if (cpu.IsInterruptsEnabled()) {
-                if (cpu.HasInterrupt(Interrupt::INT_VBLANK)) {
-                    cpu.SetupInterrupt(Interrupt::INT_VBLANK);
-                }
-                if (cpu.HasInterrupt(Interrupt::INT_LCD_STAT)) {
-                    cpu.SetupInterrupt(Interrupt::INT_LCD_STAT);
-                }
-                if (cpu.HasInterrupt(Interrupt::INT_TIMER)) {
-                    cpu.SetupInterrupt(Interrupt::INT_TIMER);
-                }
-                if (cpu.HasInterrupt(Interrupt::INT_SERIAL)) {
-                    cpu.SetupInterrupt(Interrupt::INT_SERIAL);
-                }
-                if (cpu.HasInterrupt(Interrupt::INT_JOYPAD)) {
-                    cpu.SetupInterrupt(Interrupt::INT_JOYPAD);
-                }
-            }
+            cpu.Step();
+            cycles += cpu.GetLastInstrCycles();
             gpu.Step(cpu);
+            if (RAM::Read8(LYC) == RAM::Read8(LY)) {
+                if (cpu.CheckIFEnabledInterrupt(Interrupt::INT_LCD_STAT)) {
+                        cpu.EnableInterrupt(Interrupt::INT_LCD_STAT);
+                    }
+            }
         }
 
         Uint64 frameEnd = SDL_GetPerformanceCounter();

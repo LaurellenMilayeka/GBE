@@ -9,6 +9,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj"
   "CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj"
   "CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj"
+  "CMakeFiles/GameBoy_Emulator.dir/src/Input.cpp.obj"
   "GameBoy_Emulator.pdb"
   "GameBoy_Emulator.exe"
   "GameBoy_Emulator.exe.manifest"

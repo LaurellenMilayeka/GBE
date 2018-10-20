@@ -17,8 +17,6 @@ Uint32 *Display::pixels = nullptr;
 Display::Display() {
     Uint32 rmask, gmask, bmask, amask;
 
-    /* SDL interprets each pixel as a 32-bit number, so our masks must depend
-       on the endianness (byte order) of the machine */
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     rmask = 0xff000000;
     gmask = 0x00ff0000;
@@ -34,7 +32,7 @@ Display::Display() {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cerr << "[DEBUG] : Could not initialize SDL" << std::endl;
     }
-    if (SDL_CreateWindowAndRenderer(320, 288, 0, &(this->_window), &(Display::_renderer)) != 0) {
+    if (SDL_CreateWindowAndRenderer(480, 432, 0, &(this->_window), &(Display::_renderer)) != 0) {
         std::cerr << "[DEBUG] : Cannot initialize window and renderer" << std::endl;
     }
     if ((Display::_tmpScreenData = SDL_CreateRGBSurface(0, 160, 144, 32, rmask, gmask, bmask, amask)) == nullptr) {

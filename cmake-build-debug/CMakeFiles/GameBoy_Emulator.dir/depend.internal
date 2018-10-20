@@ -7,61 +7,93 @@ CMakeFiles/GameBoy_Emulator.dir/main.cpp.obj
  ../include/Display.hpp
  ../include/GBE.hpp
  ../include/GPU.hpp
+ ../include/Input.hpp
  ../include/Loader.hpp
  ../include/OpCodes.hpp
  ../include/RAM.hpp
- C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/main.cpp
+ ../include/ROM.hpp
+ C:/Users/Flox Ajuro/GBE/main.cpp
 CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.obj
  ../include/CPU.hpp
+ ../include/Debug.hpp
  ../include/GBE.hpp
+ ../include/Input.hpp
+ ../include/OpCodes.hpp
  ../include/RAM.hpp
- C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/CPU.cpp
+ ../include/ROM.hpp
+ C:/Users/Flox Ajuro/GBE/src/CPU.cpp
 CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.obj
  ../include/CPU.hpp
  ../include/Debug.hpp
  ../include/GBE.hpp
  ../include/GPU.hpp
+ ../include/Input.hpp
+ ../include/OpCodes.hpp
  ../include/RAM.hpp
  ../include/ROM.hpp
- C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Debug.cpp
+ C:/Users/Flox Ajuro/GBE/src/Debug.cpp
 CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj
  ../include/CPU.hpp
  ../include/Debug.hpp
  ../include/Disasm.hpp
  ../include/GBE.hpp
+ ../include/Input.hpp
  ../include/OpCodes.hpp
  ../include/RAM.hpp
- C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Disasm.cpp
+ ../include/ROM.hpp
+ C:/Users/Flox Ajuro/GBE/src/Disasm.cpp
 CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj
  ../include/CPU.hpp
+ ../include/Debug.hpp
  ../include/Display.hpp
  ../include/GBE.hpp
  ../include/GPU.hpp
- ../include/RAM.hpp
- C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Display.cpp
-CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj
- ../include/CPU.hpp
- ../include/Display.hpp
- ../include/GBE.hpp
- ../include/GPU.hpp
- ../include/RAM.hpp
- C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/GPU.cpp
-CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.obj
- ../include/GBE.hpp
- ../include/Loader.hpp
+ ../include/Input.hpp
+ ../include/OpCodes.hpp
  ../include/RAM.hpp
  ../include/ROM.hpp
- C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/Loader.cpp
+ C:/Users/Flox Ajuro/GBE/src/Display.cpp
+CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj
+ ../include/CPU.hpp
+ ../include/Debug.hpp
+ ../include/Display.hpp
+ ../include/GBE.hpp
+ ../include/GPU.hpp
+ ../include/Input.hpp
+ ../include/OpCodes.hpp
+ ../include/RAM.hpp
+ ../include/ROM.hpp
+ C:/Users/Flox Ajuro/GBE/src/GPU.cpp
+CMakeFiles/GameBoy_Emulator.dir/src/Input.cpp.obj
+ ../include/GBE.hpp
+ ../include/Input.hpp
+ C:/Users/Flox Ajuro/GBE/src/Input.cpp
+CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.obj
+ ../include/CPU.hpp
+ ../include/Debug.hpp
+ ../include/GBE.hpp
+ ../include/Input.hpp
+ ../include/Loader.hpp
+ ../include/OpCodes.hpp
+ ../include/RAM.hpp
+ ../include/ROM.hpp
+ C:/Users/Flox Ajuro/GBE/src/Loader.cpp
 CMakeFiles/GameBoy_Emulator.dir/src/OpCodes.cpp.obj
  ../include/CPU.hpp
  ../include/Disasm.hpp
  ../include/GBE.hpp
  ../include/OpCodes.hpp
- C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/OpCodes.cpp
+ C:/Users/Flox Ajuro/GBE/src/OpCodes.cpp
 CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.obj
+ ../include/CPU.hpp
+ ../include/Debug.hpp
  ../include/GBE.hpp
+ ../include/Input.hpp
+ ../include/OpCodes.hpp
  ../include/RAM.hpp
- C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/RAM.cpp
-CMakeFiles/GameBoy_Emulator.dir/src/ROM.cpp.obj
  ../include/ROM.hpp
- C:/Users/Flox Ajuro/CLionProjects/GameBoy Emulator/src/ROM.cpp
+ C:/Users/Flox Ajuro/GBE/src/RAM.cpp
+CMakeFiles/GameBoy_Emulator.dir/src/ROM.cpp.obj
+ ../include/GBE.hpp
+ ../include/ROM.hpp
+ C:/Users/Flox Ajuro/GBE/src/ROM.cpp

@@ -68,6 +68,26 @@ void Debug::DebugJoypad() {
     }
 }
 
+void Debug::DebugInstr(OpCode instr, CPU &cpu) {
+    char buffer[512];
+
+    sprintf(buffer, "Execution instruction 0x%02X (%s)\n", instr.opCode, instr.mnemo.c_str());
+    Debug::LogWrite(buffer);
+    //printf("%s", buffer);
+    if (instr.length > 1) {
+        switch (instr.length) {
+            case 2:
+                sprintf(buffer, "Values : 0x%02X\n", RAM::Read8(cpu.GetProgramCounter()));
+                break;
+            case 3:
+                sprintf(buffer, "Values : 0x%04X\n", RAM::Read16(cpu.GetProgramCounter()));
+                break;
+        }
+        //Debug::LogWrite(buffer);
+        //printf("%s", buffer);
+    }
+}
+
 void Debug::DumpRAMRegistries() {
     char buffer[1024];
 

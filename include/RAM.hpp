@@ -6,6 +6,9 @@
 #define GAMEBOY_EMULATOR_RAM_HPP
 
 #include "GBE.hpp"
+#include "ROM.hpp"
+#include "Input.hpp"
+#include "Debug.hpp"
 
 namespace GBE {
 
@@ -27,6 +30,8 @@ namespace GBE {
 
             static void FillChunk(Byte value, Word from, Word to);
             static Byte* GetChunk(Word from, Word to);
+
+            static void TurnOffDMG();
 
             static Byte* GetRAM();
 

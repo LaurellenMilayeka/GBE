@@ -7,15 +7,20 @@
 
 #include <string>
 
+#include "GBE.hpp"
+
 namespace GBE {
 
     class ROM {
+
+        private:
 
         public:
 
             static std::string name;
             static unsigned int size;
 
+            static Byte first256[256];
     };
 
 };

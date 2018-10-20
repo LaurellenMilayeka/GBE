@@ -8,3 +8,4 @@ using namespace GBE;
 
 std::string ROM::name;
 unsigned int ROM::size;
+Byte ROM::first256[256];

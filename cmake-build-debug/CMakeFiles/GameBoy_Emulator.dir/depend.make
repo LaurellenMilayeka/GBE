@@ -6,20 +6,28 @@ CMakeFiles/GameBoy_Emulator.dir/main.cpp.obj: ../include/Debug.hpp
 CMakeFiles/GameBoy_Emulator.dir/main.cpp.obj: ../include/Display.hpp
 CMakeFiles/GameBoy_Emulator.dir/main.cpp.obj: ../include/GBE.hpp
 CMakeFiles/GameBoy_Emulator.dir/main.cpp.obj: ../include/GPU.hpp
+CMakeFiles/GameBoy_Emulator.dir/main.cpp.obj: ../include/Input.hpp
 CMakeFiles/GameBoy_Emulator.dir/main.cpp.obj: ../include/Loader.hpp
 CMakeFiles/GameBoy_Emulator.dir/main.cpp.obj: ../include/OpCodes.hpp
 CMakeFiles/GameBoy_Emulator.dir/main.cpp.obj: ../include/RAM.hpp
+CMakeFiles/GameBoy_Emulator.dir/main.cpp.obj: ../include/ROM.hpp
 CMakeFiles/GameBoy_Emulator.dir/main.cpp.obj: ../main.cpp
 
 CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.obj: ../include/CPU.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.obj: ../include/Debug.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.obj: ../include/GBE.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.obj: ../include/Input.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.obj: ../include/OpCodes.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.obj: ../include/RAM.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.obj: ../include/ROM.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.obj: ../src/CPU.cpp
 
 CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.obj: ../include/CPU.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.obj: ../include/Debug.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.obj: ../include/GBE.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.obj: ../include/GPU.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.obj: ../include/Input.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.obj: ../include/OpCodes.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.obj: ../include/RAM.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.obj: ../include/ROM.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.obj: ../src/Debug.cpp
@@ -28,26 +36,44 @@ CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj: ../include/CPU.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj: ../include/Debug.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj: ../include/Disasm.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj: ../include/GBE.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj: ../include/Input.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj: ../include/OpCodes.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj: ../include/RAM.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj: ../include/ROM.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj: ../src/Disasm.cpp
 
 CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj: ../include/CPU.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj: ../include/Debug.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj: ../include/Display.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj: ../include/GBE.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj: ../include/GPU.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj: ../include/Input.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj: ../include/OpCodes.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj: ../include/RAM.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj: ../include/ROM.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.obj: ../src/Display.cpp
 
 CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj: ../include/CPU.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj: ../include/Debug.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj: ../include/Display.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj: ../include/GBE.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj: ../include/GPU.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj: ../include/Input.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj: ../include/OpCodes.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj: ../include/RAM.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj: ../include/ROM.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.obj: ../src/GPU.cpp
 
+CMakeFiles/GameBoy_Emulator.dir/src/Input.cpp.obj: ../include/GBE.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/Input.cpp.obj: ../include/Input.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/Input.cpp.obj: ../src/Input.cpp
+
+CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.obj: ../include/CPU.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.obj: ../include/Debug.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.obj: ../include/GBE.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.obj: ../include/Input.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.obj: ../include/Loader.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.obj: ../include/OpCodes.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.obj: ../include/RAM.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.obj: ../include/ROM.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/Loader.cpp.obj: ../src/Loader.cpp
@@ -58,10 +84,16 @@ CMakeFiles/GameBoy_Emulator.dir/src/OpCodes.cpp.obj: ../include/GBE.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/OpCodes.cpp.obj: ../include/OpCodes.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/OpCodes.cpp.obj: ../src/OpCodes.cpp
 
+CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.obj: ../include/CPU.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.obj: ../include/Debug.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.obj: ../include/GBE.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.obj: ../include/Input.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.obj: ../include/OpCodes.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.obj: ../include/RAM.hpp
+CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.obj: ../include/ROM.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/RAM.cpp.obj: ../src/RAM.cpp
 
+CMakeFiles/GameBoy_Emulator.dir/src/ROM.cpp.obj: ../include/GBE.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/ROM.cpp.obj: ../include/ROM.hpp
 CMakeFiles/GameBoy_Emulator.dir/src/ROM.cpp.obj: ../src/ROM.cpp
 

@@ -11,7 +11,7 @@
 using namespace GBE;
 
 void Loader::LoadBootloader() {
-    std::ifstream file("data/DMG_ROM.bin", std::ios::binary);
+    std::ifstream file("../data/DMG_ROM.bin", std::ios::binary);
     unsigned int size;
 
     if (!file.is_open()) {
@@ -40,6 +40,10 @@ void Loader::LoadROM(std::string const &romPath) {
     size = (unsigned int)file.tellg();
     file.seekg(0, std::ios_base::beg);
     file.read((char*)RAM::GetRAM(), size);
+
+    for (unsigned int i = 0; i <= 255; i++) {
+        ROM::first256[i] = RAM::GetRAM()[i];
+    }
 
     file.close();
 

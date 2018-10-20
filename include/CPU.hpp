@@ -10,9 +10,11 @@
 
 #include "GBE.hpp"
 
+#define CLOCKSPEED 4194304
 #define TIME_PER_FRAME 1.0 / 60.0
-#define CYCLES_PER_FRAME 70224
+#define CYCLES_PER_FRAME CLOCKSPEED / 59.7
 
+#define DIV 0xFF04
 #define TIMA 0xFF05
 #define TMA 0xFF06
 #define TMC 0xFF07
@@ -61,8 +63,9 @@ namespace GBE {
 
             std::bitset<8> _flags;
 
-            unsigned long long int _clock;
-            unsigned char _lastInstrCycles;
+            Word _clock;
+            Byte _actualInstr;
+            Byte _lastInstrCycles;
 
             Word _af;
             Word _bc;
@@ -76,7 +79,7 @@ namespace GBE {
 
             bool IsClockEnabled() const;
 
-            int GetTimerFrequency() const;
+            Word GetTimerFrequency();
 
         public:
 
@@ -89,9 +92,11 @@ namespace GBE {
             void DisableInterrupts();
 
             bool HasInterrupt(Interrupt toCheck);
+            bool CheckIFEnabledInterrupt(Interrupt toCheck);
 
             bool IsInterruptsEnabled() const;
 
+            Byte GetActualInstr() const;
             Byte GetFlags();
 
             void SetFlags(unsigned int mask);
@@ -116,8 +121,7 @@ namespace GBE {
             void JumpRelative(int amountToJump);
 
             unsigned char GetLastInstrCycles() const;
-            void SetLastInstrCycles(unsigned char cycles);
-            void TickClock(char nbrCycles);
+            void AddToLastInstrCycles(Byte toAdd);
 
             void EnableInterrupt(Interrupt toSet);
             void SetupInterrupt(Interrupt toSet);
@@ -180,6 +184,10 @@ namespace GBE {
             void RES(Word dst, Byte toReset);
             void SET(Registry8 dst, Byte toSet);
             void SET(Word dst, Byte toSet);
+
+            void TimerStep();
+
+            void Step();
     };
 
 };

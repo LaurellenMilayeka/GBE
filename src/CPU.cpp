@@ -20,9 +20,17 @@ bool CPU::IsClockEnabled() const {
     return (((RAM::Read8(TMC) >> 2) & 1) == 1);
 }
 
+Word CPU::GetTimerFrequency() {
+    Byte toTest = (RAM::Read8(TMC) & 0x03);
+    Word frequency = 0;
 
-void CPU::UpdateTimers() {
-//    int frequency = this->GetTimerFrequency();
+    switch (toTest) {
+        case 0: frequency = 0x0400; break;
+        case 1: frequency = 0x0010; break;
+        case 2: frequency = 0x0040; break;
+        case 3: frequency = 0x0100; break;
+    }
+    return (frequency);
 }
 
 void CPU::EnableInterrupts() {
@@ -37,8 +45,16 @@ bool CPU::HasInterrupt(GBE::Interrupt toCheck) {
     return (((RAM::Read8(0xFF0F) >> toCheck) & 1) == 1 && ((RAM::Read8(0xFFFF) >> toCheck) & 1) == 1);
 }
 
+bool CPU::CheckIFEnabledInterrupt(Interrupt toCheck) {
+    return (((RAM::Read8(0xFFFF) >> toCheck) & 1) == 1);
+}
+
 bool CPU::IsInterruptsEnabled() const {
     return (this->_ime);
+}
+
+Byte CPU::GetActualInstr() const {
+    return (this->_actualInstr);
 }
 
 Byte CPU::GetFlags() {
@@ -196,7 +212,8 @@ Word CPU::GetProgramCounter() const {
 }
 
 Byte CPU::GetNextInstruction() {
-    return ((Byte)RAM::Read8(this->_pc++));
+    this->_actualInstr = (Byte)(RAM::Read8(this->_pc++));
+    return (this->_actualInstr);
 }
 
 void CPU::JumpRelative(int amountToJump) {
@@ -207,12 +224,8 @@ unsigned char CPU::GetLastInstrCycles() const {
     return (this->_lastInstrCycles);
 }
 
-void CPU::SetLastInstrCycles(unsigned char cycles) {
-    this->_lastInstrCycles = cycles;
-}
-
-void CPU::TickClock(char nbrCycles) {
-    this->_clock += nbrCycles;
+void CPU::AddToLastInstrCycles(Byte toAdd) {
+    this->_lastInstrCycles += toAdd;
 }
 
 void CPU::EnableInterrupt(GBE::Interrupt toSet) {
@@ -370,7 +383,7 @@ void CPU::ADD16(GBE::Registry16 dst, GBE::Registry16 toAdd) {
     } else {
         this->UnsetFlag(Flags::CARRY);
     }
-    if ((((this->GetRegistry16Value(dst) & 0xF) + (this->GetRegistry16Value(toAdd) & 0xF)) & 0x10) == 0x10) {
+    if ((this->GetRegistry16Value(dst) & 0xFFF) > ((this->GetRegistry16Value(dst) + this->GetRegistry16Value(toAdd)) & 0xFFF)) {
         this->SetFlags(Flags::HALF_CARRY);
     } else {
         this->UnsetFlag(Flags::HALF_CARRY);
@@ -398,6 +411,7 @@ void CPU::ADC8(GBE::Registry8 dst, Word toAdd) {
     } else {
         this->UnsetFlag(Flags::ZERO);
     }
+    this->UnsetFlag(Flags::OPERATION);
 }
 
 void CPU::ADC8(GBE::Registry8 dst, Registry8 toAdd) {
@@ -419,6 +433,7 @@ void CPU::ADC8(GBE::Registry8 dst, Registry8 toAdd) {
     } else {
         this->UnsetFlag(Flags::ZERO);
     }
+    this->UnsetFlag(Flags::OPERATION);
 }
 
 void CPU::SUB8(GBE::Registry8 dst, Word toSub) {
@@ -463,46 +478,48 @@ void CPU::SUB8(GBE::Registry8 dst, GBE::Registry8 toSub) {
 
 void CPU::SBC8(GBE::Registry8 dst, GBE::Registry8 toSbc) {
     Byte carry = (Byte)(this->IsFlagSet(Flags::CARRY) ? 1 : 0);
-    Byte value = (Byte)(this->GetRegistry8Value(toSbc) + carry);
+    Byte value = (Byte)(this->GetRegistry8Value(toSbc));
 
-    if ((value > this->GetRegistry8Value(dst))) {
-        this->SetFlags(Flags::CARRY);
-    } else {
-        this->UnsetFlag(Flags::CARRY);
-    }
-    if (value == this->GetRegistry8Value(dst)) {
+    if ((this->GetRegistry8Value(dst) - value - carry) == 0) {
         this->SetFlags(Flags::ZERO);
     } else {
         this->UnsetFlag(Flags::ZERO);
     }
-    if ((value & 0xF) > (this->GetRegistry8Value(dst) & 0xF)) {
+    if ((this->GetRegistry8Value(dst) & 0x0F) < (value & 0x0F) + carry) {
         this->SetFlags(Flags::HALF_CARRY);
     } else {
         this->UnsetFlag(Flags::HALF_CARRY);
     }
-    this->SetRegistry8Value(dst, this->GetRegistry8Value(dst) - value);
+    if (((unsigned long) this->GetRegistry8Value(dst)) - ((unsigned long) value) - carry > 0xFF) {
+        this->SetFlags(Flags::CARRY);
+    } else {
+        this->UnsetFlag(Flags::CARRY);
+    }
+    this->SetRegistry8Value(dst, this->GetRegistry8Value(dst) - value - carry);
+    this->SetFlags(Flags::OPERATION);
 }
 
 void CPU::SBC8(GBE::Registry8 dst, Word toSbc) {
     Byte carry = (Byte)(this->IsFlagSet(Flags::CARRY) ? 1 : 0);
-    Byte value = (Byte)(RAM::Read8(toSbc) + carry);
+    Byte value = (Byte)(RAM::Read8(toSbc));
 
-    if ((value > this->GetRegistry8Value(dst))) {
-        this->SetFlags(Flags::CARRY);
-    } else {
-        this->UnsetFlag(Flags::CARRY);
-    }
-    if (value == this->GetRegistry8Value(dst)) {
+    if ((this->GetRegistry8Value(dst) - value - carry) == 0) {
         this->SetFlags(Flags::ZERO);
     } else {
         this->UnsetFlag(Flags::ZERO);
     }
-    if ((value & 0xF) > (this->GetRegistry8Value(dst) & 0xF)) {
+    if ((this->GetRegistry8Value(dst) & 0x0F) < (value & 0x0F) + carry) {
         this->SetFlags(Flags::HALF_CARRY);
     } else {
         this->UnsetFlag(Flags::HALF_CARRY);
     }
-    this->SetRegistry8Value(dst, this->GetRegistry8Value(dst) - value);
+    if (((unsigned long) this->GetRegistry8Value(dst)) - ((unsigned long) value) - carry > 0xFF) {
+        this->SetFlags(Flags::CARRY);
+    } else {
+        this->UnsetFlag(Flags::CARRY);
+    }
+    this->SetRegistry8Value(dst, this->GetRegistry8Value(dst) - value - carry);
+    this->SetFlags(Flags::OPERATION);
 }
 
 void CPU::AND8(GBE::Registry8 dst, GBE::Registry8 toAnd) {
@@ -701,9 +718,9 @@ void CPU::RL(GBE::Registry8 toShift) {
     bool hasCarry = (Byte)(((this->GetRegistry8Value(toShift) >> 7) & 1) == 1);
     this->SetRegistry8Value(toShift, (Byte)((this->GetRegistry8Value(toShift) << 1) + (this->IsFlagSet(Flags::CARRY) ? 1 : 0)));
     if (hasCarry) {
-        this->SetFlags(Flags::ZERO);
+        this->SetFlags(Flags::CARRY);
     } else {
-        this->UnsetFlag(Flags::ZERO);
+        this->UnsetFlag(Flags::CARRY);
     }
     if (this->GetRegistry8Value(toShift) == 0) {
         this->SetFlags(Flags::ZERO);
@@ -717,9 +734,9 @@ void CPU::RL(Word toShift) {
     bool hasCarry = (Byte)(((RAM::Read8(toShift) >> 7) & 1) == 1);
     RAM::Write8((Byte)((RAM::Read8(toShift) << 1) + (this->IsFlagSet(Flags::CARRY) ? 1 : 0)), toShift);
     if (hasCarry) {
-        this->SetFlags(Flags::ZERO);
+        this->SetFlags(Flags::CARRY);
     } else {
-        this->UnsetFlag(Flags::ZERO);
+        this->UnsetFlag(Flags::CARRY);
     }
     if (RAM::Read8(toShift) == 0) {
         this->SetFlags(Flags::ZERO);
@@ -887,4 +904,49 @@ void CPU::SET(Word dst, Byte toSet) {
 
     value |= (1 << toSet);
     RAM::Write8(value, dst);
+}
+
+void CPU::TimerStep() {
+    Word frequency = this->GetTimerFrequency();
+
+    if (((this->_clock % 0x00FF) + this->_lastInstrCycles) >= 0x00FF) {
+        RAM::GetRAM()[DIV] = RAM::GetRAM()[DIV] + 1;
+    }
+
+    if (this->IsClockEnabled()) {
+        if (RAM::Read8(TIMA) == 0) {
+            RAM::Write8(RAM::Read8(TMA), TIMA);
+        }
+        if (((this->_clock % frequency) + this->_lastInstrCycles) >= frequency) {
+            if (RAM::Read8(TIMA) == 0xFF) {
+                RAM::GetRAM()[TIMA] = RAM::GetRAM()[TMA];
+                if (this->CheckIFEnabledInterrupt(Interrupt::INT_TIMER)) {
+                    this->EnableInterrupt(Interrupt::INT_TIMER);
+                }
+            } else {
+                RAM::GetRAM()[TIMA] = RAM::GetRAM()[TIMA] + 1;
+            }
+        }
+    }
+    this->_clock += this->_lastInstrCycles;
+}
+
+void CPU::Step() {
+    Byte instr;
+
+    instr = this->GetNextInstruction();
+    opCodes[instr].f(*this);
+    /*Debug::DebugInstr(opCodes[instr], *this);
+    Debug::DumpRegistries(*this);
+    Debug::DumpFlags(*this);
+    Debug::LogWrite("\n");*/
+    this->TimerStep();
+    this->_lastInstrCycles = opCodes[instr].cycles;
+    if (this->IsInterruptsEnabled()) {
+        if (this->HasInterrupt(Interrupt::INT_VBLANK)) this->SetupInterrupt(Interrupt::INT_VBLANK);
+        if (this->HasInterrupt(Interrupt::INT_LCD_STAT)) this->SetupInterrupt(Interrupt::INT_LCD_STAT);
+        if (this->HasInterrupt(Interrupt::INT_TIMER)) this->SetupInterrupt(Interrupt::INT_TIMER);
+        if (this->HasInterrupt(Interrupt::INT_SERIAL)) this->SetupInterrupt(Interrupt::INT_SERIAL);
+        if (this->HasInterrupt(Interrupt::INT_JOYPAD)) this->SetupInterrupt(Interrupt::INT_JOYPAD);
+    }
 }

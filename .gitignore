@@ -36,5 +36,5 @@
 *.bin
 
 # Build directories
-./build/
-./cmake-build-debug/
+build/
+cmake-build-debug/

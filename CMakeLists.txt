@@ -12,6 +12,6 @@ endif (UNIX)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-add_executable(GameBoy_Emulator include/OpCodes.hpp src/OpCodes.cpp main.cpp include/RAM.hpp include/GBE.hpp src/RAM.cpp include/Loader.hpp include/ROM.hpp src/ROM.cpp src/Loader.cpp include/Debug.hpp src/Debug.cpp include/CPU.hpp src/CPU.cpp include/Disasm.hpp src/Disasm.cpp include/GPU.hpp src/GPU.cpp include/Display.hpp src/Display.cpp)
+add_executable(GameBoy_Emulator include/OpCodes.hpp src/OpCodes.cpp main.cpp include/RAM.hpp include/GBE.hpp src/RAM.cpp include/Loader.hpp include/ROM.hpp src/ROM.cpp src/Loader.cpp include/Debug.hpp src/Debug.cpp include/CPU.hpp src/CPU.cpp include/Disasm.hpp src/Disasm.cpp include/GPU.hpp src/GPU.cpp include/Display.hpp src/Display.cpp include/Input.hpp src/Input.cpp)
 
 target_link_libraries(GameBoy_Emulator SDL2main SDL2 SDL2_image)

@@ -86,8 +86,8 @@ void Disasm::OP0x0F(GBE::CPU &cpu) {
     cpu.UnsetFlag(Flags::ZERO | Flags::HALF_CARRY | Flags::OPERATION);
 }
 
-void Disasm::OP0x10(GBE::CPU &) {
-
+void Disasm::OP0x10(GBE::CPU &cpu) {
+    cpu.JumpRelative(1);
 }
 
 void Disasm::OP0x11(GBE::CPU &cpu) {
@@ -164,7 +164,7 @@ void Disasm::OP0x1F(GBE::CPU &cpu) {
 void Disasm::OP0x20(GBE::CPU &cpu) {
     if (!cpu.IsFlagSet(Flags::ZERO)) {
         cpu.JumpRelative((SignedByte)RAM::Read8((Word) (cpu.GetProgramCounter())) + 1);
-        cpu.TickClock(4);
+        cpu.AddToLastInstrCycles(4);
     } else {
         cpu.JumpRelative(1);
     }
@@ -218,7 +218,7 @@ void Disasm::OP0x27(GBE::CPU &cpu) {
 void Disasm::OP0x28(GBE::CPU &cpu) {
     if (cpu.IsFlagSet(Flags::ZERO)) {
         cpu.JumpRelative((SignedByte)RAM::Read8((Word) (cpu.GetProgramCounter())) + 1);
-        cpu.TickClock(4);
+        cpu.AddToLastInstrCycles(4);
     } else {
         cpu.JumpRelative(1);
     }
@@ -258,7 +258,7 @@ void Disasm::OP0x2F(GBE::CPU &cpu) {
 void Disasm::OP0x30(GBE::CPU &cpu) {
     if (!cpu.IsFlagSet(Flags::CARRY)) {
         cpu.JumpRelative((SignedByte)(RAM::Read8(cpu.GetProgramCounter()) + 1));
-        cpu.TickClock(4);
+        cpu.AddToLastInstrCycles(4);
     } else {
         cpu.JumpRelative(1);
     }
@@ -274,6 +274,10 @@ void Disasm::OP0x32(GBE::CPU &cpu) {
     cpu.SetRegistry16Value(Registry16::HL, (Word)(cpu.GetRegistry16Value(Registry16::HL) - 1));
 }
 
+void Disasm::OP0x33(CPU &cpu) {
+    cpu.INC16(Registry16::SP);
+}
+
 void Disasm::OP0x34(GBE::CPU &cpu) {
     cpu.INC8(cpu.GetRegistry16Value(Registry16::HL));
 }
@@ -287,10 +291,15 @@ void Disasm::OP0x36(GBE::CPU &cpu) {
     cpu.JumpRelative(1);
 }
 
+void Disasm::OP0x37(CPU &cpu) {
+    cpu.SetFlags(Flags::CARRY);
+    cpu.UnsetFlag(Flags::OPERATION | Flags::HALF_CARRY);
+}
+
 void Disasm::OP0x38(GBE::CPU &cpu) {
     if (cpu.IsFlagSet(Flags::CARRY)) {
         cpu.JumpRelative((SignedByte)(RAM::Read8(cpu.GetProgramCounter()) + 1));
-        cpu.TickClock(4);
+        cpu.AddToLastInstrCycles(4);
     } else {
         cpu.JumpRelative(1);
     }
@@ -298,6 +307,15 @@ void Disasm::OP0x38(GBE::CPU &cpu) {
 
 void Disasm::OP0x39(GBE::CPU &cpu) {
     cpu.ADD16(Registry16::HL, Registry16::SP);
+}
+
+void Disasm::OP0x3A(CPU &cpu) {
+    cpu.SetRegistry8Value(Registry8::A, RAM::Read8(cpu.GetRegistry16Value(Registry16::HL)));
+    cpu.SetRegistry16Value(Registry16::HL, (Word)(cpu.GetRegistry16Value(Registry16::HL) - 1));
+}
+
+void Disasm::OP0x3B(CPU &cpu) {
+    cpu.DEC16(Registry16::SP);
 }
 
 void Disasm::OP0x3C(GBE::CPU &cpu) {
@@ -314,7 +332,7 @@ void Disasm::OP0x3E(GBE::CPU &cpu) {
 }
 
 void Disasm::OP0x3F(GBE::CPU &cpu) {
-    cpu.UnsetFlag(Flags::CARRY);
+    cpu.UnsetFlag(Flags::OPERATION | Flags::HALF_CARRY | Flags::CARRY);
 }
 
 void Disasm::OP0x40(GBE::CPU &cpu) {
@@ -533,10 +551,12 @@ void Disasm::OP0x75(GBE::CPU &cpu) {
     RAM::Write8(cpu.GetRegistry8Value(Registry8::L), cpu.GetRegistry16Value(Registry16::HL));
 }
 
-void Disasm::OP0x76(GBE::CPU &) {
-    /*if (cpu.IsInterruptsEnabled()) {
-        cpu.SetRegistry16Value(Registry16::PC, (Word)(cpu.GetRegistry16Value(Registry16::PC) - 1));
-    }*/
+void Disasm::OP0x76(GBE::CPU &cpu) {
+    if (cpu.IsInterruptsEnabled()) {
+
+    } else {
+        cpu.SetRegistry16Value(Registry16::PC, (Word)(cpu.GetRegistry16Value(Registry16::PC) + 1));
+    }
 }
 
 void Disasm::OP0x77(GBE::CPU &cpu) {
@@ -834,7 +854,7 @@ void Disasm::OP0xBF(GBE::CPU &cpu) {
 void Disasm::OP0xC0(GBE::CPU &cpu) {
     if (!cpu.IsFlagSet(Flags::ZERO)) {
         cpu.SetRegistry16Value(Registry16::PC, cpu.PopFromStack());
-        cpu.TickClock(12);
+        cpu.AddToLastInstrCycles(12);
     }
 }
 
@@ -845,7 +865,7 @@ void Disasm::OP0xC1(GBE::CPU &cpu) {
 void Disasm::OP0xC2(GBE::CPU &cpu) {
     if (!cpu.IsFlagSet(Flags::ZERO)) {
         cpu.SetRegistry16Value(Registry16::PC, RAM::Read16(cpu.GetProgramCounter()));
-        cpu.TickClock(4);
+        cpu.AddToLastInstrCycles(4);
     } else {
         cpu.JumpRelative(2);
     }
@@ -859,7 +879,7 @@ void Disasm::OP0xC4(GBE::CPU &cpu) {
     if (!cpu.IsFlagSet(Flags::ZERO)) {
         cpu.PushToStack((Word)(cpu.GetProgramCounter() + 2));
         cpu.SetRegistry16Value(Registry16::PC, RAM::Read16(cpu.GetProgramCounter()));
-        cpu.TickClock(12);
+        cpu.AddToLastInstrCycles(12);
     } else {
         cpu.JumpRelative(2);
     }
@@ -882,7 +902,7 @@ void Disasm::OP0xC7(GBE::CPU &cpu) {
 void Disasm::OP0xC8(GBE::CPU &cpu) {
     if (cpu.IsFlagSet(Flags::ZERO)) {
         cpu.SetRegistry16Value(Registry16::PC, cpu.PopFromStack());
-        cpu.TickClock(12);
+        cpu.AddToLastInstrCycles(12);
     }
 }
 
@@ -893,7 +913,7 @@ void Disasm::OP0xC9(GBE::CPU &cpu) {
 void Disasm::OP0xCA(GBE::CPU &cpu) {
     if (cpu.IsFlagSet(Flags::ZERO)) {
         cpu.SetRegistry16Value(Registry16::PC, RAM::Read16(cpu.GetProgramCounter()));
-        cpu.TickClock(4);
+        cpu.AddToLastInstrCycles(4);
     } else {
         cpu.JumpRelative(2);
     }
@@ -901,24 +921,19 @@ void Disasm::OP0xCA(GBE::CPU &cpu) {
 
 void Disasm::OP0xCB(GBE::CPU &cpu) {
     Byte instr;
-    bool found = false;
 
     instr = cpu.GetNextInstruction();
-    //printf("Executing instruction 0x%02X...\n", instr);
-    for (unsigned int i = 0; extOpCodes[i].mnemo != "Not Implemented"; i++) {
-        if (instr == extOpCodes[i].opCode) {
-            extOpCodes[i].f(cpu);
-            cpu.TickClock(extOpCodes[i].cycles);
-            //Debug::DumpRegistries(cpu);
-            found = true;
-        }
-    }
-    if (!found) {
-        printf("[INSTR] : 0xCB - 0x%02X at 0x%04X Instruction not implemented\n", instr, cpu.GetProgramCounter());
-        Debug::DumpRegistries(cpu);
-        Debug::DumpFlags(cpu);
-        Debug::DumpRAMRegistries();
-        exit(EXIT_FAILURE);
+    extOpCodes[instr].f(cpu);
+    cpu.AddToLastInstrCycles(extOpCodes[instr].cycles);
+}
+
+void Disasm::OP0xCC(CPU &cpu) {
+    if (cpu.IsFlagSet(Flags::ZERO)) {
+        cpu.PushToStack((Word)(cpu.GetProgramCounter() + 2));
+        cpu.SetRegistry16Value(Registry16::PC, RAM::Read16(cpu.GetProgramCounter()));
+        cpu.AddToLastInstrCycles(12);
+    } else {
+        cpu.JumpRelative(2);
     }
 }
 
@@ -928,16 +943,7 @@ void Disasm::OP0xCD(GBE::CPU &cpu) {
 }
 
 void Disasm::OP0xCE(GBE::CPU &cpu) {
-    Byte carry = (Byte)(cpu.IsFlagSet(Flags::CARRY) ? 1 : 0);
-
-    if ((RAM::Read8(cpu.GetProgramCounter()) + cpu.GetRegistry8Value(Registry8::A) + carry) > 255) cpu.SetFlags(Flags::CARRY);
-    else cpu.UnsetFlag(Flags::CARRY);
-    if (((cpu.GetRegistry8Value(Registry8::A) & 0xF) + (RAM::Read8(cpu.GetProgramCounter()) & 0xF) + carry) & 0x10) cpu.SetFlags(Flags::HALF_CARRY);
-    else cpu.UnsetFlag(Flags::HALF_CARRY);
-    cpu.SetRegistry8Value(Registry8::A, (Byte)(cpu.GetRegistry8Value(Registry8::A) + RAM::Read8(cpu.GetProgramCounter()) + carry));
-    if (cpu.GetRegistry8Value(Registry8::A) == 0) cpu.SetFlags(Flags::ZERO);
-    else cpu.UnsetFlag(Flags::ZERO);
-    cpu.UnsetFlag(Flags::OPERATION);
+    cpu.ADC8(Registry8::A, cpu.GetProgramCounter());
     cpu.JumpRelative(1);
 }
 
@@ -949,7 +955,7 @@ void Disasm::OP0xCF(GBE::CPU &cpu) {
 void Disasm::OP0xD0(GBE::CPU &cpu) {
     if (!cpu.IsFlagSet(Flags::CARRY)) {
         cpu.SetRegistry16Value(Registry16::PC, cpu.PopFromStack());
-        cpu.TickClock(12);
+        cpu.AddToLastInstrCycles(12);
     }
 }
 
@@ -960,7 +966,7 @@ void Disasm::OP0xD1(GBE::CPU &cpu) {
 void Disasm::OP0xD2(GBE::CPU &cpu) {
     if (!cpu.IsFlagSet(Flags::CARRY)) {
         cpu.SetRegistry16Value(Registry16::PC, RAM::Read16(cpu.GetProgramCounter()));
-        cpu.TickClock(4);
+        cpu.AddToLastInstrCycles(4);
     } else {
         cpu.JumpRelative(2);
     }
@@ -970,7 +976,7 @@ void Disasm::OP0xD4(GBE::CPU &cpu) {
     if (!cpu.IsFlagSet(Flags::CARRY)) {
         cpu.PushToStack((Word)(cpu.GetProgramCounter() + 2));
         cpu.SetRegistry16Value(Registry16::PC, RAM::Read16(cpu.GetProgramCounter()));
-        cpu.TickClock(12);
+        cpu.AddToLastInstrCycles(12);
     } else {
         cpu.JumpRelative(2);
     }
@@ -985,10 +991,15 @@ void Disasm::OP0xD6(GBE::CPU &cpu) {
     cpu.JumpRelative(1);
 }
 
+void Disasm::OP0xD7(CPU &cpu) {
+    cpu.PushToStack(cpu.GetProgramCounter());
+    cpu.SetRegistry16Value(Registry16::PC, 0x0010);
+}
+
 void Disasm::OP0xD8(GBE::CPU &cpu) {
     if (cpu.IsFlagSet(Flags::CARRY)) {
         cpu.SetRegistry16Value(Registry16::PC, cpu.PopFromStack());
-        cpu.TickClock(12);
+        cpu.AddToLastInstrCycles(12);
     }
 }
 
@@ -1000,10 +1011,30 @@ void Disasm::OP0xD9(GBE::CPU &cpu) {
 void Disasm::OP0xDA(GBE::CPU &cpu) {
     if (cpu.IsFlagSet(Flags::CARRY)) {
         cpu.SetRegistry16Value(Registry16::PC, RAM::Read16(cpu.GetProgramCounter()));
-        cpu.TickClock(4);
+        cpu.AddToLastInstrCycles(4);
     } else {
         cpu.JumpRelative(2);
     }
+}
+
+void Disasm::OP0xDC(CPU &cpu) {
+    if (cpu.IsFlagSet(Flags::CARRY)) {
+        cpu.PushToStack((Word)(cpu.GetProgramCounter() + 2));
+        cpu.SetRegistry16Value(Registry16::PC, RAM::Read16(cpu.GetProgramCounter()));
+        cpu.AddToLastInstrCycles(12);
+    } else {
+        cpu.JumpRelative(2);
+    }
+}
+
+void Disasm::OP0xDE(CPU &cpu) {
+    cpu.SBC8(Registry8::A, cpu.GetProgramCounter());
+    cpu.JumpRelative(1);
+}
+
+void Disasm::OP0xDF(CPU &cpu) {
+    cpu.PushToStack(cpu.GetProgramCounter());
+    cpu.SetRegistry16Value(Registry16::PC, 0x0018);
 }
 
 void Disasm::OP0xE0(GBE::CPU &cpu) {
@@ -1026,6 +1057,11 @@ void Disasm::OP0xE5(GBE::CPU &cpu) {
 void Disasm::OP0xE6(GBE::CPU &cpu) {
     cpu.AND8(Registry8::A, cpu.GetProgramCounter());
     cpu.JumpRelative(1);
+}
+
+void Disasm::OP0xE7(CPU &cpu) {
+    cpu.PushToStack(cpu.GetProgramCounter());
+    cpu.SetRegistry16Value(Registry16::PC, 0x0020);
 }
 
 void Disasm::OP0xE8(GBE::CPU &cpu) {
@@ -1061,11 +1097,7 @@ void Disasm::OP0xF0(GBE::CPU &cpu) {
 }
 
 void Disasm::OP0xF1(GBE::CPU &cpu) {
-    Word fromStack = cpu.PopFromStack();
-
-    fromStack >>= 4;
-    fromStack <<= 4;
-    cpu.SetRegistry16Value(Registry16::AF, fromStack);
+    cpu.SetRegistry16Value(Registry16::AF, cpu.PopFromStack() & 0xFFF0);
 }
 
 void Disasm::OP0xF2(GBE::CPU &cpu) {
@@ -1085,14 +1117,20 @@ void Disasm::OP0xF6(GBE::CPU &cpu) {
     cpu.JumpRelative(1);
 }
 
+void Disasm::OP0xF7(CPU &cpu) {
+    cpu.PushToStack(cpu.GetProgramCounter());
+    cpu.SetRegistry16Value(Registry16::PC, 0x0030);
+}
+
 void Disasm::OP0xF8(GBE::CPU &cpu) {
     cpu.SetRegistry16Value(Registry16::HL, cpu.GetRegistry16Value(Registry16::SP));
-    if ((cpu.GetRegistry16Value(Registry16::HL) + (SignedByte)RAM::Read8(cpu.GetProgramCounter())) > 0xFFFF) cpu.SetFlags(Flags::CARRY);
+    if ((cpu.GetRegistry16Value(Registry16::HL) + (SignedWord)RAM::Read8(cpu.GetProgramCounter())) > 0xFFFF) cpu.SetFlags(Flags::CARRY);
     else cpu.UnsetFlag(Flags::CARRY);
-    if (((cpu.GetRegistry16Value(Registry16::HL) & 0xF) + (SignedByte)(RAM::Read8(cpu.GetProgramCounter()) & 0xF)) & 0x10) cpu.SetFlags(Flags::HALF_CARRY);
+    if (((cpu.GetRegistry16Value(Registry16::HL) & 0xFFF) + (SignedWord)(RAM::Read8(cpu.GetProgramCounter()) & 0xFFF)) & 0x1000) cpu.SetFlags(Flags::HALF_CARRY);
     else cpu.UnsetFlag(Flags::HALF_CARRY);
-    cpu.SetRegistry16Value(Registry16::HL, (Word)(cpu.GetRegistry16Value(Registry16::HL) + (SignedByte)RAM::Read8(cpu.GetProgramCounter())));
+    cpu.SetRegistry16Value(Registry16::HL, (Word)(cpu.GetRegistry16Value(Registry16::HL) + (SignedWord)RAM::Read8(cpu.GetProgramCounter())));
     cpu.UnsetFlag(Flags::OPERATION | Flags::ZERO);
+    cpu.JumpRelative(1);
 }
 
 void Disasm::OP0xF9(GBE::CPU &cpu) {
@@ -1111,6 +1149,11 @@ void Disasm::OP0xFB(GBE::CPU &cpu) {
 void Disasm::OP0xFE(GBE::CPU &cpu) {
     cpu.CP8(Registry8::A, cpu.GetProgramCounter());
     cpu.JumpRelative(1);
+}
+
+void Disasm::OP0xFF(CPU &cpu) {
+    cpu.PushToStack(cpu.GetProgramCounter());
+    cpu.SetRegistry16Value(Registry16::PC, 0x0038);
 }
 
 void Disasm::EXT_OP0x00(GBE::CPU &cpu) {
@@ -1369,165 +1412,770 @@ void Disasm::EXT_OP0x3F(GBE::CPU &cpu) {
     cpu.SRL(Registry8::A);
 }
 
-void Disasm::EXT_OP0x47(GBE::CPU &cpu) {
-    if (((cpu.GetRegistry8Value(Registry8::A) >> 0) & 1) == 0) cpu.SetFlags(Flags::ZERO);
-    else cpu.UnsetFlag(Flags::ZERO);
+void Disasm::EXT_OP0x40(CPU &cpu) {
+    cpu.BIT(Registry8::B, 0);
+}
 
-    cpu.SetFlags(Flags::HALF_CARRY);
-    cpu.UnsetFlag(Flags::OPERATION);
+void Disasm::EXT_OP0x41(CPU &cpu) {
+    cpu.BIT(Registry8::C, 0);
+}
+
+void Disasm::EXT_OP0x42(CPU &cpu) {
+    cpu.BIT(Registry8::D, 0);
+}
+
+void Disasm::EXT_OP0x43(CPU &cpu) {
+    cpu.BIT(Registry8::E, 0);
+}
+
+void Disasm::EXT_OP0x44(CPU &cpu) {
+    cpu.BIT(Registry8::H, 0);
+}
+
+void Disasm::EXT_OP0x45(CPU &cpu) {
+    cpu.BIT(Registry8::L, 0);
+}
+
+void Disasm::EXT_OP0x46(CPU &cpu) {
+    cpu.BIT(cpu.GetRegistry16Value(Registry16::HL), 0);
+}
+
+void Disasm::EXT_OP0x47(GBE::CPU &cpu) {
+    cpu.BIT(Registry8::A, 0);
+}
+
+void Disasm::EXT_OP0x48(CPU &cpu) {
+    cpu.BIT(Registry8::B, 1);
+}
+
+void Disasm::EXT_OP0x49(CPU &cpu) {
+    cpu.BIT(Registry8::C, 1);
+}
+
+void Disasm::EXT_OP0x4A(CPU &cpu) {
+    cpu.BIT(Registry8::D, 1);
+}
+
+void Disasm::EXT_OP0x4B(CPU &cpu) {
+    cpu.BIT(Registry8::E, 1);
+}
+
+void Disasm::EXT_OP0x4C(CPU &cpu) {
+    cpu.BIT(Registry8::H, 1);
+}
+
+void Disasm::EXT_OP0x4D(CPU &cpu) {
+    cpu.BIT(Registry8::L, 1);
+}
+
+void Disasm::EXT_OP0x4E(CPU &cpu) {
+    cpu.BIT(cpu.GetRegistry16Value(Registry16::HL), 1);
 }
 
 void Disasm::EXT_OP0x4F(GBE::CPU &cpu) {
-    if (((cpu.GetRegistry8Value(Registry8::A) >> 1) & 1) == 0) cpu.SetFlags(Flags::ZERO);
-    else cpu.UnsetFlag(Flags::ZERO);
-
-    cpu.SetFlags(Flags::HALF_CARRY);
-    cpu.UnsetFlag(Flags::OPERATION);
+    cpu.BIT(Registry8::A, 1);
 }
 
 void Disasm::EXT_OP0x50(GBE::CPU &cpu) {
-    if (((cpu.GetRegistry8Value(Registry8::B) >> 2) & 1) == 0) cpu.SetFlags(Flags::ZERO);
-    else cpu.UnsetFlag(Flags::ZERO);
+    cpu.BIT(Registry8::B, 2);
+}
 
-    cpu.SetFlags(Flags::HALF_CARRY);
-    cpu.UnsetFlag(Flags::OPERATION);
+void Disasm::EXT_OP0x51(CPU &cpu) {
+    cpu.BIT(Registry8::C, 2);
+}
+
+void Disasm::EXT_OP0x52(CPU &cpu) {
+    cpu.BIT(Registry8::D, 2);
+}
+
+void Disasm::EXT_OP0x53(CPU &cpu) {
+    cpu.BIT(Registry8::E, 2);
+}
+
+void Disasm::EXT_OP0x54(CPU &cpu) {
+    cpu.BIT(Registry8::H, 2);
+}
+
+void Disasm::EXT_OP0x55(CPU &cpu) {
+    cpu.BIT(Registry8::L, 2);
 }
 
 void Disasm::EXT_OP0x56(GBE::CPU &cpu) {
-    if (((RAM::Read8(cpu.GetRegistry16Value(Registry16::HL)) >> 2) & 1) == 0) cpu.SetFlags(Flags::ZERO);
-    else cpu.UnsetFlag(Flags::ZERO);
-
-    cpu.SetFlags(Flags::HALF_CARRY);
-    cpu.UnsetFlag(Flags::OPERATION);
+    cpu.BIT(cpu.GetRegistry16Value(Registry16::HL), 2);
 }
 
 void Disasm::EXT_OP0x57(GBE::CPU &cpu) {
-    if (((cpu.GetRegistry8Value(Registry8::A) >> 2) & 1) == 0) cpu.SetFlags(Flags::ZERO);
-    else cpu.UnsetFlag(Flags::ZERO);
-
-    cpu.SetFlags(Flags::HALF_CARRY);
-    cpu.UnsetFlag(Flags::OPERATION);
+    cpu.BIT(Registry8::A, 2);
 }
 
 void Disasm::EXT_OP0x58(GBE::CPU &cpu) {
-    if (((cpu.GetRegistry8Value(Registry8::B) >> 3) & 1) == 0) cpu.SetFlags(Flags::ZERO);
-    else cpu.UnsetFlag(Flags::ZERO);
+    cpu.BIT(Registry8::B, 3);
+}
 
-    cpu.SetFlags(Flags::HALF_CARRY);
-    cpu.UnsetFlag(Flags::OPERATION);
+void Disasm::EXT_OP0x59(CPU &cpu) {
+    cpu.BIT(Registry8::C, 3);
+}
+
+void Disasm::EXT_OP0x5A(CPU &cpu) {
+    cpu.BIT(Registry8::D, 3);
+}
+
+void Disasm::EXT_OP0x5B(CPU &cpu) {
+    cpu.BIT(Registry8::E, 3);
+}
+
+void Disasm::EXT_OP0x5C(CPU &cpu) {
+    cpu.BIT(Registry8::H, 3);
+}
+
+void Disasm::EXT_OP0x5D(CPU &cpu) {
+    cpu.BIT(Registry8::L, 3);
 }
 
 void Disasm::EXT_OP0x5E(GBE::CPU &cpu) {
-    if (((RAM::Read8(cpu.GetRegistry16Value(Registry16::HL)) >> 3) & 1) == 0) cpu.SetFlags(Flags::ZERO);
-    else cpu.UnsetFlag(Flags::ZERO);
-
-    cpu.SetFlags(Flags::HALF_CARRY);
-    cpu.UnsetFlag(Flags::OPERATION);
+    cpu.BIT(cpu.GetRegistry16Value(Registry16::HL), 3);
 }
 
 void Disasm::EXT_OP0x5F(GBE::CPU &cpu) {
-    if (((cpu.GetRegistry8Value(Registry8::A) >> 3) & 1) == 0) cpu.SetFlags(Flags::ZERO);
-    else cpu.UnsetFlag(Flags::ZERO);
+    cpu.BIT(Registry8::A, 3);
+}
 
-    cpu.SetFlags(Flags::HALF_CARRY);
-    cpu.UnsetFlag(Flags::OPERATION);
+void Disasm::EXT_OP0x60(CPU &cpu) {
+    cpu.BIT(Registry8::B, 4);
+}
+
+void Disasm::EXT_OP0x61(CPU &cpu) {
+    cpu.BIT(Registry8::C, 4);
+}
+
+void Disasm::EXT_OP0x62(CPU &cpu) {
+    cpu.BIT(Registry8::D, 4);
+}
+
+void Disasm::EXT_OP0x63(CPU &cpu) {
+    cpu.BIT(Registry8::E, 4);
+}
+
+void Disasm::EXT_OP0x64(CPU &cpu) {
+    cpu.BIT(Registry8::H, 4);
+}
+
+void Disasm::EXT_OP0x65(CPU &cpu) {
+    cpu.BIT(Registry8::L, 4);
+}
+
+void Disasm::EXT_OP0x66(CPU &cpu) {
+    cpu.BIT(cpu.GetRegistry16Value(Registry16::HL), 4);
+}
+
+void Disasm::EXT_OP0x67(CPU &cpu) {
+    cpu.BIT(Registry8::A, 4);
+}
+
+void Disasm::EXT_OP0x68(CPU &cpu) {
+    cpu.BIT(Registry8::B, 5);
+}
+
+void Disasm::EXT_OP0x69(CPU &cpu) {
+    cpu.BIT(Registry8::C, 5);
+}
+
+void Disasm::EXT_OP0x6A(CPU &cpu) {
+    cpu.BIT(Registry8::D, 5);
+}
+
+void Disasm::EXT_OP0x6B(CPU &cpu) {
+    cpu.BIT(Registry8::E, 5);
+}
+
+void Disasm::EXT_OP0x6C(CPU &cpu) {
+    cpu.BIT(Registry8::H, 5);
+}
+
+void Disasm::EXT_OP0x6D(CPU &cpu) {
+    cpu.BIT(Registry8::L, 5);
 }
 
 void Disasm::EXT_OP0x6E(GBE::CPU &cpu) {
-    if (((RAM::Read8(cpu.GetRegistry16Value(Registry16::HL)) >> 5) & 1) == 0) cpu.SetFlags(Flags::ZERO);
-    else cpu.UnsetFlag(Flags::ZERO);
+    cpu.BIT(cpu.GetRegistry16Value(Registry16::HL), 5);
+}
 
-    cpu.SetFlags(Flags::HALF_CARRY);
-    cpu.UnsetFlag(Flags::OPERATION);
+void Disasm::EXT_OP0x6F(CPU &cpu) {
+    cpu.BIT(Registry8::A, 5);
 }
 
 void Disasm::EXT_OP0x70(GBE::CPU &cpu) {
-    if (((cpu.GetRegistry8Value(Registry8::B) >> 6) & 1) == 0) cpu.SetFlags(Flags::ZERO);
-    else cpu.UnsetFlag(Flags::ZERO);
+    cpu.BIT(Registry8::B, 6);
+}
 
-    cpu.SetFlags(Flags::HALF_CARRY);
-    cpu.UnsetFlag(Flags::OPERATION);
+void Disasm::EXT_OP0x71(CPU &cpu) {
+    cpu.BIT(Registry8::C, 6);
+}
+
+void Disasm::EXT_OP0x72(CPU &cpu) {
+    cpu.BIT(Registry8::D, 6);
+}
+
+void Disasm::EXT_OP0x73(CPU &cpu) {
+    cpu.BIT(Registry8::E, 6);
+}
+
+void Disasm::EXT_OP0x74(CPU &cpu) {
+    cpu.BIT(Registry8::H, 6);
+}
+
+void Disasm::EXT_OP0x75(CPU &cpu) {
+    cpu.BIT(Registry8::L, 6);
 }
 
 void Disasm::EXT_OP0x76(GBE::CPU &cpu) {
-    if (((RAM::Read8(cpu.GetRegistry16Value(Registry16::HL)) >> 6) & 1) == 0) cpu.SetFlags(Flags::ZERO);
-    else cpu.UnsetFlag(Flags::ZERO);
-
-    cpu.SetFlags(Flags::HALF_CARRY);
-    cpu.UnsetFlag(Flags::OPERATION);
+    cpu.BIT(cpu.GetRegistry16Value(Registry16::HL), 6);
 }
 
 void Disasm::EXT_OP0x77(GBE::CPU &cpu) {
-    if (((cpu.GetRegistry8Value(Registry8::A) >> 6) & 1) == 0) cpu.SetFlags(Flags::ZERO);
-    else cpu.UnsetFlag(Flags::ZERO);
-
-    cpu.SetFlags(Flags::HALF_CARRY);
-    cpu.UnsetFlag(Flags::OPERATION);
+    cpu.BIT(Registry8::A, 6);
 }
 
 void Disasm::EXT_OP0x78(GBE::CPU &cpu) {
-    if (((cpu.GetRegistry8Value(Registry8::B) >> 7) & 1) == 0) cpu.SetFlags(Flags::ZERO);
-    else cpu.UnsetFlag(Flags::ZERO);
+    cpu.BIT(Registry8::B, 7);
+}
 
-    cpu.SetFlags(Flags::HALF_CARRY);
-    cpu.UnsetFlag(Flags::OPERATION);
+void Disasm::EXT_OP0x79(CPU &cpu) {
+    cpu.BIT(Registry8::C, 7);
+}
+
+void Disasm::EXT_OP0x7A(CPU &cpu) {
+    cpu.BIT(Registry8::D, 7);
+}
+
+void Disasm::EXT_OP0x7B(CPU &cpu) {
+    cpu.BIT(Registry8::E, 7);
 }
 
 void Disasm::EXT_OP0x7C(GBE::CPU &cpu) {
-    if (((cpu.GetRegistry8Value(Registry8::H) >> 7) & 1) == 0) cpu.SetFlags(Flags::ZERO);
-    else cpu.UnsetFlag(Flags::ZERO);
+    cpu.BIT(Registry8::H, 7);
+}
 
-    cpu.SetFlags(Flags::HALF_CARRY);
-    cpu.UnsetFlag(Flags::OPERATION);
+void Disasm::EXT_OP0x7D(CPU &cpu) {
+    cpu.BIT(Registry8::L, 7);
 }
 
 void Disasm::EXT_OP0x7E(GBE::CPU &cpu) {
-    if (((RAM::Read8(cpu.GetRegistry16Value(Registry16::HL)) >> 7) & 1) == 0) cpu.SetFlags(Flags::ZERO);
-    else cpu.UnsetFlag(Flags::ZERO);
-
-    cpu.SetFlags(Flags::HALF_CARRY);
-    cpu.UnsetFlag(Flags::OPERATION);
+    cpu.BIT(cpu.GetRegistry16Value(Registry16::HL), 7);
 }
 
 void Disasm::EXT_OP0x7F(GBE::CPU &cpu) {
-    if (((cpu.GetRegistry8Value(Registry8::A) >> 7) & 1) == 0) cpu.SetFlags(Flags::ZERO);
-    else cpu.UnsetFlag(Flags::ZERO);
+    cpu.BIT(Registry8::A, 7);
+}
 
-    cpu.SetFlags(Flags::HALF_CARRY);
-    cpu.UnsetFlag(Flags::OPERATION);
+void Disasm::EXT_OP0x80(CPU &cpu) {
+    cpu.RES(Registry8::B, 0);
+}
+
+void Disasm::EXT_OP0x81(CPU &cpu) {
+    cpu.RES(Registry8::C, 0);
+}
+
+void Disasm::EXT_OP0x82(CPU &cpu) {
+    cpu.RES(Registry8::D, 0);
+}
+
+void Disasm::EXT_OP0x83(CPU &cpu) {
+    cpu.RES(Registry8::E, 0);
+}
+
+void Disasm::EXT_OP0x84(CPU &cpu) {
+    cpu.RES(Registry8::H, 0);
+}
+
+void Disasm::EXT_OP0x85(CPU &cpu) {
+    cpu.RES(Registry8::L, 0);
+}
+
+void Disasm::EXT_OP0x86(CPU &cpu) {
+    cpu.RES(cpu.GetRegistry16Value(Registry16::HL), 0);
 }
 
 void Disasm::EXT_OP0x87(GBE::CPU &cpu) {
-    Byte tmp = cpu.GetRegistry8Value(Registry8::A);
+    cpu.RES(Registry8::A, 0);
+}
 
-    tmp &= ~(1 << 0);
-    cpu.SetRegistry8Value(Registry8::A, tmp);
+void Disasm::EXT_OP0x88(CPU &cpu) {
+    cpu.RES(Registry8::B, 1);
+}
+
+void Disasm::EXT_OP0x89(CPU &cpu) {
+    cpu.RES(Registry8::C, 1);
+}
+
+void Disasm::EXT_OP0x8A(CPU &cpu) {
+    cpu.RES(Registry8::D, 1);
+}
+
+void Disasm::EXT_OP0x8B(CPU &cpu) {
+    cpu.RES(Registry8::E, 1);
+}
+
+void Disasm::EXT_OP0x8C(CPU &cpu) {
+    cpu.RES(Registry8::H, 1);
+}
+
+void Disasm::EXT_OP0x8D(CPU &cpu) {
+    cpu.RES(Registry8::L, 1);
+}
+
+void Disasm::EXT_OP0x8E(CPU &cpu) {
+    cpu.RES(cpu.GetRegistry16Value(Registry16::HL), 1);
+}
+
+void Disasm::EXT_OP0x8F(CPU &cpu) {
+    cpu.RES(Registry8::A, 1);
+}
+
+void Disasm::EXT_OP0x90(CPU &cpu) {
+    cpu.RES(Registry8::B, 2);
+}
+
+void Disasm::EXT_OP0x91(CPU &cpu) {
+    cpu.RES(Registry8::C, 2);
+}
+
+void Disasm::EXT_OP0x92(CPU &cpu) {
+    cpu.RES(Registry8::D, 2);
+}
+
+void Disasm::EXT_OP0x93(CPU &cpu) {
+    cpu.RES(Registry8::E, 2);
+}
+
+void Disasm::EXT_OP0x94(CPU &cpu) {
+    cpu.RES(Registry8::H, 2);
+}
+
+void Disasm::EXT_OP0x95(CPU &cpu) {
+    cpu.RES(Registry8::L, 2);
 }
 
 void Disasm::EXT_OP0x96(GBE::CPU &cpu) {
-    Byte tmp = RAM::Read8(cpu.GetRegistry16Value(Registry16::HL));
+    cpu.RES(cpu.GetRegistry16Value(Registry16::HL), 2);
+}
 
-    tmp &= ~(1 << 2);
-    RAM::Write8(tmp, cpu.GetRegistry16Value(Registry16::HL));
+void Disasm::EXT_OP0x97(CPU &cpu) {
+    cpu.RES(Registry8::A, 2);
+}
+
+void Disasm::EXT_OP0x98(CPU &cpu) {
+    cpu.RES(Registry8::B, 3);
+}
+
+void Disasm::EXT_OP0x99(CPU &cpu) {
+    cpu.RES(Registry8::C, 3);
+}
+
+void Disasm::EXT_OP0x9A(CPU &cpu) {
+    cpu.RES(Registry8::D, 3);
+}
+
+void Disasm::EXT_OP0x9B(CPU &cpu) {
+    cpu.RES(Registry8::E, 3);
+}
+
+void Disasm::EXT_OP0x9C(CPU &cpu) {
+    cpu.RES(Registry8::H, 3);
+}
+
+void Disasm::EXT_OP0x9D(CPU &cpu) {
+    cpu.RES(Registry8::L, 3);
+}
+
+void Disasm::EXT_OP0x9E(CPU &cpu) {
+    cpu.RES(cpu.GetRegistry16Value(Registry16::HL), 3);
+}
+
+void Disasm::EXT_OP0x9F(CPU &cpu) {
+    cpu.RES(Registry8::A, 3);
+}
+
+void Disasm::EXT_OP0xA0(CPU &cpu) {
+    cpu.RES(Registry8::B, 4);
+}
+
+void Disasm::EXT_OP0xA1(CPU &cpu) {
+    cpu.RES(Registry8::C, 4);
+}
+
+void Disasm::EXT_OP0xA2(CPU &cpu) {
+    cpu.RES(Registry8::D, 4);
+}
+
+void Disasm::EXT_OP0xA3(CPU &cpu) {
+    cpu.RES(Registry8::E, 4);
+}
+
+void Disasm::EXT_OP0xA4(CPU &cpu) {
+    cpu.RES(Registry8::H, 4);
+}
+
+void Disasm::EXT_OP0xA5(CPU &cpu) {
+    cpu.RES(Registry8::L, 4);
+}
+
+void Disasm::EXT_OP0xA6(CPU &cpu) {
+    cpu.RES(cpu.GetRegistry16Value(Registry16::HL), 4);
+}
+
+void Disasm::EXT_OP0xA7(CPU &cpu) {
+    cpu.RES(Registry8::A, 4);
+}
+
+void Disasm::EXT_OP0xA8(CPU &cpu) {
+    cpu.RES(Registry8::B, 5);
+}
+
+void Disasm::EXT_OP0xA9(CPU &cpu) {
+    cpu.RES(Registry8::C, 5);
+}
+
+void Disasm::EXT_OP0xAA(CPU &cpu) {
+    cpu.RES(Registry8::D, 5);
+}
+
+void Disasm::EXT_OP0xAB(CPU &cpu) {
+    cpu.RES(Registry8::E, 5);
+}
+
+void Disasm::EXT_OP0xAC(CPU &cpu) {
+    cpu.RES(Registry8::H, 5);
+}
+
+void Disasm::EXT_OP0xAD(CPU &cpu) {
+    cpu.RES(Registry8::L, 5);
+}
+
+void Disasm::EXT_OP0xAE(CPU &cpu) {
+    cpu.RES(cpu.GetRegistry16Value(Registry16::HL), 5);
 }
 
 void Disasm::EXT_OP0xAF(GBE::CPU &cpu) {
-    Byte tmp = cpu.GetRegistry8Value(Registry8::A);
-
-    tmp &= ~(1 << 5);
-    cpu.SetRegistry8Value(Registry8::A, tmp);
+    cpu.RES(Registry8::A, 5);
 }
 
-void Disasm::EXT_OP0xF6(GBE::CPU &cpu) {
-    Byte tmp = RAM::Read8(cpu.GetRegistry16Value(Registry16::HL));
+void Disasm::EXT_OP0xB0(CPU &cpu) {
+    cpu.RES(Registry8::B, 6);
+}
 
-    tmp &= (1 << 6);
-    RAM::Write8(tmp, cpu.GetRegistry16Value(Registry16::HL));
+void Disasm::EXT_OP0xB1(CPU &cpu) {
+    cpu.RES(Registry8::C, 6);
+}
+
+void Disasm::EXT_OP0xB2(CPU &cpu) {
+    cpu.RES(Registry8::D, 6);
+}
+
+void Disasm::EXT_OP0xB3(CPU &cpu) {
+    cpu.RES(Registry8::E, 6);
+}
+
+void Disasm::EXT_OP0xB4(CPU &cpu) {
+    cpu.RES(Registry8::H, 6);
+}
+
+void Disasm::EXT_OP0xB5(CPU &cpu) {
+    cpu.RES(Registry8::L, 6);
+}
+
+void Disasm::EXT_OP0xB6(CPU &cpu) {
+    cpu.RES(cpu.GetRegistry16Value(Registry16::HL), 6);
+}
+
+void Disasm::EXT_OP0xB7(CPU &cpu) {
+    cpu.RES(Registry8::A, 6);
+}
+
+void Disasm::EXT_OP0xB8(CPU &cpu) {
+    cpu.RES(Registry8::B, 7);
+}
+
+void Disasm::EXT_OP0xB9(CPU &cpu) {
+    cpu.RES(Registry8::C, 7);
+}
+
+void Disasm::EXT_OP0xBA(CPU &cpu) {
+    cpu.RES(Registry8::D, 7);
+}
+
+void Disasm::EXT_OP0xBB(CPU &cpu) {
+    cpu.RES(Registry8::E, 7);
+}
+
+void Disasm::EXT_OP0xBC(CPU &cpu) {
+    cpu.RES(Registry8::H, 7);
+}
+
+void Disasm::EXT_OP0xBD(CPU &cpu) {
+    cpu.RES(Registry8::L, 7);
+}
+
+void Disasm::EXT_OP0xBE(CPU &cpu) {
+    cpu.RES(cpu.GetRegistry16Value(Registry16::HL), 7);
+}
+
+void Disasm::EXT_OP0xBF(CPU &cpu) {
+    cpu.RES(Registry8::A, 7);
+}
+
+void Disasm::EXT_OP0xC0(CPU &cpu) {
+    cpu.SET(Registry8::B, 0);
+}
+
+void Disasm::EXT_OP0xC1(CPU &cpu) {
+    cpu.SET(Registry8::C, 0);
+}
+
+void Disasm::EXT_OP0xC2(CPU &cpu) {
+    cpu.SET(Registry8::D, 0);
+}
+
+void Disasm::EXT_OP0xC3(CPU &cpu) {
+    cpu.SET(Registry8::E, 0);
+}
+
+void Disasm::EXT_OP0xC4(CPU &cpu) {
+    cpu.SET(Registry8::H, 0);
+}
+
+void Disasm::EXT_OP0xC5(CPU &cpu) {
+    cpu.SET(Registry8::L, 0);
+}
+
+void Disasm::EXT_OP0xC6(CPU &cpu) {
+    cpu.SET(cpu.GetRegistry16Value(Registry16::HL), 0);
+}
+
+void Disasm::EXT_OP0xC7(CPU &cpu) {
+    cpu.SET(Registry8::A, 0);
+}
+
+void Disasm::EXT_OP0xC8(CPU &cpu) {
+    cpu.SET(Registry8::B, 1);
+}
+
+void Disasm::EXT_OP0xC9(CPU &cpu) {
+    cpu.SET(Registry8::C, 1);
+}
+
+void Disasm::EXT_OP0xCA(CPU &cpu) {
+    cpu.SET(Registry8::D, 1);
+}
+
+void Disasm::EXT_OP0xCB(CPU &cpu) {
+    cpu.SET(Registry8::E, 1);
+}
+
+void Disasm::EXT_OP0xCC(CPU &cpu) {
+    cpu.SET(Registry8::H, 1);
+}
+
+void Disasm::EXT_OP0xCD(CPU &cpu) {
+    cpu.SET(Registry8::L, 1);
+}
+
+void Disasm::EXT_OP0xCE(CPU &cpu) {
+    cpu.SET(cpu.GetRegistry16Value(Registry16::HL), 1);
+}
+
+void Disasm::EXT_OP0xCF(CPU &cpu) {
+    cpu.SET(Registry8::A, 1);
+}
+
+void Disasm::EXT_OP0xD0(CPU &cpu) {
+    cpu.SET(Registry8::B, 2);
+}
+
+void Disasm::EXT_OP0xD1(CPU &cpu) {
+    cpu.SET(Registry8::C, 2);
+}
+
+void Disasm::EXT_OP0xD2(CPU &cpu) {
+    cpu.SET(Registry8::D, 2);
+}
+
+void Disasm::EXT_OP0xD3(CPU &cpu) {
+    cpu.SET(Registry8::E, 2);
+}
+
+void Disasm::EXT_OP0xD4(CPU &cpu) {
+    cpu.SET(Registry8::H, 2);
+}
+
+void Disasm::EXT_OP0xD5(CPU &cpu) {
+    cpu.SET(Registry8::L, 2);
+}
+
+void Disasm::EXT_OP0xD6(CPU &cpu) {
+    cpu.SET(cpu.GetRegistry16Value(Registry16::HL), 2);
+}
+
+void Disasm::EXT_OP0xD7(CPU &cpu) {
+    cpu.SET(Registry8::A, 2);
+}
+
+void Disasm::EXT_OP0xD8(CPU &cpu) {
+    cpu.SET(Registry8::B, 3);
+}
+
+void Disasm::EXT_OP0xD9(CPU &cpu) {
+    cpu.SET(Registry8::C, 3);
+}
+
+void Disasm::EXT_OP0xDA(CPU &cpu) {
+    cpu.SET(Registry8::D, 3);
+}
+
+void Disasm::EXT_OP0xDB(CPU &cpu) {
+    cpu.SET(Registry8::E, 3);
+}
+
+void Disasm::EXT_OP0xDC(CPU &cpu) {
+    cpu.SET(Registry8::H, 3);
+}
+
+void Disasm::EXT_OP0xDD(CPU &cpu) {
+    cpu.SET(Registry8::L, 3);
+}
+
+void Disasm::EXT_OP0xDE(CPU &cpu) {
+    cpu.SET(cpu.GetRegistry16Value(Registry16::HL), 3);
+}
+
+void Disasm::EXT_OP0xDF(CPU &cpu) {
+    cpu.SET(Registry8::A, 3);
+}
+
+void Disasm::EXT_OP0xE0(CPU &cpu) {
+    cpu.SET(Registry8::B, 4);
+}
+
+void Disasm::EXT_OP0xE1(CPU &cpu) {
+    cpu.SET(Registry8::C, 4);
+}
+
+void Disasm::EXT_OP0xE2(CPU &cpu) {
+    cpu.SET(Registry8::D, 4);
+}
+
+void Disasm::EXT_OP0xE3(CPU &cpu) {
+    cpu.SET(Registry8::E, 4);
+}
+
+void Disasm::EXT_OP0xE4(CPU &cpu) {
+    cpu.SET(Registry8::H, 4);
+}
+
+void Disasm::EXT_OP0xE5(CPU &cpu) {
+    cpu.SET(Registry8::L, 4);
+}
+
+void Disasm::EXT_OP0xE6(CPU &cpu) {
+    cpu.SET(cpu.GetRegistry16Value(Registry16::HL), 4);
+}
+
+void Disasm::EXT_OP0xE7(CPU &cpu) {
+    cpu.SET(Registry8::A, 4);
+}
+
+void Disasm::EXT_OP0xE8(CPU &cpu) {
+    cpu.SET(Registry8::B, 5);
+}
+
+void Disasm::EXT_OP0xE9(CPU &cpu) {
+    cpu.SET(Registry8::C, 5);
+}
+
+void Disasm::EXT_OP0xEA(CPU &cpu) {
+    cpu.SET(Registry8::D, 5);
+}
+
+void Disasm::EXT_OP0xEB(CPU &cpu) {
+    cpu.SET(Registry8::E, 5);
+}
+
+void Disasm::EXT_OP0xEC(CPU &cpu) {
+    cpu.SET(Registry8::H, 5);
+}
+
+void Disasm::EXT_OP0xED(CPU &cpu) {
+    cpu.SET(Registry8::L, 5);
+}
+
+void Disasm::EXT_OP0xEE(CPU &cpu) {
+    cpu.SET(cpu.GetRegistry16Value(Registry16::HL), 5);
+}
+
+void Disasm::EXT_OP0xEF(CPU &cpu) {
+    cpu.SET(Registry8::A, 5);
+}
+
+void Disasm::EXT_OP0xF0(CPU &cpu) {
+    cpu.SET(Registry8::B, 6);
+}
+
+void Disasm::EXT_OP0xF1(CPU &cpu) {
+    cpu.SET(Registry8::C, 6);
+}
+
+void Disasm::EXT_OP0xF2(CPU &cpu) {
+    cpu.SET(Registry8::D, 6);
+}
+
+void Disasm::EXT_OP0xF3(CPU &cpu) {
+    cpu.SET(Registry8::E, 6);
+}
+
+void Disasm::EXT_OP0xF4(CPU &cpu) {
+    cpu.SET(Registry8::H, 6);
+}
+
+void Disasm::EXT_OP0xF5(CPU &cpu) {
+    cpu.SET(Registry8::L, 6);
+}
+
+void Disasm::EXT_OP0xF6(CPU &cpu) {
+    cpu.SET(cpu.GetRegistry16Value(Registry16::HL), 6);
+}
+
+void Disasm::EXT_OP0xF7(CPU &cpu) {
+    cpu.SET(Registry8::A, 6);
+}
+
+void Disasm::EXT_OP0xF8(CPU &cpu) {
+    cpu.SET(Registry8::B, 7);
+}
+
+void Disasm::EXT_OP0xF9(CPU &cpu) {
+    cpu.SET(Registry8::C, 7);
+}
+
+void Disasm::EXT_OP0xFA(CPU &cpu) {
+    cpu.SET(Registry8::D, 7);
+}
+
+void Disasm::EXT_OP0xFB(CPU &cpu) {
+    cpu.SET(Registry8::E, 7);
+}
+
+void Disasm::EXT_OP0xFC(CPU &cpu) {
+    cpu.SET(Registry8::H, 7);
+}
+
+void Disasm::EXT_OP0xFD(CPU &cpu) {
+    cpu.SET(Registry8::L, 7);
+}
+
+void Disasm::EXT_OP0xFE(CPU &cpu) {
+    cpu.SET(cpu.GetRegistry16Value(Registry16::HL), 7);
 }
 
 void Disasm::EXT_OP0xFF(GBE::CPU &cpu) {
-    Byte tmp = cpu.GetRegistry8Value(Registry8::A);
-
-    tmp &= (1 << 6);
-    cpu.SetRegistry8Value(Registry8::A, tmp);
+    cpu.SET(Registry8::A, 7);
 }
