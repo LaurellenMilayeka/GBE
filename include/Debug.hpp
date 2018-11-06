@@ -18,6 +18,8 @@ namespace GBE {
 
             static std::string const& ReplaceInString(std::string const& src, std::string const& haystack, std::string const& toInsert);
 
+            static std::fstream log;
+
         public:
 
             static void Dump(Byte* toDump);

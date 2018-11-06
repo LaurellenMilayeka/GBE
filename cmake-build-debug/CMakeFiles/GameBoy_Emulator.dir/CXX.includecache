@@ -6,6 +6,70 @@
 
 #IncludeRegexTransform: 
 
+..//boost/config.hpp
+
+..//boost/cstdint.hpp
+climits
+-
+limits.h
+-
+
+..//boost/static_assert.hpp
+
+..//gb_apu/Gb_Apu.h
+Gb_Oscs.h
+../gb_apu/Gb_Oscs.h
+
+..//gb_apu/Multi_Buffer.h
+Blip_Buffer.h
+../gb_apu/Blip_Buffer.h
+
+..//gb_apu/Sound_Queue.h
+SDL2/SDL.h
+-
+
+../gb_apu/Blip_Buffer.h
+blargg_common.h
+../gb_apu/blargg_common.h
+Blip_Synth.h
+../gb_apu/Blip_Synth.h
+
+../gb_apu/Blip_Synth.h
+Blip_Buffer.h
+../gb_apu/Blip_Buffer.h
+
+../gb_apu/Gb_Oscs.h
+Blip_Buffer.h
+../gb_apu/Blip_Buffer.h
+
+../gb_apu/blargg_common.h
+config.h
+../gb_apu/config.h
+boost/config.hpp
+../gb_apu/boost/config.hpp
+boost/cstdint.hpp
+../gb_apu/boost/cstdint.hpp
+boost/static_assert.hpp
+../gb_apu/boost/static_assert.hpp
+cstddef
+-
+cassert
+-
+stddef.h
+-
+assert.h
+-
+
+../include/Audio.hpp
+GBE.hpp
+../include/GBE.hpp
+gb_apu/Gb_Apu.h
+../include/gb_apu/Gb_Apu.h
+gb_apu/Multi_Buffer.h
+../include/gb_apu/Multi_Buffer.h
+gb_apu/Sound_Queue.h
+../include/gb_apu/Sound_Queue.h
+
 ../include/CPU.hpp
 bitset
 -
@@ -22,29 +86,13 @@ CPU.hpp
 OpCodes.hpp
 ../include/OpCodes.hpp
 
-../include/Display.hpp
-GBE.hpp
-../include/GBE.hpp
-GPU.hpp
-../include/GPU.hpp
-
 ../include/GBE.hpp
 SDL2/SDL.h
 -
 
-../include/GPU.hpp
-bitset
--
-CPU.hpp
-../include/CPU.hpp
-
 ../include/Input.hpp
 GBE.hpp
 ../include/GBE.hpp
-
-../include/Loader.hpp
-string
--
 
 ../include/OpCodes.hpp
 string
@@ -57,48 +105,16 @@ CPU.hpp
 ../include/RAM.hpp
 GBE.hpp
 ../include/GBE.hpp
-ROM.hpp
-../include/ROM.hpp
 Input.hpp
 ../include/Input.hpp
+Audio.hpp
+../include/Audio.hpp
 Debug.hpp
 ../include/Debug.hpp
 
-../include/ROM.hpp
-string
--
-GBE.hpp
-../include/GBE.hpp
-
-C:/Users/Flox Ajuro/GBE/main.cpp
-iostream
--
-OpCodes.hpp
--
-Loader.hpp
--
-Debug.hpp
--
+C:/Users/Flox Ajuro/GBE/src/CPU.cpp
 RAM.hpp
 -
 CPU.hpp
--
-GPU.hpp
--
-Display.hpp
--
-Input.hpp
-C:/Users/Flox Ajuro/GBE/Input.hpp
-cstring
--
-
-C:/Users/Flox Ajuro/GBE/src/GPU.cpp
-RAM.hpp
--
-Display.hpp
--
-iostream
--
-GPU.hpp
-C:/Users/Flox Ajuro/GBE/src/GPU.hpp
+C:/Users/Flox Ajuro/GBE/src/CPU.hpp
 

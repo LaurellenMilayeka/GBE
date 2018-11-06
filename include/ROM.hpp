@@ -5,7 +5,12 @@
 #ifndef GAMEBOY_EMULATOR_ROM_HPP
 #define GAMEBOY_EMULATOR_ROM_HPP
 
-#include <string>
+#include <cstring>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <fstream>
 
 #include "GBE.hpp"
 
@@ -15,12 +20,29 @@ namespace GBE {
 
         private:
 
+            static bool ExternalRAMExists();
+
         public:
 
-            static std::string name;
+            static std::string romPath;
+            static char name[16];
             static unsigned int size;
+            static unsigned int ramSize;
 
-            static Byte first256[256];
+            static Byte *_romContent;
+            static Byte _hiROMBank;
+            static Byte _loROMBank;
+            static Word _currentBank;
+
+            static std::fstream externRAM;
+
+            static void SwitchROMBank(Word newBankIndex);
+
+            static void SetExternalRAMSize(Byte data);
+
+            static void LoadExternalRAM();
+            static void SaveExternalRAM();
+
     };
 
 };

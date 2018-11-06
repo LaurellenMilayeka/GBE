@@ -3,10 +3,12 @@
 #include <Loader.hpp>
 #include <Debug.hpp>
 #include <RAM.hpp>
+#include <ROM.hpp>
 #include <CPU.hpp>
 #include <GPU.hpp>
 #include <Display.hpp>
-#include "Input.hpp"
+#include <Input.hpp>
+#include <Audio.hpp>
 #include <cstring>
 
 using namespace GBE;
@@ -85,26 +87,29 @@ int main(int ac, char**av) {
 
     printf("Welcome to GBE ( GameBoy Emulator )\n");
     Loader::LoadROM(av[1]);
-    //Loader::LoadBootloader();
-    InitRegisters(cpu);
-    cpu.SetRegistry16Value(Registry16::PC, 0x0100);
+    Loader::LoadBootloader();
+    Audio::Init();
+    //InitRegisters(cpu);
+    //cpu.SetRegistry16Value(Registry16::PC, 0x0100);
+
+    //Debug::DumpFromTo(RAM::GetRAM(), 0x0000, 0x1FFF);
 
     while (isRunning) {
-        unsigned int cycles = 0;
         Uint64 frameStart = SDL_GetPerformanceCounter();
+        CPU::clock = 0;
 
         if (Input::Update() == false) {
             isRunning = false;
         }
 
-        while (cycles < CYCLES_PER_FRAME) {
+        while (CPU::clock < CYCLES_PER_FRAME) {
             cpu.Step();
-            cycles += cpu.GetLastInstrCycles();
+            CPU::clock += cpu.GetLastInstrCycles();
             gpu.Step(cpu);
             if (RAM::Read8(LYC) == RAM::Read8(LY)) {
                 if (cpu.CheckIFEnabledInterrupt(Interrupt::INT_LCD_STAT)) {
-                        cpu.EnableInterrupt(Interrupt::INT_LCD_STAT);
-                    }
+                    cpu.EnableInterrupt(Interrupt::INT_LCD_STAT);
+                }
             }
         }
 
@@ -116,7 +121,9 @@ int main(int ac, char**av) {
                 break;
             }
         }
+        Audio::EndFrame(CPU::clock);
         frameStart = frameEnd;
     }
+    ROM::SaveExternalRAM();
     return (0);
 }

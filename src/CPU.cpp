@@ -7,6 +7,9 @@
 
 using namespace GBE;
 
+long long int CPU::clock = 0;
+bool CPU::debug = false;
+
 CPU::CPU() {
     this->_af = 0x00;
     this->_bc = 0x00;
@@ -14,6 +17,12 @@ CPU::CPU() {
     this->_hl = 0x00;
     this->_pc = 0x00;
     this->_sp = 0x00;
+
+    this->_actualInstr = 0;
+    this->_clock = 0;
+    this->_ime = 0;
+    this->_lastInstrCycles = 0;
+
 }
 
 bool CPU::IsClockEnabled() const {
@@ -191,11 +200,11 @@ void CPU::PushToStack(Word value) {
     RAM::Write8((Byte)(value >> 8), --(this->_sp));
     RAM::Write8((Byte)(value & 0xFF), --(this->_sp));
 }
-
+/*
 void CPU::PushToStack(Byte value) {
     RAM::Write8(value, --this->_sp);
 }
-
+*/
 Word CPU::PopFromStack() {
     Byte toReturn1;
     Byte toReturn2;
@@ -212,7 +221,7 @@ Word CPU::GetProgramCounter() const {
 }
 
 Byte CPU::GetNextInstruction() {
-    this->_actualInstr = (Byte)(RAM::Read8(this->_pc++));
+    this->_actualInstr = (Byte)(RAM::GetRAM()[this->_pc++]);
     return (this->_actualInstr);
 }
 
@@ -501,24 +510,24 @@ void CPU::SBC8(GBE::Registry8 dst, GBE::Registry8 toSbc) {
 
 void CPU::SBC8(GBE::Registry8 dst, Word toSbc) {
     Byte carry = (Byte)(this->IsFlagSet(Flags::CARRY) ? 1 : 0);
-    Byte value = (Byte)(RAM::Read8(toSbc));
+    int result = this->GetRegistry8Value(dst) - RAM::Read8(toSbc) - carry;
 
-    if ((this->GetRegistry8Value(dst) - value - carry) == 0) {
+    if (result == 0) {
         this->SetFlags(Flags::ZERO);
     } else {
         this->UnsetFlag(Flags::ZERO);
     }
-    if ((this->GetRegistry8Value(dst) & 0x0F) < (value & 0x0F) + carry) {
+    if (((this->GetRegistry8Value(dst) & 0x0F) - (RAM::Read8(toSbc) & 0x0F) - carry) < 0) {
         this->SetFlags(Flags::HALF_CARRY);
     } else {
         this->UnsetFlag(Flags::HALF_CARRY);
     }
-    if (((unsigned long) this->GetRegistry8Value(dst)) - ((unsigned long) value) - carry > 0xFF) {
+    if (result < 0) {
         this->SetFlags(Flags::CARRY);
     } else {
         this->UnsetFlag(Flags::CARRY);
     }
-    this->SetRegistry8Value(dst, this->GetRegistry8Value(dst) - value - carry);
+    this->SetRegistry8Value(dst, (Byte)(result));
     this->SetFlags(Flags::OPERATION);
 }
 
@@ -932,16 +941,25 @@ void CPU::TimerStep() {
 }
 
 void CPU::Step() {
-    Byte instr;
+    Byte instr = 0;
 
     instr = this->GetNextInstruction();
     opCodes[instr].f(*this);
-    /*Debug::DebugInstr(opCodes[instr], *this);
-    Debug::DumpRegistries(*this);
-    Debug::DumpFlags(*this);
-    Debug::LogWrite("\n");*/
+    if (this->_pc >= 0x100) {
+        CPU::ActivateDebug();
+    }
+    if (CPU::IsDebugEnabled()) {
+        Debug::DebugInstr(opCodes[instr], *this);
+        Debug::DumpRegistries(*this);
+        Debug::DumpFlags(*this);
+        Debug::LogWrite("\n");
+    }
+    /*if (this->_pc >= 0x04E3) {
+        printf("Breakpoint\n");
+    } */
     this->TimerStep();
     this->_lastInstrCycles = opCodes[instr].cycles;
+    //CPU::clock += this->_lastInstrCycles;
     if (this->IsInterruptsEnabled()) {
         if (this->HasInterrupt(Interrupt::INT_VBLANK)) this->SetupInterrupt(Interrupt::INT_VBLANK);
         if (this->HasInterrupt(Interrupt::INT_LCD_STAT)) this->SetupInterrupt(Interrupt::INT_LCD_STAT);
@@ -949,4 +967,12 @@ void CPU::Step() {
         if (this->HasInterrupt(Interrupt::INT_SERIAL)) this->SetupInterrupt(Interrupt::INT_SERIAL);
         if (this->HasInterrupt(Interrupt::INT_JOYPAD)) this->SetupInterrupt(Interrupt::INT_JOYPAD);
     }
+}
+
+void CPU::ActivateDebug() {
+    CPU::debug = true;
+}
+
+bool CPU::IsDebugEnabled() {
+    return (CPU::debug);
 }

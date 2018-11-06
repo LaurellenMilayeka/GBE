@@ -11,6 +11,8 @@
 
 using namespace GBE;
 
+std::fstream Debug::log;
+
 void Debug::Dump(Byte *toDump) {
     std::cout << "ROM TITLE : " << ROM::name << std::endl;
     std::cout << "ROM SIZE : " << ROM::size << std::endl;
@@ -117,8 +119,10 @@ void Debug::DumpFlags(const GBE::CPU &cpu) {
 }
 
 void Debug::LogWrite(std::string const& toWrite) {
-    std::fstream log("log.txt", std::ios::out | std::ios::app);
 
-    log.write(toWrite.c_str(), toWrite.size());
-    log.close();
+    if (!Debug::log.is_open()) {
+        Debug::log.open("log.txt", std::ios::out | std::ios::app);
+    }
+    
+    Debug::log.write(toWrite.c_str(), toWrite.size());
 }

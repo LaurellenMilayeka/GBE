@@ -6,6 +6,70 @@
 
 #IncludeRegexTransform: 
 
+..//boost/config.hpp
+
+..//boost/cstdint.hpp
+climits
+-
+limits.h
+-
+
+..//boost/static_assert.hpp
+
+..//gb_apu/Gb_Apu.h
+Gb_Oscs.h
+../gb_apu/Gb_Oscs.h
+
+..//gb_apu/Multi_Buffer.h
+Blip_Buffer.h
+../gb_apu/Blip_Buffer.h
+
+..//gb_apu/Sound_Queue.h
+SDL2/SDL.h
+-
+
+../gb_apu/Blip_Buffer.h
+blargg_common.h
+../gb_apu/blargg_common.h
+Blip_Synth.h
+../gb_apu/Blip_Synth.h
+
+../gb_apu/Blip_Synth.h
+Blip_Buffer.h
+../gb_apu/Blip_Buffer.h
+
+../gb_apu/Gb_Oscs.h
+Blip_Buffer.h
+../gb_apu/Blip_Buffer.h
+
+../gb_apu/blargg_common.h
+config.h
+../gb_apu/config.h
+boost/config.hpp
+../gb_apu/boost/config.hpp
+boost/cstdint.hpp
+../gb_apu/boost/cstdint.hpp
+boost/static_assert.hpp
+../gb_apu/boost/static_assert.hpp
+cstddef
+-
+cassert
+-
+stddef.h
+-
+assert.h
+-
+
+../include/Audio.hpp
+GBE.hpp
+../include/GBE.hpp
+gb_apu/Gb_Apu.h
+../include/gb_apu/Gb_Apu.h
+gb_apu/Multi_Buffer.h
+../include/gb_apu/Multi_Buffer.h
+gb_apu/Sound_Queue.h
+../include/gb_apu/Sound_Queue.h
+
 ../include/CPU.hpp
 bitset
 -
@@ -49,6 +113,8 @@ GBE.hpp
 ../include/Loader.hpp
 string
 -
+cstring
+-
 
 ../include/OpCodes.hpp
 string
@@ -61,18 +127,106 @@ CPU.hpp
 ../include/RAM.hpp
 GBE.hpp
 ../include/GBE.hpp
-ROM.hpp
-../include/ROM.hpp
 Input.hpp
 ../include/Input.hpp
+Audio.hpp
+../include/Audio.hpp
 Debug.hpp
 ../include/Debug.hpp
 
 ../include/ROM.hpp
-string
+cstring
+-
+sys/types.h
+-
+sys/stat.h
+-
+unistd.h
+-
+fcntl.h
+-
+fstream
 -
 GBE.hpp
 ../include/GBE.hpp
+
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Blip_Buffer.cpp
+Blip_Buffer.h
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Blip_Buffer.h
+string.h
+-
+stddef.h
+-
+math.h
+-
+
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Blip_Buffer.h
+blargg_common.h
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/blargg_common.h
+Blip_Synth.h
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Blip_Synth.h
+
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Blip_Synth.h
+Blip_Buffer.h
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Blip_Buffer.h
+
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Gb_Apu.cpp
+Gb_Apu.h
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Gb_Apu.h
+string.h
+-
+
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Gb_Apu.h
+Gb_Oscs.h
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Gb_Oscs.h
+
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Gb_Oscs.cpp
+Gb_Apu.h
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Gb_Apu.h
+string.h
+-
+
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Gb_Oscs.h
+Blip_Buffer.h
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Blip_Buffer.h
+
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Multi_Buffer.cpp
+Multi_Buffer.h
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Multi_Buffer.h
+
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Multi_Buffer.h
+Blip_Buffer.h
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Blip_Buffer.h
+
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Sound_Queue.cpp
+Sound_Queue.h
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Sound_Queue.h
+assert.h
+-
+string.h
+-
+
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/Sound_Queue.h
+SDL2/SDL.h
+-
+
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/blargg_common.h
+config.h
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/config.h
+boost/config.hpp
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/boost/config.hpp
+boost/cstdint.hpp
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/boost/cstdint.hpp
+boost/static_assert.hpp
+/mnt/c/Users/Flox Ajuro/GBE/gb_apu/boost/static_assert.hpp
+cstddef
+-
+cassert
+-
+stddef.h
+-
+assert.h
+-
 
 /mnt/c/Users/Flox Ajuro/GBE/main.cpp
 iostream
@@ -85,6 +239,8 @@ Debug.hpp
 -
 RAM.hpp
 -
+ROM.hpp
+-
 CPU.hpp
 -
 GPU.hpp
@@ -92,9 +248,15 @@ GPU.hpp
 Display.hpp
 -
 Input.hpp
-/mnt/c/Users/Flox Ajuro/GBE/Input.hpp
+-
+Audio.hpp
+-
 cstring
 -
+
+/mnt/c/Users/Flox Ajuro/GBE/src/Audio.cpp
+Audio.hpp
+/mnt/c/Users/Flox Ajuro/GBE/src/Audio.hpp
 
 /mnt/c/Users/Flox Ajuro/GBE/src/CPU.cpp
 RAM.hpp
@@ -151,6 +313,8 @@ GPU.hpp
 /mnt/c/Users/Flox Ajuro/GBE/src/Input.cpp
 Input.hpp
 /mnt/c/Users/Flox Ajuro/GBE/src/Input.hpp
+CPU.hpp
+/mnt/c/Users/Flox Ajuro/GBE/src/CPU.hpp
 
 /mnt/c/Users/Flox Ajuro/GBE/src/Loader.cpp
 iostream
@@ -179,8 +343,12 @@ cstdio
 -
 RAM.hpp
 /mnt/c/Users/Flox Ajuro/GBE/src/RAM.hpp
+ROM.hpp
+/mnt/c/Users/Flox Ajuro/GBE/src/ROM.hpp
 
 /mnt/c/Users/Flox Ajuro/GBE/src/ROM.cpp
 ROM.hpp
 /mnt/c/Users/Flox Ajuro/GBE/src/ROM.hpp
+RAM.hpp
+/mnt/c/Users/Flox Ajuro/GBE/src/RAM.hpp
 

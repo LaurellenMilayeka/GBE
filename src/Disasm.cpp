@@ -551,12 +551,12 @@ void Disasm::OP0x75(GBE::CPU &cpu) {
     RAM::Write8(cpu.GetRegistry8Value(Registry8::L), cpu.GetRegistry16Value(Registry16::HL));
 }
 
-void Disasm::OP0x76(GBE::CPU &cpu) {
-    if (cpu.IsInterruptsEnabled()) {
+void Disasm::OP0x76(GBE::CPU &) {
+    /*if (cpu.IsInterruptsEnabled()) {
 
     } else {
         cpu.SetRegistry16Value(Registry16::PC, (Word)(cpu.GetRegistry16Value(Registry16::PC) + 1));
-    }
+    }*/
 }
 
 void Disasm::OP0x77(GBE::CPU &cpu) {
@@ -1065,11 +1065,17 @@ void Disasm::OP0xE7(CPU &cpu) {
 }
 
 void Disasm::OP0xE8(GBE::CPU &cpu) {
-    if ((cpu.GetRegistry16Value(Registry16::SP) + (SignedByte)(RAM::Read8(cpu.GetProgramCounter()))) > 0xFFFF) cpu.SetFlags(Flags::CARRY);
-    else cpu.UnsetFlag(Flags::CARRY);
-    cpu.SetRegistry16Value(Registry16::SP, (Word)(cpu.GetRegistry16Value(Registry16::SP) + (SignedByte)(RAM::Read8(cpu.GetProgramCounter()))));
-    cpu.UnsetFlag(Flags::ZERO | Flags::OPERATION);
-    cpu.JumpRelative(1);
+    int result = cpu.GetRegistry16Value(Registry16::SP) + (SignedByte)(RAM::Read8(cpu.GetProgramCounter()));
+    cpu.UnsetFlag(Flags::CARRY | Flags::HALF_CARRY | Flags::OPERATION | Flags::ZERO);
+    if (((cpu.GetRegistry16Value(Registry16::SP) ^ (SignedByte)(RAM::Read8(cpu.GetProgramCounter())) ^ (result & 0xFFFF)) & 0x100) == 0x100)
+    {
+        cpu.SetFlags(Flags::CARRY);
+    }
+    if (((cpu.GetRegistry16Value(Registry16::SP) ^ (SignedByte)(RAM::Read8(cpu.GetProgramCounter())) ^ (result & 0xFFFF)) & 0x10) == 0x10)
+    {
+        cpu.SetFlags(Flags::HALF_CARRY);
+    }
+    cpu.SetRegistry16Value(Registry16::SP, (Word)(result));
 }
 
 void Disasm::OP0xE9(GBE::CPU &cpu) {

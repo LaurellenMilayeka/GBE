@@ -29,7 +29,7 @@ Display::Display() {
     amask = 0xff000000;
 #endif
 
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
         std::cerr << "[DEBUG] : Could not initialize SDL" << std::endl;
     }
     if (SDL_CreateWindowAndRenderer(480, 432, 0, &(this->_window), &(Display::_renderer)) != 0) {

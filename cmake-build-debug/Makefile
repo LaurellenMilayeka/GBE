@@ -122,6 +122,141 @@ GameBoy_Emulator/fast:
 	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/build
 .PHONY : GameBoy_Emulator/fast
 
+gb_apu/Blip_Buffer.obj: gb_apu/Blip_Buffer.cpp.obj
+
+.PHONY : gb_apu/Blip_Buffer.obj
+
+# target to build an object file
+gb_apu/Blip_Buffer.cpp.obj:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/gb_apu/Blip_Buffer.cpp.obj
+.PHONY : gb_apu/Blip_Buffer.cpp.obj
+
+gb_apu/Blip_Buffer.i: gb_apu/Blip_Buffer.cpp.i
+
+.PHONY : gb_apu/Blip_Buffer.i
+
+# target to preprocess a source file
+gb_apu/Blip_Buffer.cpp.i:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/gb_apu/Blip_Buffer.cpp.i
+.PHONY : gb_apu/Blip_Buffer.cpp.i
+
+gb_apu/Blip_Buffer.s: gb_apu/Blip_Buffer.cpp.s
+
+.PHONY : gb_apu/Blip_Buffer.s
+
+# target to generate assembly for a file
+gb_apu/Blip_Buffer.cpp.s:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/gb_apu/Blip_Buffer.cpp.s
+.PHONY : gb_apu/Blip_Buffer.cpp.s
+
+gb_apu/Gb_Apu.obj: gb_apu/Gb_Apu.cpp.obj
+
+.PHONY : gb_apu/Gb_Apu.obj
+
+# target to build an object file
+gb_apu/Gb_Apu.cpp.obj:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/gb_apu/Gb_Apu.cpp.obj
+.PHONY : gb_apu/Gb_Apu.cpp.obj
+
+gb_apu/Gb_Apu.i: gb_apu/Gb_Apu.cpp.i
+
+.PHONY : gb_apu/Gb_Apu.i
+
+# target to preprocess a source file
+gb_apu/Gb_Apu.cpp.i:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/gb_apu/Gb_Apu.cpp.i
+.PHONY : gb_apu/Gb_Apu.cpp.i
+
+gb_apu/Gb_Apu.s: gb_apu/Gb_Apu.cpp.s
+
+.PHONY : gb_apu/Gb_Apu.s
+
+# target to generate assembly for a file
+gb_apu/Gb_Apu.cpp.s:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/gb_apu/Gb_Apu.cpp.s
+.PHONY : gb_apu/Gb_Apu.cpp.s
+
+gb_apu/Gb_Oscs.obj: gb_apu/Gb_Oscs.cpp.obj
+
+.PHONY : gb_apu/Gb_Oscs.obj
+
+# target to build an object file
+gb_apu/Gb_Oscs.cpp.obj:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/gb_apu/Gb_Oscs.cpp.obj
+.PHONY : gb_apu/Gb_Oscs.cpp.obj
+
+gb_apu/Gb_Oscs.i: gb_apu/Gb_Oscs.cpp.i
+
+.PHONY : gb_apu/Gb_Oscs.i
+
+# target to preprocess a source file
+gb_apu/Gb_Oscs.cpp.i:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/gb_apu/Gb_Oscs.cpp.i
+.PHONY : gb_apu/Gb_Oscs.cpp.i
+
+gb_apu/Gb_Oscs.s: gb_apu/Gb_Oscs.cpp.s
+
+.PHONY : gb_apu/Gb_Oscs.s
+
+# target to generate assembly for a file
+gb_apu/Gb_Oscs.cpp.s:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/gb_apu/Gb_Oscs.cpp.s
+.PHONY : gb_apu/Gb_Oscs.cpp.s
+
+gb_apu/Multi_Buffer.obj: gb_apu/Multi_Buffer.cpp.obj
+
+.PHONY : gb_apu/Multi_Buffer.obj
+
+# target to build an object file
+gb_apu/Multi_Buffer.cpp.obj:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/gb_apu/Multi_Buffer.cpp.obj
+.PHONY : gb_apu/Multi_Buffer.cpp.obj
+
+gb_apu/Multi_Buffer.i: gb_apu/Multi_Buffer.cpp.i
+
+.PHONY : gb_apu/Multi_Buffer.i
+
+# target to preprocess a source file
+gb_apu/Multi_Buffer.cpp.i:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/gb_apu/Multi_Buffer.cpp.i
+.PHONY : gb_apu/Multi_Buffer.cpp.i
+
+gb_apu/Multi_Buffer.s: gb_apu/Multi_Buffer.cpp.s
+
+.PHONY : gb_apu/Multi_Buffer.s
+
+# target to generate assembly for a file
+gb_apu/Multi_Buffer.cpp.s:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/gb_apu/Multi_Buffer.cpp.s
+.PHONY : gb_apu/Multi_Buffer.cpp.s
+
+gb_apu/Sound_Queue.obj: gb_apu/Sound_Queue.cpp.obj
+
+.PHONY : gb_apu/Sound_Queue.obj
+
+# target to build an object file
+gb_apu/Sound_Queue.cpp.obj:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/gb_apu/Sound_Queue.cpp.obj
+.PHONY : gb_apu/Sound_Queue.cpp.obj
+
+gb_apu/Sound_Queue.i: gb_apu/Sound_Queue.cpp.i
+
+.PHONY : gb_apu/Sound_Queue.i
+
+# target to preprocess a source file
+gb_apu/Sound_Queue.cpp.i:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/gb_apu/Sound_Queue.cpp.i
+.PHONY : gb_apu/Sound_Queue.cpp.i
+
+gb_apu/Sound_Queue.s: gb_apu/Sound_Queue.cpp.s
+
+.PHONY : gb_apu/Sound_Queue.s
+
+# target to generate assembly for a file
+gb_apu/Sound_Queue.cpp.s:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/gb_apu/Sound_Queue.cpp.s
+.PHONY : gb_apu/Sound_Queue.cpp.s
+
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -148,6 +283,33 @@ main.s: main.cpp.s
 main.cpp.s:
 	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/main.cpp.s
 .PHONY : main.cpp.s
+
+src/Audio.obj: src/Audio.cpp.obj
+
+.PHONY : src/Audio.obj
+
+# target to build an object file
+src/Audio.cpp.obj:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/src/Audio.cpp.obj
+.PHONY : src/Audio.cpp.obj
+
+src/Audio.i: src/Audio.cpp.i
+
+.PHONY : src/Audio.i
+
+# target to preprocess a source file
+src/Audio.cpp.i:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/src/Audio.cpp.i
+.PHONY : src/Audio.cpp.i
+
+src/Audio.s: src/Audio.cpp.s
+
+.PHONY : src/Audio.s
+
+# target to generate assembly for a file
+src/Audio.cpp.s:
+	$(MAKE) -f CMakeFiles\GameBoy_Emulator.dir\build.make CMakeFiles/GameBoy_Emulator.dir/src/Audio.cpp.s
+.PHONY : src/Audio.cpp.s
 
 src/CPU.obj: src/CPU.cpp.obj
 
@@ -428,9 +590,27 @@ help:
 	@echo ... GameBoy_Emulator
 	@echo ... edit_cache
 	@echo ... rebuild_cache
+	@echo ... gb_apu/Blip_Buffer.obj
+	@echo ... gb_apu/Blip_Buffer.i
+	@echo ... gb_apu/Blip_Buffer.s
+	@echo ... gb_apu/Gb_Apu.obj
+	@echo ... gb_apu/Gb_Apu.i
+	@echo ... gb_apu/Gb_Apu.s
+	@echo ... gb_apu/Gb_Oscs.obj
+	@echo ... gb_apu/Gb_Oscs.i
+	@echo ... gb_apu/Gb_Oscs.s
+	@echo ... gb_apu/Multi_Buffer.obj
+	@echo ... gb_apu/Multi_Buffer.i
+	@echo ... gb_apu/Multi_Buffer.s
+	@echo ... gb_apu/Sound_Queue.obj
+	@echo ... gb_apu/Sound_Queue.i
+	@echo ... gb_apu/Sound_Queue.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
+	@echo ... src/Audio.obj
+	@echo ... src/Audio.i
+	@echo ... src/Audio.s
 	@echo ... src/CPU.obj
 	@echo ... src/CPU.i
 	@echo ... src/CPU.s

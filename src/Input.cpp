@@ -1,4 +1,5 @@
 #include "Input.hpp"
+#include "CPU.hpp"
 
 using namespace GBE;
 
@@ -15,6 +16,9 @@ bool Input::Update() {
                 break;
             case SDL_KEYDOWN:
                 switch (event.key.keysym.sym) {
+                    case SDLK_F11:
+                        CPU::ActivateDebug();
+                        break;
                     case SDLK_DOWN:
                         Input::_directionInputs |= (1 << 3);
                         break;

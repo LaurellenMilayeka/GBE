@@ -6,6 +6,7 @@
 #define GAMEBOY_EMULATOR_LOADER_HPP
 
 #include <string>
+#include <cstring>
 
 namespace GBE {
 

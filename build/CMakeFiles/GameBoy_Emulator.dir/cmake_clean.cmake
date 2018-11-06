@@ -10,6 +10,12 @@ file(REMOVE_RECURSE
   "CMakeFiles/GameBoy_Emulator.dir/src/GPU.cpp.o"
   "CMakeFiles/GameBoy_Emulator.dir/src/Display.cpp.o"
   "CMakeFiles/GameBoy_Emulator.dir/src/Input.cpp.o"
+  "CMakeFiles/GameBoy_Emulator.dir/src/Audio.cpp.o"
+  "CMakeFiles/GameBoy_Emulator.dir/gb_apu/Blip_Buffer.cpp.o"
+  "CMakeFiles/GameBoy_Emulator.dir/gb_apu/Gb_Apu.cpp.o"
+  "CMakeFiles/GameBoy_Emulator.dir/gb_apu/Gb_Oscs.cpp.o"
+  "CMakeFiles/GameBoy_Emulator.dir/gb_apu/Multi_Buffer.cpp.o"
+  "CMakeFiles/GameBoy_Emulator.dir/gb_apu/Sound_Queue.cpp.o"
   "GameBoy_Emulator.pdb"
   "GameBoy_Emulator"
 )

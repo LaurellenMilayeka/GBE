@@ -4,7 +4,13 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "C:/Users/Flox Ajuro/GBE/gb_apu/Blip_Buffer.cpp" "C:/Users/Flox Ajuro/GBE/cmake-build-debug/CMakeFiles/GameBoy_Emulator.dir/gb_apu/Blip_Buffer.cpp.obj"
+  "C:/Users/Flox Ajuro/GBE/gb_apu/Gb_Apu.cpp" "C:/Users/Flox Ajuro/GBE/cmake-build-debug/CMakeFiles/GameBoy_Emulator.dir/gb_apu/Gb_Apu.cpp.obj"
+  "C:/Users/Flox Ajuro/GBE/gb_apu/Gb_Oscs.cpp" "C:/Users/Flox Ajuro/GBE/cmake-build-debug/CMakeFiles/GameBoy_Emulator.dir/gb_apu/Gb_Oscs.cpp.obj"
+  "C:/Users/Flox Ajuro/GBE/gb_apu/Multi_Buffer.cpp" "C:/Users/Flox Ajuro/GBE/cmake-build-debug/CMakeFiles/GameBoy_Emulator.dir/gb_apu/Multi_Buffer.cpp.obj"
+  "C:/Users/Flox Ajuro/GBE/gb_apu/Sound_Queue.cpp" "C:/Users/Flox Ajuro/GBE/cmake-build-debug/CMakeFiles/GameBoy_Emulator.dir/gb_apu/Sound_Queue.cpp.obj"
   "C:/Users/Flox Ajuro/GBE/main.cpp" "C:/Users/Flox Ajuro/GBE/cmake-build-debug/CMakeFiles/GameBoy_Emulator.dir/main.cpp.obj"
+  "C:/Users/Flox Ajuro/GBE/src/Audio.cpp" "C:/Users/Flox Ajuro/GBE/cmake-build-debug/CMakeFiles/GameBoy_Emulator.dir/src/Audio.cpp.obj"
   "C:/Users/Flox Ajuro/GBE/src/CPU.cpp" "C:/Users/Flox Ajuro/GBE/cmake-build-debug/CMakeFiles/GameBoy_Emulator.dir/src/CPU.cpp.obj"
   "C:/Users/Flox Ajuro/GBE/src/Debug.cpp" "C:/Users/Flox Ajuro/GBE/cmake-build-debug/CMakeFiles/GameBoy_Emulator.dir/src/Debug.cpp.obj"
   "C:/Users/Flox Ajuro/GBE/src/Disasm.cpp" "C:/Users/Flox Ajuro/GBE/cmake-build-debug/CMakeFiles/GameBoy_Emulator.dir/src/Disasm.cpp.obj"
@@ -21,6 +27,7 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../include"
+  "../"
   )
 
 # Targets to which this target links.

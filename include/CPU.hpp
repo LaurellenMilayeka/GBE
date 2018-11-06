@@ -19,8 +19,6 @@
 #define TMA 0xFF06
 #define TMC 0xFF07
 
-#define CLOCKSPEED 4194304
-
 namespace GBE {
 
     typedef enum {
@@ -79,9 +77,13 @@ namespace GBE {
 
             bool IsClockEnabled() const;
 
+            static bool debug;
+
             Word GetTimerFrequency();
 
         public:
+
+            static long long int clock;
 
             explicit CPU();
             ~CPU() = default;
@@ -95,6 +97,9 @@ namespace GBE {
             bool CheckIFEnabledInterrupt(Interrupt toCheck);
 
             bool IsInterruptsEnabled() const;
+
+            static void ActivateDebug();
+            static bool IsDebugEnabled();
 
             Byte GetActualInstr() const;
             Byte GetFlags();
@@ -114,7 +119,7 @@ namespace GBE {
             Byte GetNextInstruction();
 
             void PushToStack(Word value);
-            void PushToStack(Byte value);
+            //void PushToStack(Byte value);
 
             Word PopFromStack();
 
